@@ -585,7 +585,7 @@ function S13Credits({ tweaks }) {
         ),
         React.createElement("div", null,
           [
-            { label: "Authors", body: "Taylor Lucas and Robert Sells, MURP candidates, University of Colorado Denver College of Architecture and Planning" },
+            { label: "Authors", body: "Robert Sells and Taylor Lucas, MURP candidates, University of Colorado Denver College of Architecture and Planning" },
             { label: "Client", body: "Fehr & Peers" },
             { label: "Suggested citation", body: "Lucas, T., & Sells, R. (2026). Mind the Gap: Lessons from Denver to Rebuild Your Sidewalk Network. MURP Capstone, University of Colorado Denver." },
           ].map((item, i) =>
