@@ -87,7 +87,7 @@ function S1Cover({ tweaks }) {
       React.createElement("rect", { x: 4, y: 40, width: 56, height: 2, rx: 1, fill: "rgba(255,255,255,0.2)" }),
       React.createElement("path", { d: "M28 27 L31 36 L26 33 L29 42", stroke: "#D89A4E", strokeWidth: 2.5, fill: "none", strokeLinecap: "round" })
     ),
-    React.createElement("div", { style: { fontSize: 13, letterSpacing: "0.22em", color: rust, fontWeight: 700, textTransform: "uppercase", marginBottom: 20 } }, "Mind the Gap"),
+    React.createElement("div", { style: { fontSize: 32, letterSpacing: "0.22em", color: rust, fontWeight: 700, textTransform: "uppercase", marginBottom: 20 } }, "Mind the Gap"),
     React.createElement("h1", {
       style: { fontSize: "clamp(42px, 6vw, 80px)", fontWeight: 900, color: "#EDE6DA", lineHeight: 1.08, margin: "0 0 28px", maxWidth: 760 }
     }, "Lessons from Denver to Rebuild Your Sidewalk Network"),
