@@ -137,13 +137,13 @@ function S2About({ tweaks }) {
         React.createElement("div", { style: { fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: rust, fontWeight: 700, marginBottom: 12 } }, "About This Guide"),
         React.createElement("h2", { style: { fontSize: 34, fontWeight: 800, color: navy, margin: "0 0 20px", lineHeight: 1.2 } }, "About This Guide"),
         React.createElement("p", { style: { fontSize: 16, color: "#444", lineHeight: 1.75, marginBottom: 14 } },
-          "Most American cities are losing the same fight against the same opponent: a sidewalk system designed for the nineteenth century, applied to twenty-first-century neighborhoods, and funded one property at a time."
+          "Incomplete networks. Code non-compliance. Deferred maintenance. These are all well known issues that sidewalk networks across the nation face. As walkable and safe pedestrian networks have returned to the forefront of planners minds, reforming the governance structure of these networks has become vital."
         ),
         React.createElement("p", { style: { fontSize: 16, color: "#444", lineHeight: 1.75, marginBottom: 14 } },
           "Denver's two-decade reform effort is the most fully documented case of a major city escaping that system. This Story Map walks through the analysis — what made Denver's network look the way it does, what the city tried, what failed, and what finally worked."
         ),
-        React.createElement("p", { style: { fontSize: 16, color: "#444", lineHeight: 1.75 } },
-          React.createElement("strong", null, "The focus is Denver. The field guide at the end is for everyone.")
+       // React.createElement("p", { style: { fontSize: 16, color: "#444", lineHeight: 1.75 } },
+         // React.createElement("strong", null, "The focus is Denver. The field guide at the end is for everyone.")
         )
       ),
       React.createElement("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 16 } },
@@ -190,7 +190,7 @@ function S3Network({ tweaks }) {
       slideLabel: "See the gap",
       headline: "The sidewalk network in 2025",
       paragraphs: [
-        "Light pink: existing sidewalk. Medium red: inadequate (too narrow to meet current standards). Dark red: missing entirely.",
+        "These maps seperate sidewalk networks into three conditions: sufficient sidewalks, sidewalks that exist but don't meet accessibility standards, and streets where sidewalks are missing altogether.",
         "In Denver, 60% of the network is sufficient, 30% is too narrow, and 10% is missing outright. Toggle between cities to compare."
       ],
       visual: React.createElement("div", { style: { width: "100%", height: "100%", position: "relative" } },
@@ -208,8 +208,8 @@ function S3Network({ tweaks }) {
       headline: "This is a structure problem",
       paragraphs: [
         "Streets are maintained publicly. Wastewater is maintained publicly. Street lighting is maintained publicly.",
-        "Sidewalks are the exception — the only piece of the public right-of-way for which the abutting property owner has historically been responsible.",
-        "This is not a funding problem or a planning problem. It is a structure problem. Denver spent two decades learning the difference."
+        "Sidewalks are the exception as the only piece of the public right-of-way for which the abutting property owner has historically been responsible.",
+        "This is not a funding problem or a planning problem. It is funadmentally a structural problem with political solutions. Denver spent two decades learning the difference."
       ],
       visual: React.createElement("div", {
         style: { width: "100%", height: "100%", background: navy, display: "flex", alignItems: "center", justifyContent: "center" }
@@ -251,7 +251,7 @@ function S3Network({ tweaks }) {
     id: "s3", tweaks,
     actLabel: "Act I — The Argument",
     title: "The State of the Network",
-    intro: "Three cities, the same problem — mapped.",
+    intro: "Three cities, the same issue.",
     slides
   });
 }
@@ -364,8 +364,9 @@ function S4Era({ tweaks }) {
       slideLabel: "Development era × gaps",
       headline: "Sidewalk gaps don't appear randomly",
       paragraphs: [
-        "They appear where a neighborhood was built without sidewalks — and stay there because retrofit is far harder than original construction.",
-        "Dark green parcels: car development era (post-1940). Light green: pre-car era. Pink lines: existing sidewalk. Red lines: inadequate or missing. Toggle between cities to compare."
+        "They appear where a neighborhood was built without sidewalks and stay there because retrofit is far harder than original construction.",
+        "Sidewalk gaps in Denver cluster most heavily in post-1940 neighborhoods. In the city’s older, prewar areas, the sidewalk network is far more continuous. The overlap is hard to miss: where development happened in the auto era, pedestrian infrastructure was more likely to be omitted or built to lower standards, and those gaps have persisted.",
+		"Toggle between cities to compare how closely sidewalk gaps track development era."
       ],
       visual: React.createElement("div", { style: { width: "100%", height: "100%", position: "relative" } },
         React.createElement(CityTabs, { cities: eraMaps.map(m => m.city), active: eraCity, onChange: setEraCity, color: rust }),
@@ -386,8 +387,8 @@ function S4Era({ tweaks }) {
       slideLabel: "Why retrofit is harder",
       headline: "Path dependency in practice",
       paragraphs: [
-        "Installing sidewalks during initial development is inexpensive — the right-of-way is open, drainage is being graded.",
-        "Retrofitting a car-era neighborhood is several times more expensive: no curb-and-gutter, stormwater drainage required, informal right-of-way claims, utility conflicts.",
+        "Installing sidewalks during initial development is when its least expensive: the right-of-way is open, drainage is being graded.",
+        "Retrofitting a car-era neighborhood is several times more expensive: no curb-and-gutter, stormwater drainage and engineering required, informal right-of-way claims, and utility conflicts.",
         "Every year a city defers reform, the cost of fixing what's missing grows."
       ],
       visual: React.createElement(CrossSection)
@@ -398,7 +399,7 @@ function S4Era({ tweaks }) {
     id: "s4", tweaks, mediaRight: false,
     actLabel: "Act I — The Argument",
     title: "The Era Determines the Gap",
-    intro: "Path dependency as the central finding. The sidewalk map you see today reflects decisions made 60–80 years ago.",
+    intro: "The sidewalk map you see today reflects decisions made 60–80 years ago.",
     slides
   });
 }
@@ -451,8 +452,8 @@ function S5Equity({ tweaks }) {
       slideLabel: "Redlined cores",
       headline: "Layer 1: Historical disinvestment",
       paragraphs: [
-        "In Denver and Minneapolis, neighborhoods graded C and D under the 1930s federal redlining maps show notably higher rates of missing sidewalks than A or B areas.",
-        "In Denver, C and D areas account for 26% of total gaps; A and B areas account for only 13%. Toggle to see how Minneapolis and Seattle compare — Seattle tells a very different story."
+        "In Denver and Minneapolis, neighborhoods graded C and D under the 1930s redlining maps show notably higher rates of missing sidewalks than A or B areas.",
+        "In Denver, C and D areas account for 26% of total gaps; A and B areas account for only 13%. Toggle to see how Minneapolis and Seattle compare. Seattle tells us what happened in other cities."
       ],
       stat: "26%", statLabel: "of Denver's gaps in HOLC C+D areas (vs. 13% in A+B)",
       visual: React.createElement("div", { style: { width: "100%", height: "100%", position: "relative" } },
@@ -464,9 +465,9 @@ function S5Equity({ tweaks }) {
       slideLabel: "Seattle complicates the picture",
       headline: "Layer 2: Car-era ungraded areas",
       paragraphs: [
-        "Seattle's Grade D areas account for only 7% of gaps — the neighborhoods that were redlined in 1938 were already built out with sidewalks during streetcar-era construction.",
+        "Seattle's Grade D areas account for only 7% of gaps - the neighborhoods that were redlined in 1938 were already built out with sidewalks during streetcar-era construction.",
         "In Seattle, 62% of all sidewalk gaps fall in HOLC-ungraded areas. In Denver, 61%. In Minneapolis, 39%.",
-        "This is the second equity layer: the legacy of car-era development standards in places HOLC never looked."
+        "This is the second equity layer: the legacy of car-era development standards in places that weren't developed during the initial redlining period."
       ],
       visual: React.createElement("div", { style: { width: "100%", height: "100%", position: "relative" } },
         React.createElement(CityTabs, { cities: holcMaps.map(m => m.city), active: holcCity, onChange: setHolcCity, color: rust }),
@@ -489,11 +490,11 @@ function S5Equity({ tweaks }) {
     },
     {
       slideLabel: "What this means",
-      headline: "All three layers are real. None is the whole picture.",
+      headline: "All three layers matter. None are the whole picture.",
       paragraphs: [
-        "Any equity-based prioritization focused only on historically redlined areas will miss the majority of the network's gaps.",
+        "Any equity-based prioritization focused only on historically redlined areas will miss the majority of a network's gaps.",
         "Any prioritization that ignores transit corridors will rebuild infrastructure that doesn't reach where people are trying to go.",
-        "Effective reform names which layers are most pronounced in each city — and prioritizes accordingly."
+        "Effective reforms recognize which layers are most pronounced in each city and prioritizes them accordingly."
       ],
       visual: React.createElement(VennDiagram)
     }
@@ -503,7 +504,7 @@ function S5Equity({ tweaks }) {
     id: "s5", tweaks,
     actLabel: "Act I — The Argument",
     title: "Three Equity Layers",
-    intro: "What the data actually shows — and what it doesn't.",
+    intro: "What the data shows — and what it doesn't.",
     slides
   });
 }
