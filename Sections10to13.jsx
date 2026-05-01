@@ -11,13 +11,13 @@ function S10SIP({ tweaks }) {
     React.createElement("div", {
       style: { width: "100%", height: "100%", background: "#F7F4EF", padding: 40, display: "flex", flexDirection: "column", justifyContent: "center" }
     },
-      React.createElement("div", { style: { fontSize: 13, fontWeight: 700, color: navy, marginBottom: 4 } }, "SIP Fee Structure — Post-Initiative 307"),
-      React.createElement("div", { style: { fontSize: 11, color: "#888", marginBottom: 28 } }, "Annual fee by parcel type · Income-qualified rebates available"),
+      React.createElement("div", { style: { fontSize: 13, fontWeight: 700, color: navy, marginBottom: 4 } }, "SIP Fee Structure: Post-Initiative 307"),
+      React.createElement("div", { style: { fontSize: 11, color: "#888", marginBottom: 28 } }, "Annual fee by development type* · Income-qualified rebates available"),
       [
-        { type: "Single-family residential (standard)", fee: "~$50–80/yr", bar: 0.25, note: "Flat rate post-Council refinement" },
-        { type: "Multi-family residential", fee: "~$120–200/yr", bar: 0.45, note: "Scaled by frontage" },
-        { type: "Commercial", fee: "~$300–600/yr", bar: 0.75, note: "Larger parcels pay more" },
-        { type: "Industrial / large institutional", fee: "~$600–1,200/yr", bar: 1.0, note: "Highest frontage exposure" },
+        { type: "Single-family residential (standard)", fee: "~$150/yr", bar: 0.25, note: "Flat rate post-Council refinement" },
+        { type: "Large multi-family residential", fee: "~$500-2500/yr", bar: 0.45, note: "Scaled by frontage" },
+        { type: "Whole block development", fee: "~$4000/yr", bar: 0.75, note: "Larger parcels pay more" },
+        { type: "Industrial / large institutional", fee: "~$4000+/yr", bar: 1.0, note: "Highest frontage exposure" },
       ].map((row, i) =>
         React.createElement("div", { key: i, style: { marginBottom: 20 } },
           React.createElement("div", { style: { display: "flex", justifyContent: "space-between", marginBottom: 6 } },
@@ -36,35 +36,40 @@ function S10SIP({ tweaks }) {
       )
     );
 
-  const FundingGap = () => {
-    const annual = 28; // ~$28M estimated annual revenue
-    const need = 1100 / 9; // $1.1B over 9 years
-    const pct = annual / need;
+    const FundingGap = () => {
+    const sources = [
+      { label: "SIP annual fee revenue", sublabel: "Dedicated stream, first in Denver's history", color: green, note: "~$XX M/yr NEED TO CONFIRM REVENUE" },
+      { label: "Development-triggered construction", sublabel: "Owners build when property redevelops (D.R.M.C. 49-84)", color: "#4A90A4", note: "Ongoing, unquantified" },
+      { label: "Federal & state grants", sublabel: "RAISE, CDBG, CDOT — competitive, variable", color: "#D89A4E", note: "Variable, project-by-project" },
+      { label: "Future bond measures", sublabel: "Precedent: Elevate Denver ($47.7M, 2017)", color: "#B6BFB1", note: "Not yet committed" },
+    ];
     return React.createElement("div", {
       style: { width: "100%", height: "100%", background: "#fff", padding: 40, display: "flex", flexDirection: "column", justifyContent: "center" }
     },
-      React.createElement("div", { style: { fontSize: 13, fontWeight: 700, color: navy, marginBottom: 4 } }, "Annual SIP Revenue vs. Need"),
-      React.createElement("div", { style: { fontSize: 11, color: "#888", marginBottom: 32 } }, "$1.1B total need over 9-year master plan"),
-      React.createElement("div", { style: { display: "flex", gap: 24, alignItems: "flex-end", marginBottom: 24 } },
-        React.createElement("div", { style: { flex: 1 } },
-          React.createElement("div", { style: { height: 200, background: "rgba(27,58,75,0.06)", borderRadius: 6, position: "relative", overflow: "hidden", display: "flex", alignItems: "flex-end" } },
-            React.createElement("div", { style: { width: "100%", height: `${pct * 100}%`, background: green, borderRadius: "4px 4px 0 0" } })
-          ),
-          React.createElement("div", { style: { fontSize: 12, color: green, fontWeight: 700, marginTop: 6, textAlign: "center" } }, `~$${annual}M/yr`),
-          React.createElement("div", { style: { fontSize: 11, color: "#888", textAlign: "center" } }, "SIP fee revenue")
-        ),
-        React.createElement("div", { style: { flex: 1 } },
-          React.createElement("div", { style: { height: 200, background: "rgba(27,58,75,0.06)", borderRadius: 6, position: "relative", overflow: "hidden", display: "flex", alignItems: "flex-end" } },
-            React.createElement("div", { style: { width: "100%", height: "100%", background: `repeating-linear-gradient(45deg, rgba(178,84,44,0.15) 0px, rgba(178,84,44,0.15) 4px, transparent 4px, transparent 12px)`, borderRadius: "4px 4px 0 0" } }),
-            React.createElement("div", { style: { width: "100%", height: `${pct * 100}%`, background: green, position: "absolute", bottom: 0, borderRadius: "4px 4px 0 0" } })
-          ),
-          React.createElement("div", { style: { fontSize: 12, color: rust, fontWeight: 700, marginTop: 6, textAlign: "center" } }, `~$${Math.round(need)}M/yr`),
-          React.createElement("div", { style: { fontSize: 11, color: "#888", textAlign: "center" } }, "Annualized need")
+      React.createElement("div", { style: { fontSize: 13, fontWeight: 700, color: navy, marginBottom: 4 } }, "How SIP Fits Into the Funding Picture"),
+      React.createElement("div", { style: { fontSize: 11, color: "#888", marginBottom: 28, lineHeight: 1.6 } },
+        "The fee is the foundation — not the whole structure. Total network need was last estimated at $1.1B (Denver Moves, 2017)."
+      ),
+      React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 10, marginBottom: 28 } },
+        ...sources.map((s, i) =>
+          React.createElement("div", {
+            key: i,
+            style: { display: "flex", alignItems: "center", gap: 14, padding: "10px 14px", borderRadius: 6, background: "rgba(27,58,75,0.03)", border: "1px solid rgba(27,58,75,0.08)" }
+          },
+            React.createElement("div", { style: { width: 10, height: 10, borderRadius: "50%", background: s.color, flexShrink: 0 } }),
+            React.createElement("div", { style: { flex: 1 } },
+              React.createElement("div", { style: { fontSize: 12, fontWeight: 700, color: navy } }, s.label),
+              React.createElement("div", { style: { fontSize: 11, color: "#888", marginTop: 1 } }, s.sublabel)
+            ),
+            React.createElement("div", { style: { fontSize: 11, color: "#aaa", fontStyle: "italic", whiteSpace: "nowrap" } }, s.note)
+          )
         )
       ),
-      React.createElement("div", { style: { padding: "14px 16px", background: "rgba(178,84,44,0.06)", border: `1px solid ${rust}`, borderRadius: 6 } },
-        React.createElement("span", { style: { fontSize: 12, color: rust, fontWeight: 700 } }, "Honest gap: "),
-        React.createElement("span", { style: { fontSize: 12, color: "#444" } }, "Annual fee revenue covers an estimated fraction of the annualized $1.1B need. Practitioners should watch how DOTI closes this gap across the 9-year plan.")
+      React.createElement("div", { style: { padding: "12px 16px", background: "rgba(27,58,75,0.04)", border: "1px solid rgba(27,58,75,0.12)", borderRadius: 6 } },
+        React.createElement("span", { style: { fontSize: 12, color: navy, fontWeight: 700 } }, "What we know: "),
+        React.createElement("span", { style: { fontSize: 12, color: "#444" } },
+          "The SIP fee is the first dedicated, recurring revenue stream for sidewalks in Denver's history. The $1.1B total network need — a 2017 estimate — will require multiple funding sources over many years. No single source has been sized against a verified annual target."
+        )
       )
     );
   };
@@ -84,20 +89,20 @@ function S10SIP({ tweaks }) {
       slideLabel: "What's working",
       headline: "Three structural elements",
       paragraphs: [
-        "First: legal responsibility is the city's, not the homeowner's. Second: funding is dedicated rather than appropriated annually. Third: prioritization is needs-based rather than complaint-driven.",
-        "The first two are durable by design. The third is the active question — and it's the one practitioners in other cities should watch most closely as SIP progresses."
+        "First, legal responsibility is  now the city's, not the homeowner's. Second, funding is dedicated rather than appropriated annually. Third, prioritization is needs-based rather than complaint-driven.",
+        "The legal and funding pieces are now built into the model. The harder part is delivery: deciding where work happens first, and whether those choices hold up as the program moves from policy to pavement."
       ],
       stat: "9-year", statLabel: "master plan to achieve complete, ADA-compliant network citywide",
-      visual: React.createElement(MapPlaceholder, { label: "Denver SIP Construction Districts", sublabel: "Completed / In-progress / Planned" })
+      visual: React.createElement(MapPlaceholder, { label: "SIP Construction Program or other similar maps", sublabel: "Other ideas?" })
     },
     {
       slideLabel: "What's still open",
       headline: "Three things still being worked out",
       paragraphs: [
-        "First: how SIP coordinates with utility cuts and curb-ramp ADA work. Sidewalks share the right-of-way with everything else.",
-        "Second: how the city closes the gap between annual fee revenue and the $1.1 billion total need over a 9-year plan.",
-        "Third: how non-residential parcels — especially institutional and government-owned lots — are brought into compliance.",
-        "None of these are reasons to abandon the model. They are reasons to keep paying attention."
+        "First: how SIP coordinates with utilities, curb ramps, drainage, trees, and street projects. Sidewalks share the right-of-way with everything else.",
+        "Second: how the city assembles the full funding picture (fee revenue, development-triggered construction, grants, and future bonds) to address a network need last estimated at $1.1 billion in 2017.",
+        "Third: how the city applies responsibility across commercial, institutional, tax-exempt, and government-owned parcels.",
+        "None of these are insurmountable. As Denver continues to work out its programs kinks, practitioners can see how they overcome these challenges and how those solutions can apply to your own city."
       ],
       visual: React.createElement(FundingGap)
     }
@@ -107,7 +112,7 @@ function S10SIP({ tweaks }) {
     id: "s10", tweaks,
     actLabel: "Act III — Reform Pathways",
     title: "Where Denver Stands Today",
-    intro: "SIP implementation — where the program stands now.",
+    intro: "SIP implementation: where the program stands.",
     slides
   });
 }
@@ -203,7 +208,7 @@ function S11Pathways({ tweaks }) {
       React.createElement("div", { style: { fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: rust, fontWeight: 700, marginBottom: 12 } }, "Act III — Reform Pathways"),
       React.createElement("h2", { style: { fontSize: 34, fontWeight: 800, color: navy, margin: "0 0 16px" } }, "The Eight Reform Pathways"),
       React.createElement("p", { style: { fontSize: 16, color: "#444", lineHeight: 1.75, maxWidth: 680, marginBottom: 8 } },
-        "Initiative 307 is one of eight recognizable pathways out of the property-owner model. Cities have chosen between them based on three things: their existing legal authority, their political environment, and what their network actually looks like."
+        "Initiative 307 is one of at least eight ways cities have restructured how sidewalks get funded, built, and maintained. Which model fits depends on three things: a city's legal authority, its political environment, and the condition of the network it already has."
       ),
       React.createElement("p", { style: { fontSize: 14, color: "#666", marginBottom: 40 } },
         "None of these models is universally correct. Click any pathway to explore it."
@@ -540,7 +545,7 @@ function S12Decision({ tweaks }) {
         }
       },
         React.createElement("p", { style: { margin: 0, fontSize: 15, color: "#333", lineHeight: 1.7, fontStyle: "italic" } },
-          "Reform doesn't require luck. It requires diagnosis, the right pathway for the diagnosis, and the political conditions your city actually has — not the ones you wish it had."
+          "Reform requires recognition, diagnosis, and the political will to get it done."
         )
       )
     )
