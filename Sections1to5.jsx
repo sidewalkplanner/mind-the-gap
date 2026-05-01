@@ -144,7 +144,6 @@ function S2About({ tweaks }) {
         ),
        // React.createElement("p", { style: { fontSize: 16, color: "#444", lineHeight: 1.75 } },
          // React.createElement("strong", null, "The focus is Denver. The field guide at the end is for everyone.")
-        )
       ),
       React.createElement("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 16 } },
         tiles.map((t, i) =>
