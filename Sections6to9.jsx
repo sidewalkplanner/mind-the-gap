@@ -48,47 +48,12 @@ function S6History({ tweaks }) {
       )
     );
 
-  const DistrictMap = () =>
-    React.createElement("div", {
-      style: {
-        width: "100%", height: "100%",
-        background: "#E8E2D4",
-        display: "flex", flexDirection: "column",
-        alignItems: "center", justifyContent: "center", padding: 32
-      }
-    },
-      React.createElement("div", { style: { fontSize: 12, fontWeight: 700, color: navy, marginBottom: 16, textTransform: "uppercase", letterSpacing: "0.08em" } },
-        "Denver Sidewalk Districts — c. 1881"
-      ),
-      React.createElement("svg", { viewBox: "0 0 280 220", style: { width: "100%", maxWidth: 320, border: "1.5px solid #C4B898", borderRadius: 4 } },
-        React.createElement("rect", { width: 280, height: 220, fill: "#E8DEC8" }),
-        // District blocks
-        React.createElement("rect", { x: 20, y: 20, width: 70, height: 55, fill: "rgba(27,58,75,0.15)", stroke: navy, strokeWidth: 1.5 }),
-        React.createElement("rect", { x: 100, y: 20, width: 80, height: 55, fill: "rgba(27,58,75,0.22)", stroke: navy, strokeWidth: 1.5 }),
-        React.createElement("rect", { x: 190, y: 20, width: 70, height: 55, fill: "rgba(27,58,75,0.12)", stroke: navy, strokeWidth: 1.5 }),
-        React.createElement("rect", { x: 20, y: 85, width: 120, height: 60, fill: "rgba(27,58,75,0.18)", stroke: navy, strokeWidth: 1.5 }),
-        React.createElement("rect", { x: 150, y: 85, width: 110, height: 60, fill: "rgba(27,58,75,0.25)", stroke: navy, strokeWidth: 1.5 }),
-        React.createElement("rect", { x: 20, y: 155, width: 240, height: 48, fill: "rgba(27,58,75,0.1)", stroke: navy, strokeWidth: 1.5 }),
-        // Labels
-        React.createElement("text", { x: 55, y: 51, fontSize: 8, fill: navy, textAnchor: "middle", fontWeight: 600 }, "District I"),
-        React.createElement("text", { x: 140, y: 51, fontSize: 8, fill: navy, textAnchor: "middle", fontWeight: 600 }, "District II"),
-        React.createElement("text", { x: 225, y: 51, fontSize: 8, fill: navy, textAnchor: "middle", fontWeight: 600 }, "District III"),
-        React.createElement("text", { x: 80, y: 118, fontSize: 8, fill: navy, textAnchor: "middle", fontWeight: 600 }, "District IV"),
-        React.createElement("text", { x: 205, y: 118, fontSize: 8, fill: navy, textAnchor: "middle", fontWeight: 600 }, "District V"),
-        React.createElement("text", { x: 140, y: 182, fontSize: 8, fill: navy, textAnchor: "middle", fontWeight: 600 }, "District VI (Outer)"),
-        React.createElement("text", { x: 140, y: 212, fontSize: 9, fill: "#666", textAnchor: "middle", fontStyle: "italic" }, "Schematic — district boundaries approximate")
-      ),
-      React.createElement("div", { style: { marginTop: 16, fontSize: 12, color: "#555", textAlign: "center", maxWidth: 280 } },
-        "Each district: shared assessment, public construction, lien-backed enforcement. Neighbors did not pay one at a time — they paid together."
-      )
-    );
-
   const slides = [
     {
       slideLabel: "A different starting point",
       headline: "Denver did not always have this problem",
       paragraphs: [
-        "When the city published its first municipal code in 1881, sidewalks were treated as coordinated public infrastructure. An official sidewalk contractor was selected by competitive bid. A City Engineer inspected and certified completed work.",
+        "When the city published its first municipal code in 1881, sidewalks were treated as coordinated public infrastructure. In city designated sidewalk networks, an official sidewalk contractor was selected by competitive bid then a City Engineer inspected and certified completed work.",
         "Enforcement had teeth. If a property was cited and a sidewalk wasn't built within sixty days, the city built it and collected the cost via a lien on the property."
       ],
       visual: React.createElement(CharterDoc)
@@ -107,9 +72,8 @@ function S6History({ tweaks }) {
       slideLabel: "Standards and structure",
       headline: "The same elements Denver rebuilt in 2022",
       paragraphs: [
-        "Width standards in the 1881 code: twelve feet of uninterrupted sidewalk in front of commercial properties, five feet in front of residential and vacant lots.",
-        "By modern standards, the residential figure is below today's ADA-influenced practice — but the structure of the regulation itself was sound.",
-        "Geographic assessment, public construction, lien-backed enforcement: the same elements Denver eventually rebuilt under a different name."
+        "Width standards in the 1881 code had 12 feet of uninterrupted sidewalk in front of commercial properties and five feet in front of residential and vacant lots within various areas of town.",
+        "By modern standards, these requirements not only meet our requirements, but in some cases even exceed them.",
       ],
       visual: React.createElement(MapPlaceholder, { label: "Historical Denver Sidewalk Network", sublabel: "c. 1880s streetcar-era city extent" })
     }
@@ -118,8 +82,8 @@ function S6History({ tweaks }) {
   return React.createElement(Sidecar, {
     id: "s6", tweaks, mediaRight: true,
     actLabel: "Act II — Denver's Trajectory",
-    title: "Denver Once Had a System",
-    intro: "The trap was made, not inherited.",
+    title: "Denver Had a Better System",
+    intro: "This problem wasn't inherited, it was designed.",
     slides
   });
 }
@@ -164,10 +128,10 @@ function S7Swipe({ tweaks }) {
       React.createElement("div", { style: { fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: rust, fontWeight: 700, marginBottom: 12 } }, "Act II — Denver's Trajectory"),
       React.createElement("h2", { style: { fontSize: 34, fontWeight: 800, color: navy, margin: "0 0 16px" } }, "How Denver Lost It"),
       React.createElement("p", { style: { fontSize: 16, color: "#444", lineHeight: 1.75, maxWidth: 680, marginBottom: 8 } },
-        "What undid the system wasn't neglect. It was growth. As Denver expanded outward in the postwar boom, Sidewalk Districts were phased out. New subdivisions were platted with narrow attached sidewalks — or no sidewalks at all."
+        "What undid the system wasn't neglect. It was sprawling, unchecked growth. As Denver expanded outward in the postwar boom, Sidewalk Districts were phased out. New subdivisions were platted with narrow attached sidewalks or, in many cases, no sidewalks at all."
       ),
       React.createElement("p", { style: { fontSize: 14, color: "#888", fontStyle: "italic", marginBottom: 32 } },
-        "Drag the slider — 1880 left, 2025 right"
+        "Drag the slider — 1880 left, 2025 right (NOTE:DIFFERENT MAP. Maybe a slider showing network within Denver's original boundaries compared with growth?)"
       )
     ),
     React.createElement("div", {
@@ -254,7 +218,7 @@ function S7Swipe({ tweaks }) {
     ),
     React.createElement("div", { style: { maxWidth: 1200, margin: "0 auto", padding: "32px 48px 60px" } },
       React.createElement("p", { style: { fontSize: 15, color: "#444", lineHeight: 1.75, maxWidth: 680 } },
-        "The 1880s footprint sits inside a postwar city that grew far past it without bringing the system along. This pattern is not unique to Denver — most mid-sized American cities followed the same path: a walkable urban core surrounded by decades of car-oriented growth, with no mechanism to extend the sidewalk system outward."
+        "The 1880s footprint sits inside a postwar city that grew far past it without bringing the system along. Most mid-sized American cities followed the same path with a walkable urban core that was then surrounded by decades of car-oriented growth. With no coherent mechanism to extend the sidewalk system outward, the system crumbled."
       )
     )
   );
@@ -268,20 +232,20 @@ function S8Timeline({ tweaks }) {
   const [activeIdx, setActiveIdx] = React.useState(null);
 
   const events = [
-    { year: "1881", label: "Denver's First Charter", body: "The city establishes Sidewalk Districts: an official contractor, City Engineer inspection, and a 60-day cite-and-lien enforcement mechanism. Hundreds of miles of sidewalk built over the following decades.", type: "positive" },
+    { year: "1881", label: "Denver's First Charter", body: "The city establishes Sidewalk Districts: an official contractor, City Engineer inspection, and a 60-day, automatic tax-lien collection. Hundreds of miles of sidewalk built over the following decades.", type: "positive" },
     { year: "1945–60s", label: "Sidewalk Districts Phased Out", body: "As Denver grows outward, the shared-assessment model is dismantled. Responsibility shifts entirely to individual property owners. New subdivisions built without sidewalks.", type: "negative" },
-    { year: "1984", label: "First 'Sidewalk Bill'", body: "City Council introduces a bill giving property owners 'breathing room' on repair timelines. Acknowledges the burden but does not redistribute it.", type: "neutral" },
+    { year: "1984", label: "First 'Sidewalk Bill'", body: "City Council introduces a bill giving property owners 'breathing room' on repair timelines. Acknowledges the burden but leaves private-liability model intact.", type: "neutral" },
     { year: "1988", label: "Council Seeks a Rewrite", body: "After years of failed enforcement, a Council panel asks for a complete rewrite. The city effectively walks away from active management.", type: "negative" },
     { year: "2002", label: "Right-of-Way Sidewalk Initiative", body: "City staff propose a fee of $6.60/sq ft and ~20 cents/sq ft annual maintenance charge. The proposal is never adopted.", type: "neutral" },
     { year: "2015", label: "Rethinking Denver Sidewalk Policy", body: "WalkDenver and Mile High Connects publish: 47% of streets in low-income areas lack adequate sidewalks. The 2002 fee proposal is recirculated.", type: "neutral" },
     { year: "2016", label: "Council Declines Reform", body: "After consulting the City Attorney's Office, Council concludes responsibility should remain with property owners 'to protect the city from liability.' The clearest pre-307 chance to act, declined.", type: "negative" },
     { year: "2017", label: "Denver Moves: Pedestrians", body: "City plan identifies a $1.1 billion gap to complete the network.", type: "milestone" },
-    { year: "Nov 2017", label: "Elevate Denver Bond", body: "Voters approve $47.7M for sidewalks — meaningful, but a fraction of the identified $1.1B need.", type: "positive" },
-    { year: "2017–20", label: "Neighborhood Sidewalk Repair Program", body: "City launches a proactive inspection-and-bill program. After 1,100 inspections over three years, the pace projects to 400 years for citywide coverage.", type: "negative" },
-    { year: "Nov 2020", label: "Auditor's Report", body: "City Auditor labels the program 'flawed' — inefficient, inconsistent, placing undue burden on residents.", type: "negative" },
+    { year: "Nov 2017", label: "Elevate Denver Bond", body: "Voters approve $47.7M for sidewalks - a meaningful, but small fraction of the identified $1.1B need.", type: "positive" },
+    { year: "2017–20", label: "Neighborhood Sidewalk Repair Program", body: "City launches a proactive inspection-and-bill program. After 1,100 inspections over three years, the pace projects 400 years for citywide completion.", type: "negative" },
+    { year: "Nov 2020", label: "Auditor's Report", body: "City Auditor labels the program 'flawed, inefficient, inconsistent, and placing undue burden on residents.", type: "negative" },
     { year: "2022", label: "Denver Deserves Sidewalks", body: "Advocates collect ~20,000 signatures to put a new model on the ballot, bypassing City Council entirely.", type: "positive" },
-    { year: "Nov 2022", label: "Initiative 307 Passes", body: "Voters approve a citywide annual fee that funds construction and repair through the city. Property-owner liability ends.", type: "milestone" },
-    { year: "Jan 2025", label: "Fees Begin / SIP Launches", body: "The city begins fee collection. The Sidewalk Improvement Program launches a 9-year master plan to build and repair a complete, ADA-compliant network.", type: "positive" },
+    { year: "Nov 2022", label: "Initiative 307 Passes", body: "Voters approve a citywide annual fee that funds construction and repair through the city. Repair and construction responsibility shifts to the city.", type: "milestone" },
+    { year: "Jan 2025", label: "Fees Begin and SIP Launches", body: "The city begins fee collection. The Sidewalk Improvement Program launches a 9-year master plan to build and repair a complete, ADA-compliant network.", type: "positive" },
   ];
 
   const typeStyle = {
@@ -375,7 +339,7 @@ function S8Timeline({ tweaks }) {
         }
       },
         React.createElement("p", { style: { margin: 0, fontSize: 15, color: "#333", lineHeight: 1.7, fontStyle: "italic" } },
-          "Eight years between identifying the billion-dollar gap and passing reform. The lesson is not that reform is hard. The lesson is that reform that doesn't change the funding model can't outrun the model itself."
+          "The lesson to be learned here is that no amount of planning, enforcement, or bonding would fix Denver's sidewalk network. The system that created the gaps was, without any change, the system that was trying to close them."
         )
       )
     )
@@ -467,18 +431,17 @@ function S9Ballot({ tweaks }) {
       slideLabel: "The bypass",
       headline: "In 2022, advocates took it to the ballot",
       paragraphs: [
-        "The Denver Deserves Sidewalks campaign collected nearly 20,000 signatures across roughly six months of fieldwork — enough to put the question directly to voters.",
-        "The proposal fit in one sentence: a small annual fee on every property, scaled to lot frontage, in exchange for the city — not the homeowner — taking responsibility for sidewalk construction and repair."
+        "The Denver Deserves Sidewalks campaign collected nearly 20,000 signatures across roughly six months of fieldwork. This was finally enough to put the question directly to voters.",
+        "The proposal fit in one sentence: a small annual fee on every property, scaled to lot frontage, in exchange for the city taking responsibility for sidewalk construction and repair."
       ],
       stat: "~20,000", statLabel: "signatures collected to put the question to voters directly",
-      visual: React.createElement(MapPlaceholder, { label: "Campaign Signature Collection Map", sublabel: "Denver Deserves Sidewalks — 2022" })
+      visual: React.createElement(MapPlaceholder, { label: "Campaign Photo, search Instagram, Denverite, etc. for something.", sublabel: "Denver Deserves Sidewalks — 2022" })
     },
     {
       slideLabel: "What voters approved",
-      headline: "Initiative 307 — November 2022",
+      headline: "Initiative 307: November 2022",
       paragraphs: [
-        "The vote did three things at once: shifted legal responsibility from property owner to city, created a dedicated recurring funding stream, and required prioritization based on need.",
-        "The implementation language was on the ballot — not added later."
+        "The vote did three things at once: it shifted legal responsibility from property owner to city, created a dedicated recurring funding stream, and required prioritization based on need.",
       ],
       visual: React.createElement(ThreeChanges)
     },
@@ -486,9 +449,9 @@ function S9Ballot({ tweaks }) {
       slideLabel: "Why this won",
       headline: "Why this one worked",
       paragraphs: [
-        "Every prior attempt — from 1984 onward — tried to make the property-owner model work better. Initiative 307 replaced it.",
-        "Property owners gave up a future repair bill they couldn't predict in exchange for a smaller, predictable annual one. That trade was easier for voters to make than for council members to propose.",
-        "When council action stalls for two decades, a well-funded ballot campaign is not a backup plan. It is the plan."
+        "Every prior attempt, from 1984 onward, tried to make the property-owner model work better. Initiative 307, instead, worked to overhaul it.",
+        "Property owners gave up a future repair bill they couldn't predict in exchange for a smaller, predictable annual one. City Council wasn't taking action and Denver voters decided it was time for change.",
+        "When council action stalls for two decades, a ballot campaign by passionate advocates can feel like the only way forward."
       ],
       visual: React.createElement(ModelComparison)
     }
