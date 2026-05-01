@@ -140,7 +140,7 @@ function S2About({ tweaks }) {
           "Incomplete networks. Code non-compliance. Deferred maintenance. These are all well known issues that sidewalk networks across the nation face. As walkable and safe pedestrian networks have returned to the forefront of planners minds, reforming the governance structure of these networks has become vital."
         ),
         React.createElement("p", { style: { fontSize: 16, color: "#444", lineHeight: 1.75, marginBottom: 14 } },
-          "Denver's two-decade reform effort is the most fully documented case of a major city escaping that system. This Story Map walks through the analysis — what made Denver's network look the way it does, what the city tried, what failed, and what finally worked."
+          "Denver's two-decade reform effort is the most fully documented case of a major city escaping that system. This guide will take you through it all: what made Denver's network look the way it does, what the city tried, what failed, what's working now, and how it can be applied to your own city."
         ),
        // React.createElement("p", { style: { fontSize: 16, color: "#444", lineHeight: 1.75 } },
          // React.createElement("strong", null, "The focus is Denver. The field guide at the end is for everyone.")
