@@ -65,8 +65,7 @@ function S6History({ tweaks }) {
         "The city was divided into geographic districts. All properties in a district paid a coordinated assessment. The city built and the city repaired.",
         "Outside of a designated district, a majority of property owners on a block could petition the city to build sidewalks. Construction costs were collected via property tax lien.",
         "Neighbors did not pay one at a time. They paid together, and the city built together."
-      ],
-      visual: React.createElement(DistrictMap)
+      ]
     },
     {
       slideLabel: "Standards and structure",
