@@ -1322,382 +1322,130 @@ function S12Decision({ tweaks }) {
   const bone = tweaks?.bgColor || "#EDE6DA";
   const green = "#2D6A4F";
   const amber = "#D89A4E";
-  const muted = "#8A857A";
 
   const [answers, setAnswers] = React.useState({});
-  const [revealed, setRevealed] = React.useState(false);
+  const [result, setResult] = React.useState(null);
 
-  // ── Pathway catalog (mirrors the eight models in S11) ────────────────────────
-  const pathways = {
-    public_ownership: {
-      name: "Public Ownership",
-      color: "#1B3A4B",
-      auth: "Council action",
-      cities: "Boston, MA · Lincoln, NE · Maitland, FL · Spanish Fork, UT",
-      summary: "General fund covers construction and maintenance. The city treats sidewalks as core infrastructure, like streets.",
-      fits: "Strong council appetite, general-fund capacity to absorb a recurring sidewalk line item, and a robust public works department able to deliver citywide.",
-      risk: "Without a dedicated revenue stream, sidewalk funding competes annually with every other budget priority and is exposed to recession-era cuts.",
-      archetype: "The Boston archetype"
-    },
-    utility_fee: {
-      name: "Utility Fee",
-      color: "#2D5F7A",
-      auth: "Council action",
-      cities: "Payette, ID · Westminster, CO · Englewood, CO · Baker City, OR",
-      summary: "Flat monthly charge billed alongside water, sewer, or trash. Englewood's opt-in version runs at ~95% voluntary participation.",
-      fits: "Existing utility billing can carry a new charge, council can authorize without a ballot, and the city wants the fastest path to protected revenue.",
-      risk: "Flat fees are regressive without income-based adjustments, and per-household revenue is modest at typical residential rates.",
-      archetype: "The Payette / Westminster archetype"
-    },
-    dedicated_fee: {
-      name: "Dedicated Annual Fee",
-      color: "#B2542C",
-      auth: "Voter mandate",
-      cities: "Denver, CO (Initiative 307, 2022)",
-      summary: "Parcel-based fee scaled by frontage, dedicated to a sidewalk program. Funds a multi-year build-out and repair plan directly.",
-      fits: "Council action has stalled, an advocacy coalition has capacity to run a ballot campaign, and the revenue need is too large for utility-fee scale.",
-      risk: "Long timeline — Denver moved from first serious proposal to funded plan over two decades. Requires sustained organizing and careful legal drafting.",
-      archetype: "The Denver archetype"
-    },
-    millage: {
-      name: "Property Tax Millage",
-      color: "#4A7C59",
-      auth: "Voter mandate (periodic renewal)",
-      cities: "Ann Arbor, MI · East Grand Rapids, MI",
-      summary: "Dedicated millage rate approved by voters and renewed on a fixed cycle. Ann Arbor passed a 0.125-mill levy specifically for sidewalk repair in 2011.",
-      fits: "State allows millage rates without supermajority hurdles, the property tax base is reliable, and voters periodically renew infrastructure measures.",
-      risk: "Renewal cycles create funding cliffs and political uncertainty; not viable in California under Prop 13's supermajority requirement.",
-      archetype: "The Ann Arbor archetype"
-    },
-    parcel_tax: {
-      name: "Parcel Tax",
-      color: "#7B5EA7",
-      auth: "Voter mandate (simple majority in CA)",
-      cities: "Berkeley, CA (Measure FF, 2024)",
-      summary: "Flat per-parcel or per-square-foot tax. Berkeley's Measure FF generates ~$15M annually for 14 years at $0.17/sqft residential, $0.25/sqft other.",
-      fits: "California cities specifically — Prop 13 requires a two-thirds vote for property tax increases but only a simple majority for parcel taxes.",
-      risk: "Designed around California's constitutional constraints; outside CA, a millage or dedicated fee is usually simpler. Rate structure determines distributional impact.",
-      archetype: "The Berkeley archetype"
-    },
-    improvement_district: {
-      name: "Improvement District",
-      color: "#5A7A6A",
-      auth: "Council action",
-      cities: "Ithaca, NY (five Sidewalk Improvement Districts)",
-      summary: "Geographic districts with annual fees scaled by property classification. Maintenance costs are socialized across all properties within each district.",
-      fits: "Significant variation in conditions across neighborhoods, capacity to administer differentiated fees, and equity is a primary design constraint.",
-      risk: "Administrative complexity is meaningfully higher than a flat citywide fee. District boundaries are politically negotiated and can entrench inequities if drawn poorly.",
-      archetype: "The Ithaca archetype"
-    },
-    inspection_bill: {
-      name: "Inspection-and-Bill",
-      color: "#8A6A3A",
-      auth: "Council action",
-      cities: "Minneapolis, MN",
-      summary: "City inspects on a rotating cycle, makes repairs, and bills the abutting owner. Preserves property-owner liability while ensuring repairs proceed on schedule.",
-      fits: "Network is largely intact but maintenance has lapsed, ballot reform isn't politically viable, and the city wants repair coordination without changing legal liability.",
-      risk: "Preserves the surprise-bill problem at the household level. Doesn't resolve the underlying cost-distribution issue that the private-liability model creates.",
-      archetype: "The Minneapolis archetype"
-    },
-    general_levy: {
-      name: "General Transportation Levy",
-      color: "#3A6A8A",
-      auth: "Voter mandate (periodic renewal)",
-      cities: "Seattle, WA · Cheney, WA · East Grand Rapids, MI",
-      summary: "Voter-approved levy funding streets and sidewalks together, often with an equity index directing capital. Seattle's transportation levy is the largest example.",
-      fits: "The political coalition for transportation broadly is stronger than for sidewalks specifically, and the city has appetite for repeated ballot cycles.",
-      risk: "Sidewalks compete with streets inside the same fund and can be deprioritized at the implementation stage. Renewal cycles create planning uncertainty.",
-      archetype: "The Seattle archetype"
-    }
-  };
-
-  // ── Diagnostic questions ─────────────────────────────────────────────────────
-  const questions = [
-    {
-      id: "q1",
-      label: "Legal framework",
-      text: "What is your state's local-government framework?",
-      subtitle: "This determines which funding tools your city can adopt without state legislative authorization. If you're unsure, verify with municipal counsel before designing the mechanism.",
-      options: [
-        { id: "home_rule", label: "Home rule — broad municipal authority (CO, MI, OH, WA, MN, MA, TX, and most western states)", icon: "🏛" },
-        { id: "dillons", label: "Dillon's Rule — explicit state authorization required (VA, NC, AL, ID, and most southeastern states)", icon: "📜" },
-        { id: "california", label: "California — home rule with Prop 13 constraints on property tax", icon: "⚖" },
-        { id: "unsure", label: "Not sure — need to confirm with counsel", icon: "❓" }
-      ]
-    },
-    {
-      id: "q2",
-      label: "Network state",
-      text: "What does your sidewalk network actually need?",
-      subtitle: "The first diagnosis is physical, not financial. A city mostly filling gaps faces a different problem — and a different cost curve — than one mostly fixing what already exists.",
-      options: [
-        { id: "build_out", label: "Build out — significant missing sidewalks, especially in post-1940 car-era neighborhoods", icon: "🚧" },
-        { id: "maintenance", label: "Fix what exists — network is largely complete but in deferred-maintenance disrepair", icon: "🔧" },
-        { id: "both", label: "Both — meaningful gaps and meaningful maintenance backlog", icon: "🌐" },
-        { id: "unknown", label: "Not sure — we don't have a current network inventory", icon: "📊" }
-      ]
-    },
-    {
-      id: "q3",
-      label: "Spatial pattern",
-      text: "Where are the worst problems concentrated?",
-      subtitle: "Spatial pattern shapes which pathway is politically viable and where the equity case lives. The same total deficit looks very different in a redlined core than in a car-era periphery.",
-      options: [
-        { id: "redlined", label: "Historically disinvested neighborhoods (former HOLC C/D grades, lower-income)", icon: "🏘" },
-        { id: "periphery", label: "Post-1940 car-era peripheral neighborhoods", icon: "🚗" },
-        { id: "dispersed", label: "Dispersed across the network with no strong spatial pattern", icon: "🗺" },
-        { id: "corridors", label: "Specific corridors near schools, transit stops, or commercial centers", icon: "🚌" }
-      ]
-    },
-    {
-      id: "q4",
-      label: "Political appetite",
-      text: "How would you describe political appetite for reform?",
-      subtitle: "Be honest about where you are; that determines what is actually possible. A pathway requiring sustained ballot organizing is not the right answer for a council that could pass a utility fee next month.",
-      options: [
-        { id: "ready", label: "Council is ready to act — a measure could plausibly pass this year", icon: "🏛" },
-        { id: "open", label: "Council is open but needs a stronger public case or coalition first", icon: "📣" },
-        { id: "stalled", label: "Council has stalled for years — ballot is the realistic path", icon: "🗳" },
-        { id: "absent", label: "Sidewalks aren't yet on the political agenda — case-building comes first", icon: "💤" }
-      ]
-    },
-    {
-      id: "q5",
-      label: "Revenue capacity",
-      text: "What revenue capacity do you have?",
-      subtitle: "Funding feasibility narrows the field. The same pathway can be the right answer in one fiscal context and the wrong one in another.",
-      options: [
-        { id: "general_fund", label: "General fund could absorb sidewalks if council prioritized it", icon: "💰" },
-        { id: "utility", label: "Existing utility billing infrastructure can carry a new dedicated charge", icon: "💧" },
-        { id: "voter", label: "Voter-approved revenue is the only realistic path to needed scale", icon: "🗳" },
-        { id: "tight", label: "Tight budget — new spending requires unusually strong justification", icon: "📉" }
-      ]
-    },
-    {
-      id: "q6",
-      label: "Delivery capacity",
-      text: "How is sidewalk delivery currently organized?",
-      subtitle: "Operational capacity determines what a reformed program can actually deliver. Funding a program the city can't staff or contract for is a common failure mode.",
-      options: [
-        { id: "robust", label: "Robust public works — could absorb citywide sidewalk delivery in-house", icon: "🏗" },
-        { id: "mid", label: "Mid-capacity — could deliver with new staff or contractor partnerships", icon: "⚙" },
-        { id: "limited", label: "Limited — would need to contract construction and inspection out", icon: "📋" },
-        { id: "district", label: "Decentralized or district-based delivery fits the city's structure better", icon: "🏘" }
-      ]
-    }
-  ];
-
-  // ── Scoring matrix ───────────────────────────────────────────────────────────
-  // Each (qid, optionId) → contribution to each pathway's total score
-  const SCORES = {
+  const questions = {
     q1: {
-      home_rule:  { public_ownership: 2, utility_fee: 3, dedicated_fee: 3, millage: 2, parcel_tax: -1, improvement_district: 2, inspection_bill: 2, general_levy: 2 },
-      dillons:    { public_ownership: 1, utility_fee: 1, dedicated_fee: -1, millage: 1, parcel_tax: -2, improvement_district: 0, inspection_bill: 2, general_levy: 0 },
-      california: { public_ownership: 0, utility_fee: 0, dedicated_fee: -3, millage: -5, parcel_tax: 7, improvement_district: 1, inspection_bill: 1, general_levy: 1 },
-      unsure:     { public_ownership: 1, utility_fee: 1, dedicated_fee: 1, millage: 0, parcel_tax: 0, improvement_district: 1, inspection_bill: 1, general_levy: 1 }
+      text: "Where are your city's gaps concentrated?",
+      subtitle: "Look at your existing sidewalk data by development era and HOLC grade.",
+      options: [
+        { id: "cores", label: "Older redlined cores (streetcar-era neighborhoods)", icon: "🏙" },
+        { id: "periphery", label: "Car-era peripheral neighborhoods (post-1940)", icon: "🚗" },
+        { id: "both", label: "Both — dispersed across the network", icon: "🗺" },
+        { id: "operational", label: "Gaps are manageable — I need better operations, not new funding", icon: "🔧" },
+      ]
     },
     q2: {
-      build_out:   { public_ownership: 2, utility_fee: 1, dedicated_fee: 3, millage: 2, parcel_tax: 2, improvement_district: 2, inspection_bill: -2, general_levy: 3 },
-      maintenance: { public_ownership: 1, utility_fee: 2, dedicated_fee: 1, millage: 2, parcel_tax: 1, improvement_district: 1, inspection_bill: 3, general_levy: 1 },
-      both:        { public_ownership: 2, utility_fee: 2, dedicated_fee: 3, millage: 2, parcel_tax: 2, improvement_district: 2, inspection_bill: 1, general_levy: 2 },
-      unknown:     { public_ownership: 0, utility_fee: 0, dedicated_fee: 0, millage: 0, parcel_tax: 0, improvement_district: 1, inspection_bill: 2, general_levy: 0 }
+      text: "Do you have legal authority to assess a property-based fee?",
+      subtitle: "In most states, yes. In California, Prop 13 limits millages — check with municipal counsel.",
+      options: [
+        { id: "yes", label: "Yes — standard state law (most states)", icon: "✅" },
+        { id: "ca", label: "No — California-style supermajority limits apply", icon: "⚖" },
+      ]
     },
     q3: {
-      redlined:  { public_ownership: 1, utility_fee: 0, dedicated_fee: 2, millage: 1, parcel_tax: 1, improvement_district: 3, inspection_bill: 0, general_levy: 2 },
-      periphery: { public_ownership: 1, utility_fee: 1, dedicated_fee: 3, millage: 2, parcel_tax: 1, improvement_district: 1, inspection_bill: -1, general_levy: 3 },
-      dispersed: { public_ownership: 2, utility_fee: 2, dedicated_fee: 2, millage: 2, parcel_tax: 2, improvement_district: 1, inspection_bill: 1, general_levy: 1 },
-      corridors: { public_ownership: 1, utility_fee: 1, dedicated_fee: 1, millage: 1, parcel_tax: 1, improvement_district: 2, inspection_bill: 1, general_levy: 2 }
-    },
-    q4: {
-      ready:   { public_ownership: 3, utility_fee: 3, dedicated_fee: -1, millage: -1, parcel_tax: -1, improvement_district: 3, inspection_bill: 3, general_levy: 0 },
-      open:    { public_ownership: 2, utility_fee: 2, dedicated_fee: 1, millage: 1, parcel_tax: 1, improvement_district: 2, inspection_bill: 2, general_levy: 1 },
-      stalled: { public_ownership: -2, utility_fee: -1, dedicated_fee: 3, millage: 3, parcel_tax: 2, improvement_district: -1, inspection_bill: 1, general_levy: 3 },
-      absent:  { public_ownership: -1, utility_fee: 0, dedicated_fee: -1, millage: -1, parcel_tax: -1, improvement_district: 0, inspection_bill: 1, general_levy: -1 }
-    },
-    q5: {
-      general_fund: { public_ownership: 4, utility_fee: 1, dedicated_fee: 0, millage: 0, parcel_tax: 0, improvement_district: 1, inspection_bill: 2, general_levy: 0 },
-      utility:      { public_ownership: 1, utility_fee: 4, dedicated_fee: 1, millage: 0, parcel_tax: 0, improvement_district: 2, inspection_bill: 2, general_levy: 0 },
-      voter:        { public_ownership: -1, utility_fee: 1, dedicated_fee: 4, millage: 3, parcel_tax: 3, improvement_district: 1, inspection_bill: 0, general_levy: 3 },
-      tight:        { public_ownership: -1, utility_fee: 1, dedicated_fee: 0, millage: 0, parcel_tax: 0, improvement_district: 1, inspection_bill: 3, general_levy: 0 }
-    },
-    q6: {
-      robust:   { public_ownership: 2, utility_fee: 2, dedicated_fee: 2, millage: 2, parcel_tax: 2, improvement_district: 1, inspection_bill: 2, general_levy: 2 },
-      mid:      { public_ownership: 1, utility_fee: 2, dedicated_fee: 2, millage: 1, parcel_tax: 1, improvement_district: 1, inspection_bill: 2, general_levy: 1 },
-      limited:  { public_ownership: 0, utility_fee: 2, dedicated_fee: 1, millage: 0, parcel_tax: 0, improvement_district: 1, inspection_bill: 2, general_levy: 0 },
-      district: { public_ownership: 0, utility_fee: 0, dedicated_fee: 1, millage: 1, parcel_tax: 1, improvement_district: 4, inspection_bill: 1, general_levy: 0 }
+      text: "Can your council act on its own, or do you need a ballot?",
+      subtitle: "Political diagnosis: has your council moved on sidewalks in the last decade?",
+      options: [
+        { id: "council", label: "Council can and will act — plausibly within 2 years", icon: "🏛" },
+        { id: "ballot", label: "Council has stalled for a decade — ballot is the path", icon: "🗳" },
+      ]
     }
   };
 
-  // ── Score calculation ────────────────────────────────────────────────────────
-  const computeScores = () => {
-    const scores = {};
-    Object.keys(pathways).forEach(k => { scores[k] = 0; });
-    Object.entries(answers).forEach(([qid, optId]) => {
-      const contrib = SCORES[qid] && SCORES[qid][optId];
-      if (!contrib) return;
-      Object.entries(contrib).forEach(([pkey, pts]) => { scores[pkey] += pts; });
-    });
-    return scores;
+  const outcomes = {
+    "cores-yes-council":   { pathway: "Public Ownership or Utility Fee", cities: "Boston, MA · Westminster, CO", color: "#1B3A4B", section: "s11" },
+    "cores-yes-ballot":    { pathway: "Dedicated Annual Fee or Property Tax Millage", cities: "Denver, CO · Ann Arbor, MI", color: rust, section: "s11" },
+    "cores-ca-council":    { pathway: "Parcel Tax (simple majority)", cities: "Berkeley, CA — Measure FF", color: "#7B5EA7", section: "s11" },
+    "cores-ca-ballot":     { pathway: "Parcel Tax (simple majority)", cities: "Berkeley, CA — Measure FF", color: "#7B5EA7", section: "s11" },
+    "periphery-yes-council": { pathway: "Public Ownership + Interim Walkway Program", cities: "Boston, MA + Seattle, WA walkway program", color: "#1B3A4B", section: "s11" },
+    "periphery-yes-ballot":  { pathway: "Dedicated Annual Fee + Interim Walkway Program", cities: "Denver, CO + Seattle, WA walkway program", color: rust, section: "s11" },
+    "periphery-ca-council":  { pathway: "Parcel Tax + Interim Walkway Program", cities: "Berkeley, CA + Seattle, WA model", color: "#7B5EA7", section: "s11" },
+    "periphery-ca-ballot":   { pathway: "Parcel Tax + Interim Walkway Program", cities: "Berkeley, CA + Seattle, WA model", color: "#7B5EA7", section: "s11" },
+    "both-yes-council":    { pathway: "Improvement District + Utility Fee", cities: "Ithaca, NY · Westminster, CO", color: "#5A7A6A", section: "s11" },
+    "both-yes-ballot":     { pathway: "Dedicated Annual Fee (the Denver model)", cities: "Denver, CO", color: rust, section: "s11" },
+    "both-ca-council":     { pathway: "Parcel Tax + Improvement District", cities: "Berkeley, CA + Ithaca, NY model", color: "#7B5EA7", section: "s11" },
+    "both-ca-ballot":      { pathway: "Parcel Tax + Improvement District", cities: "Berkeley, CA + Ithaca, NY model", color: "#7B5EA7", section: "s11" },
+    "operational-yes-council": { pathway: "Inspection-and-Bill", cities: "Minneapolis, MN", color: "#8A6A3A", section: "s11" },
+    "operational-yes-ballot":  { pathway: "Inspection-and-Bill", cities: "Minneapolis, MN", color: "#8A6A3A", section: "s11" },
+    "operational-ca-council":  { pathway: "Inspection-and-Bill", cities: "Minneapolis, MN", color: "#8A6A3A", section: "s11" },
+    "operational-ca-ballot":   { pathway: "Inspection-and-Bill", cities: "Minneapolis, MN", color: "#8A6A3A", section: "s11" },
   };
 
-  const sortedScores = () => {
-    const scores = computeScores();
-    return Object.entries(scores)
-      .map(([k, v]) => ({ key: k, score: v, ...pathways[k] }))
-      .sort((a, b) => b.score - a.score);
-  };
-
-  // ── Next-steps generator — keyed to the answer combination, not just primary ──
-  const generateNextSteps = (primary) => {
-    const steps = [];
-    if (answers.q1 === "unsure") {
-      steps.push("Before designing a mechanism, confirm with municipal counsel whether your state grants home rule or operates under Dillon's Rule. The answer changes which tools are available.");
-    }
-    if (answers.q2 === "unknown") {
-      steps.push("Commission or compile a citywide sidewalk inventory. Without one, the pathway choice is built on guesses, and the resulting program will be miscalibrated.");
-    }
-    if (primary === "dedicated_fee" || primary === "millage" || primary === "parcel_tax" || primary === "general_levy") {
-      steps.push("Build an advocacy coalition early. Denver's Initiative 307 succeeded after sustained organizing across disability rights, pedestrian safety, and neighborhood groups — not from a single campaign cycle.");
-    }
-    if (primary === "utility_fee" || primary === "public_ownership") {
-      steps.push("Draft the ordinance language alongside a phased implementation plan. Council-action pathways move faster, but front-loading the operational details prevents stalls after passage.");
-    }
-    if (primary === "inspection_bill") {
-      steps.push("Audit your existing inspection capacity and assessment-billing infrastructure. The Minneapolis model only works if the city can run a rotating cycle that meaningfully covers the network within a defined timeframe.");
-    }
-    if (primary === "improvement_district") {
-      steps.push("Define district boundaries before designing the fee structure. Boundaries determine who pays for what; getting them wrong embeds inequities the funding mechanism can't correct.");
-    }
-    if (answers.q3 === "redlined") {
-      steps.push("Embed equity in both the prioritization sequence and the fee structure. Repairing redlined cores first does not automatically protect low-income owners from regressive charges — those need to be addressed in parallel.");
-    }
-    if (answers.q4 === "absent") {
-      steps.push("Reform begins with case-building, not mechanism design. Document the network deficit, the ADA exposure, and the comparative-cost case before approaching council or drafting ballot language.");
-    }
-    if (answers.q6 === "limited") {
-      steps.push("Plan for delivery as carefully as funding. A passed measure with no contractor pipeline produces visible failure within the first program cycle.");
-    }
-    return steps.slice(0, 3);
-  };
-
-  // ── Archetype detection ──────────────────────────────────────────────────────
-  const detectArchetype = (top) => {
-    if (answers.q1 === "california") return "The Berkeley archetype";
-    if (top === "dedicated_fee" && answers.q4 === "stalled") return "The Denver archetype";
-    if (top === "inspection_bill") return "The Minneapolis archetype";
-    if (top === "general_levy") return "The Seattle archetype";
-    if (top === "utility_fee" && answers.q4 === "ready") return "The Payette / Westminster archetype";
-    if (top === "millage") return "The Ann Arbor archetype";
-    if (top === "improvement_district") return "The Ithaca archetype";
-    if (top === "public_ownership") return "The Boston archetype";
-    return pathways[top]?.archetype || "";
-  };
-
-  // ── Handlers ─────────────────────────────────────────────────────────────────
   const answer = (qid, val) => {
     const next = { ...answers, [qid]: val };
     setAnswers(next);
-    if (Object.keys(next).length === questions.length) {
-      setTimeout(() => setRevealed(true), 250);
+
+    // Check if we should skip Q2/Q3 for operational
+    if (qid === "q1" && val === "operational") {
+      setResult(outcomes["operational-yes-council"]);
+    } else if (next.q1 && next.q2 && next.q3) {
+      const key = `${next.q1}-${next.q2}-${next.q3}`;
+      setResult(outcomes[key] || null);
     }
   };
-  const reset = () => { setAnswers({}); setRevealed(false); };
+
+  const reset = () => { setAnswers({}); setResult(null); };
   const scrollTo = (id) => { const el = document.getElementById(id); if (el) window.scrollTo({ top: el.offsetTop - 60, behavior: "smooth" }); };
 
-  // Current question is the first unanswered one
-  const currentQId = !revealed ? (questions.find(q => !answers[q.id])?.id || null) : null;
-  const completedCount = Object.keys(answers).length;
-  const progressPct = (completedCount / questions.length) * 100;
-
-  // ── Render result panel ──────────────────────────────────────────────────────
-  const sorted = revealed ? sortedScores() : null;
-  const primary = sorted?.[0];
-  const alternative = sorted?.[1];
-  const contraIndicated = sorted ? sorted.filter(p => p.score < 0).slice(-2) : [];
-  const archetype = primary ? detectArchetype(primary.key) : null;
-  const nextSteps = primary ? generateNextSteps(primary.key) : [];
+  const currentQ = !answers.q1 ? "q1" : answers.q1 === "operational" ? null : !answers.q2 ? "q2" : !answers.q3 ? "q3" : null;
 
   return React.createElement("section", {
     id: "s12",
     style: { background: "#fff", padding: "80px 48px" }
   },
-    React.createElement("div", { style: { maxWidth: 960, margin: "0 auto" } },
-
-      // Header
-      React.createElement("div", { style: { fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: rust, fontWeight: 700, marginBottom: 12 } },
-        "Act IV — A Pathway For Your City"
+    React.createElement("div", { style: { maxWidth: 900, margin: "0 auto" } },
+      React.createElement("div", { style: { fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: rust, fontWeight: 700, marginBottom: 12 } }, "Act IV — A Pathway For Your City"),
+      React.createElement("h2", { style: { fontSize: 34, fontWeight: 800, color: navy, margin: "0 0 16px" } }, "Diagnose Your Starting Point"),
+      React.createElement("p", { style: { fontSize: 16, color: "#444", lineHeight: 1.75, maxWidth: 640, marginBottom: 8 } },
+        "The question is not 'what should every city do.' The question is 'what should my city do, given where it is starting from.' Three diagnostic questions narrow the field."
       ),
-      React.createElement("h2", { style: { fontSize: 34, fontWeight: 800, color: navy, margin: "0 0 16px", lineHeight: 1.2 } },
-        "Diagnose Your Starting Point"
-      ),
-      React.createElement("p", { style: { fontSize: 16, color: "#444", lineHeight: 1.75, maxWidth: 680, marginBottom: 12 } },
-        "The question isn't \"what should every city do.\" It's \"what should ", React.createElement("em", null, "my"), " city do, given where it's actually starting from.\" Six questions cover the legal, physical, political, fiscal, and operational dimensions that narrow the field."
-      ),
-      React.createElement("p", { style: { fontSize: 14, color: "#777", marginBottom: 40 } },
-        "Answers are scored against all eight reform pathways. The strongest fits surface; contraindicated pathways are flagged."
+      React.createElement("p", { style: { fontSize: 14, color: "#888", marginBottom: 44 } },
+        "Answer each question and the right pathway comes into focus."
       ),
 
-      // Progress bar
-      !revealed && React.createElement("div", { style: { marginBottom: 36 } },
-        React.createElement("div", { style: { display: "flex", justifyContent: "space-between", marginBottom: 8 } },
-          React.createElement("div", { style: { fontSize: 12, color: muted, fontWeight: 600, letterSpacing: "0.04em" } },
-            `Question ${Math.min(completedCount + 1, questions.length)} of ${questions.length}`
-          ),
-          React.createElement("div", { style: { fontSize: 12, color: muted, fontWeight: 600 } },
-            `${Math.round(progressPct)}% complete`
-          )
-        ),
-        React.createElement("div", { style: { height: 4, background: "rgba(27,58,75,0.08)", borderRadius: 2, overflow: "hidden" } },
-          React.createElement("div", {
-            style: { height: "100%", width: `${progressPct}%`, background: rust, transition: "width 0.4s ease" }
-          })
-        ),
-        // Question step labels
-        React.createElement("div", {
-          style: { display: "flex", justifyContent: "space-between", marginTop: 14, gap: 4 }
-        },
-          questions.map(q => {
-            const done = !!answers[q.id];
-            const active = currentQId === q.id;
-            return React.createElement("div", {
-              key: q.id,
-              style: { flex: 1, textAlign: "center" }
-            },
-              React.createElement("div", {
-                style: {
-                  width: 22, height: 22, borderRadius: "50%",
-                  background: done ? green : active ? navy : "rgba(27,58,75,0.1)",
-                  color: done || active ? "#fff" : "#aaa",
-                  display: "inline-flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 11, fontWeight: 700, marginBottom: 6, transition: "all 0.2s"
-                }
-              }, done ? "✓" : q.id.replace("q", "")),
-              React.createElement("div", {
-                style: { fontSize: 10.5, color: done ? green : active ? navy : "#aaa", fontWeight: done || active ? 600 : 400, letterSpacing: "0.02em" }
-              }, q.label)
-            );
-          })
-        )
+      // Progress dots
+      React.createElement("div", { style: { display: "flex", gap: 8, marginBottom: 36, alignItems: "center" } },
+        ["Gap profile", "Legal authority", "Council or ballot?"].map((label, i) => {
+          const qKey = `q${i + 1}`;
+          const done = !!answers[qKey];
+          const active = currentQ === qKey;
+          return React.createElement("div", { key: i, style: { display: "flex", alignItems: "center", gap: 8 } },
+            React.createElement("div", {
+              style: {
+                width: 28, height: 28, borderRadius: "50%",
+                background: done ? green : active ? navy : "rgba(27,58,75,0.1)",
+                color: done || active ? "#fff" : "#999",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 12, fontWeight: 700, transition: "all 0.2s"
+              }
+            }, done ? "✓" : i + 1),
+            React.createElement("span", { style: { fontSize: 12, color: done ? green : active ? navy : "#aaa", fontWeight: done || active ? 600 : 400 } }, label),
+            i < 2 && React.createElement("div", { style: { width: 24, height: 2, background: done ? green : "rgba(27,58,75,0.12)", marginLeft: 4 } })
+          );
+        })
       ),
 
       // Questions
-      !revealed && questions.map(q => {
-        const isActive = currentQId === q.id;
-        const answered = !!answers[q.id];
+      !result && Object.entries(questions).map(([qid, q]) => {
+        if (answers.q1 === "operational" && qid !== "q1") return null;
+        const isActive = currentQ === qid;
+        const answered = !!answers[qid];
         if (!isActive && !answered) return null;
 
         return React.createElement("div", {
-          key: q.id,
+          key: qid,
           style: {
-            marginBottom: 24, padding: "28px 32px",
-            background: isActive ? bone : "#F7F9F7",
+            marginBottom: 28, padding: "28px 32px",
+            background: isActive ? bone : answered ? "#F7F9F7" : "#fff",
             borderRadius: 10,
-            border: isActive ? `2px solid ${navy}` : `1.5px solid ${green}33`,
+            border: isActive ? `2px solid ${navy}` : `1.5px solid ${answered ? green : "rgba(27,58,75,0.12)"}`,
             transition: "all 0.2s"
           }
         },
-          // Question header
-          React.createElement("div", { style: { display: "flex", alignItems: "flex-start", gap: 16, marginBottom: isActive ? 14 : 0 } },
+          React.createElement("div", { style: { display: "flex", alignItems: "flex-start", gap: 16, marginBottom: answered && !isActive ? 0 : 20 } },
             React.createElement("div", {
               style: {
                 width: 32, height: 32, borderRadius: "50%", flexShrink: 0,
@@ -1705,29 +1453,20 @@ function S12Decision({ tweaks }) {
                 display: "flex", alignItems: "center", justifyContent: "center",
                 fontSize: 13, fontWeight: 700
               }
-            }, answered ? "✓" : q.id.replace("q", "")),
+            }, answered ? "✓" : qid.replace("q", "")),
             React.createElement("div", { style: { flex: 1 } },
-              React.createElement("div", { style: { fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", color: rust, fontWeight: 700, marginBottom: 4 } }, q.label),
-              React.createElement("div", { style: { fontSize: 18, fontWeight: 700, color: navy, marginBottom: 6, lineHeight: 1.35 } }, q.text),
-              isActive && React.createElement("div", { style: { fontSize: 13.5, color: "#666", lineHeight: 1.6 } }, q.subtitle)
+              React.createElement("div", { style: { fontSize: 17, fontWeight: 700, color: navy, marginBottom: 4 } }, q.text),
+              React.createElement("div", { style: { fontSize: 13, color: "#777" } }, q.subtitle)
             )
           ),
-
-          // Answered summary (collapsed view)
-          answered && !isActive && React.createElement("div", {
-            style: { paddingLeft: 48, marginTop: 8, fontSize: 13, color: green, fontWeight: 600 }
-          },
-            "→ " + q.options.find(o => o.id === answers[q.id])?.label
+          answered && !isActive && React.createElement("div", { style: { paddingLeft: 48, fontSize: 13, color: green, fontWeight: 600 } },
+            "→ " + q.options.find(o => o.id === answers[qid])?.label
           ),
-
-          // Active question options
-          isActive && React.createElement("div", {
-            style: { display: "flex", flexDirection: "column", gap: 10, paddingLeft: 48, marginTop: 16 }
-          },
+          isActive && React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 10, paddingLeft: 48 } },
             q.options.map(opt =>
               React.createElement("button", {
                 key: opt.id,
-                onClick: () => answer(q.id, opt.id),
+                onClick: () => answer(qid, opt.id),
                 style: {
                   display: "flex", alignItems: "center", gap: 14,
                   padding: "14px 18px", borderRadius: 8,
@@ -1736,232 +1475,59 @@ function S12Decision({ tweaks }) {
                   fontFamily: "inherit", textAlign: "left",
                   transition: "all 0.15s"
                 },
-                onMouseEnter: e => {
-                  e.currentTarget.style.borderColor = navy;
-                  e.currentTarget.style.background = "rgba(27,58,75,0.03)";
-                  e.currentTarget.style.transform = "translateX(2px)";
-                },
-                onMouseLeave: e => {
-                  e.currentTarget.style.borderColor = "rgba(27,58,75,0.15)";
-                  e.currentTarget.style.background = "#fff";
-                  e.currentTarget.style.transform = "translateX(0)";
-                }
+                onMouseEnter: e => { e.currentTarget.style.borderColor = navy; e.currentTarget.style.background = "rgba(27,58,75,0.03)"; },
+                onMouseLeave: e => { e.currentTarget.style.borderColor = "rgba(27,58,75,0.15)"; e.currentTarget.style.background = "#fff"; }
               },
-                React.createElement("span", { style: { fontSize: 20, flexShrink: 0 } }, opt.icon),
-                React.createElement("span", { style: { fontSize: 14, color: navy, fontWeight: 500, lineHeight: 1.45 } }, opt.label)
+                React.createElement("span", { style: { fontSize: 20 } }, opt.icon),
+                React.createElement("span", { style: { fontSize: 14, color: navy, fontWeight: 500, lineHeight: 1.4 } }, opt.label)
               )
             )
           )
         );
       }),
 
-      // ── Result panel ────────────────────────────────────────────────────────
-      revealed && primary && React.createElement("div", null,
-
-        // Archetype banner
-        archetype && React.createElement("div", {
-          style: {
-            padding: "18px 24px",
-            background: `${primary.color}10`,
-            borderLeft: `4px solid ${primary.color}`,
-            borderRadius: "0 8px 8px 0",
-            marginBottom: 28,
-            display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12
-          }
-        },
-          React.createElement("div", null,
-            React.createElement("div", { style: { fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase", color: muted, fontWeight: 700, marginBottom: 4 } },
-              "Your diagnostic profile"
-            ),
-            React.createElement("div", { style: { fontSize: 20, fontWeight: 800, color: navy } }, archetype)
-          ),
-          React.createElement("button", {
-            onClick: reset,
-            style: {
-              padding: "8px 16px", background: "transparent",
-              border: `1.5px solid rgba(27,58,75,0.25)`, color: navy,
-              borderRadius: 6, fontSize: 12, fontWeight: 600,
-              cursor: "pointer", fontFamily: "inherit"
-            }
-          }, "↺ Start over")
-        ),
-
-        // Primary recommendation
-        React.createElement("div", {
-          style: {
-            padding: "32px 36px", borderRadius: 12,
-            background: "#fff",
-            border: `2.5px solid ${primary.color}`,
-            boxShadow: `0 4px 24px ${primary.color}22`,
-            marginBottom: 24
-          }
-        },
-          React.createElement("div", { style: { fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: primary.color, fontWeight: 700, marginBottom: 10 } },
-            "Primary pathway"
-          ),
-          React.createElement("h3", { style: { fontSize: 28, fontWeight: 900, color: navy, margin: "0 0 8px" } }, primary.name),
-          React.createElement("div", { style: { fontSize: 13, color: muted, marginBottom: 18, display: "flex", gap: 16, flexWrap: "wrap" } },
-            React.createElement("span", null, primary.auth.startsWith("Council") ? "🏛" : "🗳", " ", primary.auth),
-            React.createElement("span", null, "Example: ", primary.cities)
-          ),
-          React.createElement("p", { style: { fontSize: 15, color: "#333", lineHeight: 1.7, margin: "0 0 18px" } }, primary.summary),
-
-          React.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginTop: 20 } },
-            React.createElement("div", null,
-              React.createElement("div", { style: { fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: green, fontWeight: 700, marginBottom: 6 } }, "Why this fits"),
-              React.createElement("p", { style: { fontSize: 13.5, color: "#444", lineHeight: 1.65, margin: 0 } }, primary.fits)
-            ),
-            React.createElement("div", null,
-              React.createElement("div", { style: { fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: rust, fontWeight: 700, marginBottom: 6 } }, "Key risk"),
-              React.createElement("p", { style: { fontSize: 13.5, color: "#444", lineHeight: 1.65, margin: 0 } }, primary.risk)
-            )
-          )
-        ),
-
-        // Alternative pathway (only if meaningfully close to primary)
-        alternative && (alternative.score >= primary.score - 4) && React.createElement("div", {
-          style: {
-            padding: "24px 28px", borderRadius: 10,
-            background: "#FAFAF7",
-            border: `1.5px solid ${alternative.color}66`,
-            marginBottom: 24
-          }
-        },
-          React.createElement("div", { style: { fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase", color: alternative.color, fontWeight: 700, marginBottom: 8 } },
-            "Compatible alternative"
-          ),
-          React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 10, flexWrap: "wrap", gap: 8 } },
-            React.createElement("h4", { style: { fontSize: 20, fontWeight: 800, color: navy, margin: 0 } }, alternative.name),
-            React.createElement("div", { style: { fontSize: 12, color: muted } }, alternative.auth)
-          ),
-          React.createElement("p", { style: { fontSize: 13.5, color: "#555", lineHeight: 1.65, margin: "0 0 8px" } }, alternative.summary),
-          React.createElement("p", { style: { fontSize: 12.5, color: muted, lineHeight: 1.6, margin: 0, fontStyle: "italic" } },
-            "Could also work because: ", alternative.fits.toLowerCase().replace(/\.$/, "")
-          )
-        ),
-
-        // Contraindicated pathways
-        contraIndicated.length > 0 && React.createElement("div", {
-          style: {
-            padding: "20px 24px", borderRadius: 10,
-            background: "rgba(178,84,44,0.06)",
-            border: "1px solid rgba(178,84,44,0.2)",
-            marginBottom: 24
-          }
-        },
-          React.createElement("div", { style: { fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase", color: rust, fontWeight: 700, marginBottom: 10 } },
-            "Pathways to avoid given your context"
-          ),
-          contraIndicated.map((p, i) =>
-            React.createElement("div", {
-              key: p.key,
-              style: { marginBottom: i < contraIndicated.length - 1 ? 12 : 0, display: "flex", gap: 12, alignItems: "baseline" }
-            },
-              React.createElement("span", { style: { fontSize: 14, color: navy, fontWeight: 700, minWidth: 180 } }, p.name),
-              React.createElement("span", { style: { fontSize: 13, color: "#666", lineHeight: 1.55 } }, p.risk)
-            )
-          )
-        ),
-
-        // Next steps
-        nextSteps.length > 0 && React.createElement("div", {
-          style: {
-            padding: "24px 28px", borderRadius: 10,
-            background: bone, marginBottom: 24
-          }
-        },
-          React.createElement("div", { style: { fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase", color: navy, fontWeight: 700, marginBottom: 14 } },
-            "What to do next"
-          ),
-          nextSteps.map((step, i) =>
-            React.createElement("div", {
-              key: i,
-              style: { display: "flex", gap: 14, marginBottom: i < nextSteps.length - 1 ? 12 : 0 }
-            },
-              React.createElement("div", {
-                style: {
-                  width: 24, height: 24, borderRadius: "50%", flexShrink: 0,
-                  background: navy, color: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 12, fontWeight: 700
-                }
-              }, i + 1),
-              React.createElement("p", { style: { fontSize: 14, color: "#333", lineHeight: 1.65, margin: 0 } }, step)
-            )
-          )
-        ),
-
-        // Score breakdown (collapsed but available)
-        React.createElement("details", { style: { marginBottom: 24 } },
-          React.createElement("summary", {
-            style: { fontSize: 12, color: muted, fontWeight: 600, cursor: "pointer", padding: "8px 0", letterSpacing: "0.04em" }
-          }, "Show full pathway scoring →"),
-          React.createElement("div", { style: { marginTop: 12, padding: "16px 20px", background: "#FAFAF7", borderRadius: 8 } },
-            sorted.map((p, i) =>
-              React.createElement("div", {
-                key: p.key,
-                style: {
-                  display: "flex", justifyContent: "space-between", alignItems: "center",
-                  padding: "8px 0",
-                  borderBottom: i < sorted.length - 1 ? "1px solid rgba(0,0,0,0.05)" : "none"
-                }
-              },
-                React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 10 } },
-                  React.createElement("div", { style: { width: 8, height: 8, borderRadius: "50%", background: p.color } }),
-                  React.createElement("span", { style: { fontSize: 13, color: navy, fontWeight: i === 0 ? 700 : 500 } }, p.name)
-                ),
-                React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 8 } },
-                  React.createElement("div", {
-                    style: {
-                      width: 100, height: 6, background: "rgba(0,0,0,0.06)", borderRadius: 3, overflow: "hidden"
-                    }
-                  },
-                    React.createElement("div", {
-                      style: {
-                        height: "100%",
-                        width: `${Math.max(0, Math.min(100, (p.score / sorted[0].score) * 100))}%`,
-                        background: p.color
-                      }
-                    })
-                  ),
-                  React.createElement("span", { style: { fontSize: 12, color: muted, fontWeight: 600, minWidth: 28, textAlign: "right" } }, p.score > 0 ? `+${p.score}` : p.score)
-                )
-              )
-            )
-          )
-        ),
-
-        // Action buttons
-        React.createElement("div", { style: { display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginTop: 32 } },
+      // Result
+      result && React.createElement("div", {
+        style: {
+          padding: "36px 40px", borderRadius: 12,
+          background: `${result.color}0D`,
+          border: `2.5px solid ${result.color}`,
+          textAlign: "center", marginBottom: 32
+        }
+      },
+        React.createElement("div", { style: { fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: result.color, fontWeight: 700, marginBottom: 12 } }, "Recommended Pathway"),
+        React.createElement("h3", { style: { fontSize: 26, fontWeight: 900, color: navy, margin: "0 0 10px" } }, result.pathway),
+        React.createElement("div", { style: { fontSize: 14, color: "#666", marginBottom: 24 } }, `Example cities: ${result.cities}`),
+        React.createElement("div", { style: { display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" } },
           React.createElement("button", {
             onClick: () => scrollTo("s11"),
             style: {
-              padding: "13px 24px", background: primary.color, color: "#fff",
+              padding: "12px 24px", background: result.color, color: "#fff",
               border: "none", borderRadius: 6, fontSize: 14, fontWeight: 700,
               cursor: "pointer", fontFamily: "inherit"
             }
-          }, `Explore ${primary.name} in detail →`),
+          }, "Explore this pathway →"),
           React.createElement("button", {
             onClick: reset,
             style: {
-              padding: "13px 24px", background: "transparent",
-              border: `1.5px solid ${navy}`, color: navy,
+              padding: "12px 24px", background: "transparent",
+              border: `1.5px solid ${result.color}`, color: result.color,
               borderRadius: 6, fontSize: 14, fontWeight: 600,
               cursor: "pointer", fontFamily: "inherit"
             }
-          }, "Re-run the diagnostic")
+          }, "Start over")
         )
       ),
 
       // Closing
       React.createElement("div", {
         style: {
-          marginTop: 48, padding: "24px 28px", background: bone,
+          marginTop: 40, padding: "24px 28px", background: bone,
           borderLeft: `4px solid ${rust}`, borderRadius: "0 8px 8px 0"
         }
       },
         React.createElement("p", { style: { margin: 0, fontSize: 15, color: "#333", lineHeight: 1.7, fontStyle: "italic" } },
-          "Reform requires recognition, diagnosis, and the political will to get it done. This diagnostic is a starting point — not a substitute for the legal review, fiscal analysis, and coalition work each pathway demands."
+          "Reform requires recognition, diagnosis, and the political will to get it done."
         )
       )
     )
