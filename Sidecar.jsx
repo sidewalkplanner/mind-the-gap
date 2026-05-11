@@ -57,7 +57,7 @@ function MapPlaceholder({ label, sublabel, color, layers }) {
   );
 }
 
-function Sidecar({ id, actLabel, title, intro, slides, mediaRight = true, tweaks }) {
+function Sidecar({ id, actLabel, title, intro, slides, mediaRight = true, tweaks, isMobile }) {
   const [activeSlide, setActiveSlide] = React.useState(0);
   const textPanelRef = React.useRef(null);
   const slideRefs = React.useRef([]);
@@ -67,6 +67,7 @@ function Sidecar({ id, actLabel, title, intro, slides, mediaRight = true, tweaks
   const bone = tweaks?.bgColor || "#EDE6DA";
 
   React.useEffect(() => {
+    if (isMobile) return; // IntersectionObserver not needed on mobile (no sticky)
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach(entry => {
@@ -80,8 +81,70 @@ function Sidecar({ id, actLabel, title, intro, slides, mediaRight = true, tweaks
     );
     slideRefs.current.forEach(el => el && observer.observe(el));
     return () => observer.disconnect();
-  }, [slides.length]);
+  }, [slides.length, isMobile]);
 
+  // ── MOBILE LAYOUT: each slide = visual above text, stacked ──────────────
+  if (isMobile) {
+    return React.createElement("section", { id },
+      React.createElement("div", {
+        style: { padding: "40px 20px 0" }
+      },
+        actLabel && React.createElement("div", {
+          style: {
+            fontSize: 11, fontWeight: 700, letterSpacing: "0.12em",
+            textTransform: "uppercase", color: rust, marginBottom: 12
+          }
+        }, actLabel),
+        title && React.createElement("h2", {
+          style: { fontSize: 26, fontWeight: 800, color: navy, margin: "0 0 16px", lineHeight: 1.2 }
+        }, title),
+        intro && React.createElement("p", {
+          style: { fontSize: 15, color: "#444", lineHeight: 1.7, marginBottom: 28 }
+        }, intro),
+        slides.map((slide, i) =>
+          React.createElement("div", { key: i, style: { marginBottom: 48 } },
+            // Visual above text
+            React.createElement("div", {
+              style: {
+                width: "100%", height: "min(60vh, 420px)",
+                borderRadius: 8, overflow: "hidden",
+                boxShadow: "0 4px 20px rgba(27,58,75,0.12)",
+                marginBottom: 20
+              }
+            }, slide.visual),
+            // Text block
+            slide.slideLabel && React.createElement("div", {
+              style: {
+                fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase",
+                color: rust, fontWeight: 700, marginBottom: 8
+              }
+            }, `0${i + 1}  ${slide.slideLabel}`),
+            slide.headline && React.createElement("h3", {
+              style: { fontSize: 19, fontWeight: 700, color: navy, margin: "0 0 12px", lineHeight: 1.25 }
+            }, slide.headline),
+            ...(slide.paragraphs || []).map((p, j) =>
+              React.createElement("p", {
+                key: j,
+                style: { fontSize: 15, color: "#333", lineHeight: 1.72, marginBottom: 12 }
+              }, p)
+            ),
+            slide.stat && React.createElement("div", {
+              style: {
+                margin: "16px 0", padding: "14px 18px",
+                background: bone, borderLeft: `4px solid ${rust}`,
+                borderRadius: "0 6px 6px 0"
+              }
+            },
+              React.createElement("div", { style: { fontSize: 26, fontWeight: 800, color: rust } }, slide.stat),
+              React.createElement("div", { style: { fontSize: 13, color: "#555", marginTop: 2 } }, slide.statLabel)
+            )
+          )
+        )
+      )
+    );
+  }
+
+  // ── DESKTOP LAYOUT: original side-by-side sticky ─────────────────────────
   const textSide = React.createElement("div", {
     ref: textPanelRef,
     style: { flex: "0 0 42%", padding: "0 0 200px 0" }
@@ -139,7 +202,7 @@ function Sidecar({ id, actLabel, title, intro, slides, mediaRight = true, tweaks
   const mediaSide = React.createElement("div", {
     style: {
       flex: "0 0 52%", position: "sticky", top: 72, alignSelf: "flex-start",
-      height: "calc(100vh - 92px)", overflow: "hidden", borderRadius: 10,
+      height: "calc(100dvh - 92px)", overflow: "hidden", borderRadius: 10,
       boxShadow: "0 4px 24px rgba(27,58,75,0.12)"
     }
   },
