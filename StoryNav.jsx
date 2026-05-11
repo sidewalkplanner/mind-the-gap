@@ -16,7 +16,7 @@ const SECTIONS = [
   { id: "s13", label: "Credits" },
 ];
 
-function StoryNav({ tweaks }) {
+function StoryNav({ tweaks, isMobile }) {
   const [progress, setProgress] = React.useState(0);
   const [active, setActive] = React.useState("s1");
   const [menuOpen, setMenuOpen] = React.useState(false);
@@ -38,6 +38,11 @@ function StoryNav({ tweaks }) {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Close menu when switching to desktop
+  React.useEffect(() => {
+    if (!isMobile) setMenuOpen(false);
+  }, [isMobile]);
 
   const scrollTo = (id) => {
     const el = document.getElementById(id);
@@ -61,24 +66,45 @@ function StoryNav({ tweaks }) {
       }
     },
       React.createElement("span", { style: { fontWeight: 700, fontSize: 15, letterSpacing: "0.04em", opacity: 0.95 } }, "MIND THE GAP"),
-      // Desktop links
-      React.createElement("div", { style: { display: "flex", gap: 4, alignItems: "center" } },
-        SECTIONS.map(s =>
-          React.createElement("button", {
-            key: s.id,
-            onClick: () => scrollTo(s.id),
+
+      isMobile
+        // Mobile: hamburger button
+        ? React.createElement("button", {
+            onClick: () => setMenuOpen(o => !o),
+            "aria-label": menuOpen ? "Close menu" : "Open menu",
             style: {
-              background: active === s.id ? rust : "transparent",
-              border: "none", color: "#fff", cursor: "pointer",
-              padding: "4px 9px", borderRadius: 4, fontSize: 11.5,
-              fontFamily: "inherit", fontWeight: active === s.id ? 700 : 400,
-              opacity: active === s.id ? 1 : 0.72, transition: "all 0.15s",
-              letterSpacing: "0.02em"
+              background: "transparent", border: "none", color: "#fff",
+              cursor: "pointer", padding: "6px 4px", display: "flex",
+              flexDirection: "column", gap: 5, alignItems: "center", justifyContent: "center"
             }
-          }, s.label)
-        )
-      )
+          },
+            menuOpen
+              ? React.createElement("span", { style: { fontSize: 20, lineHeight: 1, fontWeight: 300 } }, "✕")
+              : React.createElement(React.Fragment, null,
+                  React.createElement("span", { style: { display: "block", width: 22, height: 2, background: "#fff", borderRadius: 1 } }),
+                  React.createElement("span", { style: { display: "block", width: 22, height: 2, background: "#fff", borderRadius: 1 } }),
+                  React.createElement("span", { style: { display: "block", width: 22, height: 2, background: "#fff", borderRadius: 1 } })
+                )
+          )
+        // Desktop: pill-button row
+        : React.createElement("div", { style: { display: "flex", gap: 4, alignItems: "center" } },
+            SECTIONS.map(s =>
+              React.createElement("button", {
+                key: s.id,
+                onClick: () => scrollTo(s.id),
+                style: {
+                  background: active === s.id ? rust : "transparent",
+                  border: "none", color: "#fff", cursor: "pointer",
+                  padding: "4px 9px", borderRadius: 4, fontSize: 11.5,
+                  fontFamily: "inherit", fontWeight: active === s.id ? 700 : 400,
+                  opacity: active === s.id ? 1 : 0.72, transition: "all 0.15s",
+                  letterSpacing: "0.02em"
+                }
+              }, s.label)
+            )
+          )
     ),
+
     // Progress bar
     React.createElement("div", {
       style: {
@@ -92,6 +118,36 @@ function StoryNav({ tweaks }) {
           width: `${progress * 100}%`, transition: "width 0.1s"
         }
       })
+    ),
+
+    // Mobile full-screen overlay menu
+    isMobile && menuOpen && React.createElement("div", {
+      style: {
+        position: "fixed", inset: 0, zIndex: 998,
+        background: navy,
+        display: "flex", flexDirection: "column",
+        paddingTop: 52, overflowY: "auto"
+      }
+    },
+      SECTIONS.map((s, i) =>
+        React.createElement("button", {
+          key: s.id,
+          onClick: () => scrollTo(s.id),
+          style: {
+            background: active === s.id ? rust : "transparent",
+            border: "none", borderBottom: "1px solid rgba(255,255,255,0.08)",
+            color: "#fff", cursor: "pointer",
+            padding: "18px 28px", textAlign: "left",
+            fontFamily: "inherit", fontSize: 16,
+            fontWeight: active === s.id ? 700 : 400,
+            display: "flex", alignItems: "center", gap: 14,
+            transition: "background 0.15s"
+          }
+        },
+          React.createElement("span", { style: { fontSize: 12, opacity: 0.5, minWidth: 28 } }, `0${i + 1}`.slice(-2)),
+          s.label
+        )
+      )
     )
   );
 }
