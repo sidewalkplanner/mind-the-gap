@@ -18,6 +18,7 @@
       background: #EDE6DA;
       color: #1B3A4B;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
     #root { padding-top: 55px; }
     h1, h2, h3 { font-family: "DM Sans", sans-serif; }
@@ -46,6 +47,17 @@
   <script type="text/babel" src="Sections.jsx"></script>
 
   <script type="text/babel">
+    function useIsMobile() {
+      const [isMobile, setIsMobile] = React.useState(() => window.innerWidth < 768);
+      React.useEffect(() => {
+        const handler = () => setIsMobile(window.innerWidth < 768);
+        window.addEventListener("resize", handler, { passive: true });
+        return () => window.removeEventListener("resize", handler);
+      }, []);
+      return isMobile;
+    }
+    Object.assign(window, { useIsMobile });
+
     const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
       "primaryColor": "#1B3A4B",
       "accentColor": "#B2542C",
@@ -55,25 +67,26 @@
 
     function App() {
       const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
+      const isMobile = useIsMobile();
 
       return React.createElement(React.Fragment, null,
-        React.createElement(StoryNav, { tweaks }),
+        React.createElement(StoryNav, { tweaks, isMobile }),
 
-        React.createElement(S1Cover,    { tweaks }),
-        React.createElement(S2About,    { tweaks }),
-        React.createElement(S3Network,  { tweaks }),
-        React.createElement(S4Era,      { tweaks }),
-        React.createElement(S5Equity,   { tweaks }),
-        React.createElement(S6History,  { tweaks }),
-        React.createElement(S7Swipe,    { tweaks }),
-        React.createElement(S8Timeline, { tweaks }),
-        React.createElement(S9Ballot,   { tweaks }),
-        React.createElement(S10SIP,     { tweaks }),
-        React.createElement(S11Pathways,{ tweaks }),
-        React.createElement(S12Decision,{ tweaks }),
-        React.createElement(S13Credits, { tweaks }),
+        React.createElement(S1Cover,    { tweaks, isMobile }),
+        React.createElement(S2About,    { tweaks, isMobile }),
+        React.createElement(S3Network,  { tweaks, isMobile }),
+        React.createElement(S4Era,      { tweaks, isMobile }),
+        React.createElement(S5Equity,   { tweaks, isMobile }),
+        React.createElement(S6History,  { tweaks, isMobile }),
+        React.createElement(S7Swipe,    { tweaks, isMobile }),
+        React.createElement(S8Timeline, { tweaks, isMobile }),
+        React.createElement(S9Ballot,   { tweaks, isMobile }),
+        React.createElement(S10SIP,     { tweaks, isMobile }),
+        React.createElement(S11Pathways,{ tweaks, isMobile }),
+        React.createElement(S12Decision,{ tweaks, isMobile }),
+        React.createElement(S13Credits, { tweaks, isMobile }),
 
-        React.createElement(TweaksPanel, { title: "Tweaks" },
+        !isMobile && React.createElement(TweaksPanel, { title: "Tweaks" },
           React.createElement(TweakSection, { label: "Colors" },
             React.createElement(TweakColor, { label: "Primary (Navy)", tweakKey: "primaryColor", tweaks, setTweak }),
             React.createElement(TweakColor, { label: "Accent (Rust)", tweakKey: "accentColor", tweaks, setTweak }),
