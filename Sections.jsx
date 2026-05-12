@@ -79,7 +79,7 @@ function S1Cover({ tweaks, isMobile }) {
     ),
     React.createElement("div", { style: { position: "absolute", top: 0, left: 0, right: 0, height: 6, background: rust } }),
     React.createElement("svg", {
-      width: isMobile ? 58 : 92, height: isMobile ? 58 : 92, viewBox: "0 0 64 64",
+      width: isMobile ? 72 : 112, height: isMobile ? 72 : 112, viewBox: "0 0 64 64",
       style: { marginBottom: isMobile ? 18 : 24, opacity: 0.95 }
     },
       React.createElement("rect", { x: 4, y: 28, width: 24, height: 8, rx: 1, fill: "#B6BFB1", opacity: 0.8 }),
@@ -208,7 +208,7 @@ function S3Network({ tweaks, isMobile }) {
         "These maps seperate sidewalk networks into three conditions: sufficient sidewalks, sidewalks that exist but don't meet accessibility standards, and streets where sidewalks are missing altogether.",
         "In Denver, 60% of the network is sufficient, 30% is too narrow, and 10% is missing outright. Toggle between cities to compare."
       ],
-      visual: React.createElement("div", { style: { width: "100%", height: "100%", position: "relative" } },
+      visual: React.createElement("div", { style: { width: "100%", height: "100%", position: "relative", paddingTop: 52, boxSizing: "border-box" } },
         React.createElement(CityTabs, {
           cities: networkMaps.map(m => m.city),
           active: city1,
@@ -383,7 +383,7 @@ function S4Era({ tweaks, isMobile }) {
         "Sidewalk gaps in Denver cluster most heavily in post-1940 neighborhoods. In the city’s older, prewar areas, the sidewalk network is far more continuous. The overlap is hard to miss: where development happened in the auto era, pedestrian infrastructure was more likely to be omitted or built to lower standards, and those gaps have persisted.",
 		"Toggle between cities to compare how closely sidewalk gaps track development era."
       ],
-      visual: React.createElement("div", { style: { width: "100%", height: "100%", position: "relative" } },
+      visual: React.createElement("div", { style: { width: "100%", height: "100%", position: "relative", paddingTop: 52, boxSizing: "border-box" } },
         React.createElement(CityTabs, { cities: eraMaps.map(m => m.city), active: eraCity, onChange: setEraCity, color: rust }),
         React.createElement(MapImage, eraMaps[eraCity])
       )
@@ -471,7 +471,7 @@ function S5Equity({ tweaks, isMobile }) {
         "In Denver, C and D areas account for 26% of total gaps; A and B areas account for only 13%. Toggle to see how Minneapolis and Seattle compare. Seattle tells us what happened in other cities."
       ],
       stat: "26%", statLabel: "of Denver's gaps in HOLC C+D areas (vs. 13% in A+B)",
-      visual: React.createElement("div", { style: { width: "100%", height: "100%", position: "relative" } },
+      visual: React.createElement("div", { style: { width: "100%", height: "100%", position: "relative", paddingTop: 52, boxSizing: "border-box" } },
         React.createElement(CityTabs, { cities: holcMaps.map(m => m.city), active: holcCity, onChange: setHolcCity, color: rust }),
         React.createElement(MapImage, holcMaps[holcCity])
       )
@@ -484,7 +484,7 @@ function S5Equity({ tweaks, isMobile }) {
         "In Seattle, 62% of all sidewalk gaps fall in HOLC-ungraded areas. In Denver, 61%. In Minneapolis, 39%.",
         "This is the second equity layer: the legacy of car-era development standards in places that weren't developed during the initial redlining period."
       ],
-      visual: React.createElement("div", { style: { width: "100%", height: "100%", position: "relative" } },
+      visual: React.createElement("div", { style: { width: "100%", height: "100%", position: "relative", paddingTop: 52, boxSizing: "border-box" } },
         React.createElement(CityTabs, { cities: holcMaps.map(m => m.city), active: holcCity, onChange: setHolcCity, color: rust }),
         React.createElement(MapImage, holcMaps[holcCity])
       )
@@ -498,7 +498,7 @@ function S5Equity({ tweaks, isMobile }) {
         "As cities expand bus rapid transit and light rail, the assumption that nearby pedestrian infrastructure already exists is often wrong."
       ],
       stat: "65%", statLabel: "of Denver's gaps within ¼ mile of a historic streetcar line",
-      visual: React.createElement("div", { style: { width: "100%", height: "100%", position: "relative" } },
+      visual: React.createElement("div", { style: { width: "100%", height: "100%", position: "relative", paddingTop: 52, boxSizing: "border-box" } },
         React.createElement(CityTabs, { cities: streetcarMaps.map(m => m.city), active: streetcarCity, onChange: setStreetcarCity, color: rust }),
         React.createElement(MapImage, streetcarMaps[streetcarCity])
       )
@@ -792,7 +792,13 @@ function S8Timeline({ tweaks, isMobile }) {
       React.createElement("p", { style: { fontSize: 17, color: "#444", lineHeight: 1.75, marginBottom: 10 } },
         "From the moment Denver named the billion-dollar problem to the moment it acted, eight years passed. From the first failed enforcement bill to the ballot initiative that finally worked, four decades."
       ),
-      React.createElement("div", { style: { fontSize: 13, color: "#666", marginBottom: 12, fontWeight: 600 } }, "Click any timeline row to expand details."),
+      React.createElement("div", {
+        style: {
+          fontSize: 14, color: navy, marginBottom: 14, fontWeight: 700,
+          background: "rgba(216,154,78,0.18)", border: "1px solid rgba(216,154,78,0.45)",
+          borderRadius: 8, padding: "10px 12px", display: "inline-flex", alignItems: "center", gap: 8
+        }
+      }, "👇 Click any timeline row to expand details"),
       React.createElement("div", { style: { display: "flex", gap: 16, marginBottom: 44 } },
         [["Positive step", "#2D6A4F"], ["Failed attempt", "#B6B0A6"], ["Neutral / proposal", "#D89A4E"], ["Milestone", rust]].map(([l, c]) =>
           React.createElement("div", { key: l, style: { display: "flex", alignItems: "center", gap: 6 } },
@@ -842,9 +848,9 @@ function S8Timeline({ tweaks, isMobile }) {
             // Content
             React.createElement("div", {
               style: {
-                flex: 1, background: isActive ? (ev.type === "milestone" ? "rgba(178,84,44,0.06)" : "rgba(27,58,75,0.04)") : "transparent",
+                flex: 1, background: isActive ? (ev.type === "milestone" ? "rgba(178,84,44,0.08)" : "rgba(27,58,75,0.06)") : "rgba(27,58,75,0.015)",
                 borderRadius: 6, padding: isActive ? "12px 16px" : "10px 16px",
-                marginLeft: 12, border: isActive ? `1px solid ${ts.dot}44` : "1px solid transparent",
+                marginLeft: 12, border: isActive ? `1px solid ${ts.dot}66` : "1px dashed rgba(27,58,75,0.2)",
                 transition: "all 0.2s"
               }
             },
@@ -2750,4 +2756,3 @@ function S13Credits({ tweaks, isMobile }) {
 }
 
 Object.assign(window, { S10SIP, S11Pathways, S12Decision, S13Credits });
-

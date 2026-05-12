@@ -147,7 +147,7 @@ function Sidecar({ id, actLabel, title, intro, slides, mediaRight = true, tweaks
   // ── DESKTOP LAYOUT: original side-by-side sticky ─────────────────────────
   const textSide = React.createElement("div", {
     ref: textPanelRef,
-    style: { flex: "0 0 42%", padding: "0 0 200px 0" }
+    style: { flex: "0 0 38%", padding: "0 0 200px 0" }
   },
     actLabel && React.createElement("div", {
       style: {
@@ -201,7 +201,7 @@ function Sidecar({ id, actLabel, title, intro, slides, mediaRight = true, tweaks
 
   const mediaSide = React.createElement("div", {
     style: {
-      flex: "0 0 52%", position: "sticky", top: 72, alignSelf: "flex-start",
+      flex: "0 0 58%", position: "sticky", top: 72, alignSelf: "flex-start",
       height: "calc(100dvh - 92px)", overflow: "hidden", borderRadius: 10,
       boxShadow: "0 4px 24px rgba(27,58,75,0.12)"
     }
