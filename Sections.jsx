@@ -2704,7 +2704,7 @@ function S13Credits({ tweaks, isMobile }) {
       React.createElement("div", { style: { display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: isMobile ? 32 : 40 } },
         React.createElement("div", null,
           React.createElement("p", { style: { fontSize: 16, lineHeight: 1.75, opacity: 0.85, marginBottom: 24 } },
-            "This Story Map is the public face of a longer capstone report: ",
+            "This guide is the public face of a longer capstone report: ",
             React.createElement("em", null, "Mind the Gap: Lessons from Denver to Rebuild Your Sidewalk Network"),
             ", produced for Fehr & Peers in partnership with the University of Colorado Denver MURP program."
           ),
@@ -2723,7 +2723,7 @@ function S13Credits({ tweaks, isMobile }) {
           [
             { label: "Authors", body: "Robert Sells and Taylor Lucas, MURP candidates, University of Colorado Denver College of Architecture and Planning" },
             { label: "Client", body: "Fehr & Peers" },
-            { label: "Suggested citation", body: "Lucas, T., & Sells, R. (2026). Mind the Gap: Lessons from Denver to Rebuild Your Sidewalk Network. MURP Capstone, University of Colorado Denver." },
+            { label: "Suggested citation", body: "Sells, R., & Lucas, T. (2026). Mind the Gap: Lessons from Denver to Rebuild Your Sidewalk Network. MURP Capstone, University of Colorado Denver." },
           ].map((item, i) =>
             React.createElement("div", { key: i, style: { marginBottom: 24 } },
               React.createElement("div", { style: { fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", color: rust, fontWeight: 700, marginBottom: 6 } }, item.label),
