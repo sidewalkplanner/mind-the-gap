@@ -1690,104 +1690,104 @@ function S12Decision({ tweaks, isMobile }) {
   const questions = [
     {
       id: "q1",
-      label: "Current rules",
-      text: "Where is sidewalk responsibility written down today?",
-      subtitle: "Charter changes have to go to a public vote. Ordinances can be amended by council.",
+      label: "Current liability framework",
+      text: "How is sidewalk responsibility currently structured in your city?",
+      subtitle: "Reform looks different if responsibility is codified in your charter (requires amendment), set by ordinance (council can change), or just operational practice (most flexible). This shapes which pathways are even available.",
       options: [
-        { id: "charter_codified", label: "In our city charter", icon: "📜" },
-        { id: "ordinance", label: "In an ordinance — council could change it", icon: "📋" },
-        { id: "practice", label: "Just how it's always been done — nothing formally on the books", icon: "🗂" },
-        { id: "mixed", label: "A mix of charter, ordinance, and practice", icon: "🔀" },
-        { id: "unclear_q1", label: "Not sure", icon: "❓" }
+        { id: "charter_codified", label: "Codified in city charter — owners hold responsibility by charter provision", icon: "📜" },
+        { id: "ordinance", label: "Established by ordinance — council could change it", icon: "📋" },
+        { id: "practice", label: "Operational practice — no explicit charter or ordinance codification", icon: "🗂" },
+        { id: "mixed", label: "Mixed — some elements in charter, others in ordinance or practice", icon: "🔀" },
+        { id: "unclear_q1", label: "Unclear — need municipal counsel to verify", icon: "❓" }
       ]
     },
     {
       id: "q2",
-      label: "State law",
-      text: "What does your state allow?",
-      subtitle: "The fee-versus-tax distinction usually determines whether you need voter approval.",
+      label: "State revenue framework",
+      text: "What state-level constraints apply to new sidewalk revenue?",
+      subtitle: "Whether a mechanism counts as a 'fee' or 'tax' often determines whether council can act alone or whether voter approval is required. State law sets the outer bounds; charter and ordinance work within them.",
       options: [
-        { id: "broad_home_rule", label: "Home rule, no major tax-vote hurdles", icon: "🏛" },
-        { id: "tabor", label: "Tax increases need voter approval (Colorado TABOR or similar)", icon: "📊" },
-        { id: "prop13", label: "Property-tax supermajority required (California Prop 13/218)", icon: "⚖" },
-        { id: "millage_cap", label: "Millage caps with rollback formulas (Michigan Headlee or similar)", icon: "📉" },
-        { id: "dillons", label: "Dillon's Rule — most new revenue needs state authorization", icon: "📜" },
-        { id: "unsure_q2", label: "Not sure", icon: "❓" }
+        { id: "broad_home_rule", label: "Home rule with no significant tax-vote requirements — broad authority over fees and most assessments", icon: "🏛" },
+        { id: "tabor", label: "Tax increases require voter approval (Colorado TABOR or similar) — fees can be council-adopted if properly structured", icon: "📊" },
+        { id: "prop13", label: "Property-tax supermajority required (California Prop 13/218) — parcel tax is the established workaround", icon: "⚖" },
+        { id: "millage_cap", label: "Millage rate caps with rollback formulas (Michigan Headlee or similar)", icon: "📉" },
+        { id: "dillons", label: "Dillon's Rule — most revenue mechanisms need explicit state authorization", icon: "📜" },
+        { id: "unsure_q2", label: "Unsure — need to verify with municipal counsel", icon: "❓" }
       ]
     },
     {
       id: "q3",
-      label: "Network needs",
-      text: "What does your network actually need?",
-      subtitle: "New construction and ongoing maintenance usually come from different funding sources.",
+      label: "Network state",
+      text: "What does your sidewalk network actually need?",
+      subtitle: "Build-out and maintenance have different revenue scales and very different cost curves. A network needing $1B of new construction is not the same problem as one needing a rotating repair cycle.",
       options: [
-        { id: "build_out", label: "Build out — lots of missing sidewalks, especially in post-1940 neighborhoods", icon: "🚧" },
-        { id: "maintenance", label: "Fix what we have — network is mostly complete but in disrepair", icon: "🔧" },
-        { id: "both", label: "Both — gaps to fill and a backlog to repair", icon: "🌐" },
-        { id: "no_inventory", label: "Not sure — we don't have a current inventory", icon: "📊" }
+        { id: "build_out", label: "Build out — significant missing sidewalks, especially in post-1940 car-era neighborhoods", icon: "🚧" },
+        { id: "maintenance", label: "Fix what exists — network largely complete but in deferred-maintenance disrepair", icon: "🔧" },
+        { id: "both", label: "Both — meaningful gaps AND meaningful maintenance backlog", icon: "🌐" },
+        { id: "no_inventory", label: "Not sure — we don't have a current network inventory", icon: "📊" }
       ]
     },
     {
       id: "q4",
-      label: "Geography",
-      text: "Where are the worst sidewalks?",
-      subtitle: "This affects both fee structure and which neighborhoods get work first.",
+      label: "Spatial pattern",
+      text: "Where are gaps and disrepair concentrated?",
+      subtitle: "Spatial pattern affects whether a uniform citywide mechanism fits or whether geographic/income scaling is essential. Equity emphasis can be addressed through structure (rebates, scaling) or geography (sequencing).",
       options: [
-        { id: "redlined_central", label: "Historically disinvested neighborhoods (former redlined areas, lower-income cores)", icon: "🏘" },
-        { id: "periphery", label: "Post-1940 car-era neighborhoods on the edges of the city", icon: "🚗" },
-        { id: "dispersed_equity", label: "Spread fairly evenly across the city", icon: "🗺" },
-        { id: "corridors_use", label: "Specific corridors — schools, transit, commercial streets", icon: "🚌" },
-        { id: "spatial_unknown", label: "Not mapped yet", icon: "❓" }
+        { id: "redlined_central", label: "Historically disinvested neighborhoods (former HOLC C/D areas, lower-income cores)", icon: "🏘" },
+        { id: "periphery", label: "Post-1940 car-era peripheral neighborhoods — gap-heavy by development era", icon: "🚗" },
+        { id: "dispersed_equity", label: "Dispersed across the city — no strong spatial concentration", icon: "🗺" },
+        { id: "corridors_use", label: "Specific corridors (schools, transit, commercial) by use prioritization", icon: "🚌" },
+        { id: "spatial_unknown", label: "Not yet mapped — pattern unclear", icon: "❓" }
       ]
     },
     {
       id: "q5",
-      label: "Leadership",
-      text: "Is there political appetite in city leadership for change?",
-      subtitle: "Sidewalk reforms usually move through one of two paths: a champion in city leadership — a council member, mayor, or department head — or a sustained ballot campaign.",
+      label: "Council feasibility",
+      text: "How feasible is council action on a new sidewalk mechanism?",
+      subtitle: "Be honest about your council. Council action is faster but limited in scope; if they won't act, you're routed to a ballot pathway. Council appetite is separable from voter appetite.",
       options: [
-        { id: "council_high", label: "Yes — leadership is on board and ready to move this term", icon: "🟢" },
-        { id: "council_mid", label: "Some interest, but it needs more groundwork to move", icon: "🟡" },
-        { id: "council_low", label: "No — leadership isn't interested or has stalled on it", icon: "🔴" },
-        { id: "council_unknown", label: "Haven't really tested it", icon: "❓" }
+        { id: "council_high", label: "High — council has majority support and political will to act this term", icon: "🟢" },
+        { id: "council_mid", label: "Moderate — council is interested but needs a stronger public case or coalition", icon: "🟡" },
+        { id: "council_low", label: "Low — council has stalled for years; political will is not there", icon: "🔴" },
+        { id: "council_unknown", label: "Don't know — hasn't been seriously tested", icon: "❓" }
       ]
     },
     {
       id: "q6",
-      label: "Ballot",
-      text: "Could a ballot measure win?",
-      subtitle: "Winning a ballot measure takes a coalition, signature-gatherers, and money for the campaign. Denver's reform took two decades of organizing.",
+      label: "Voter & advocacy capacity",
+      text: "How feasible is a ballot pathway?",
+      subtitle: "Ballot pathways depend on more than voter sentiment — sustained advocacy infrastructure, signature capacity, and campaign resources matter. Denver's reform took two decades of organizing.",
       options: [
-        { id: "ballot_high", label: "Yes — there's a coalition, public support, and resources for a campaign", icon: "🟢" },
-        { id: "ballot_mid", label: "Some pieces are in place; the campaign itself would need building", icon: "🟡" },
-        { id: "ballot_low", label: "Unlikely — no organized advocacy, low public awareness", icon: "🔴" },
-        { id: "ballot_proven", label: "Yes — past sidewalk or transportation measures have already passed", icon: "✅" },
+        { id: "ballot_high", label: "High — strong advocacy coalition; voters likely receptive; campaign capacity exists", icon: "🟢" },
+        { id: "ballot_mid", label: "Moderate — some capacity; voter support uncertain; campaign would need to be built", icon: "🟡" },
+        { id: "ballot_low", label: "Low — no organized advocacy; voter awareness minimal", icon: "🔴" },
+        { id: "ballot_proven", label: "Proven — past sidewalk or transportation measures have passed", icon: "✅" },
         { id: "ballot_unknown", label: "Don't know — no recent test of voter sentiment", icon: "❓" }
       ]
     },
     {
       id: "q7",
-      label: "Scale",
-      text: "How much money does the program need?",
-      subtitle: "Different funding tools raise different amounts. Bonds and grants can multiply whatever base mechanism you start with.",
+      label: "Revenue scale needed",
+      text: "What scale of revenue does the program need?",
+      subtitle: "Available mechanisms vary by an order of magnitude. A program needing $5M/year and one needing $100M/year are not the same problem. Bonds and grants can stretch any base mechanism further.",
       options: [
-        { id: "modest", label: "A few million a year would be meaningful", icon: "💧" },
-        { id: "substantial", label: "Tens of millions a year for major build-out", icon: "💰" },
-        { id: "very_high", label: "Hundreds of millions over a decade (Denver-scale)", icon: "🏛" },
-        { id: "scale_unknown", label: "Don't know — we'd need a needs assessment first", icon: "❓" }
+        { id: "modest", label: "Modest — a few million per year would meaningfully advance the program", icon: "💧" },
+        { id: "substantial", label: "Substantial — tens of millions per year for a major build-out", icon: "💰" },
+        { id: "very_high", label: "Very high — hundreds of millions over a decade (Denver-scale)", icon: "🏛" },
+        { id: "scale_unknown", label: "Don't know — need a needs-assessment first", icon: "❓" }
       ]
     },
     {
       id: "q8",
-      label: "Delivery",
-      text: "Who will actually build and maintain it?",
-      subtitle: "A funded program still needs people to do the work — public works staff, contractors, or both.",
+      label: "Delivery capacity",
+      text: "How is sidewalk delivery currently organized?",
+      subtitle: "Operational capacity determines what a reformed program can actually build. Funding a program the city can't staff or contract for is a common failure mode.",
       options: [
-        { id: "robust", label: "Strong public works — could take it on in-house", icon: "🏗" },
-        { id: "mid", label: "Mid-capacity — could handle it with new staff or contractors", icon: "⚙" },
-        { id: "limited", label: "Limited — would need to contract most of it out", icon: "📋" },
-        { id: "district_oriented", label: "Decentralized — we already work by district or neighborhood", icon: "🏘" },
-        { id: "delivery_unknown", label: "Not formally assessed", icon: "❓" }
+        { id: "robust", label: "Robust public works — could absorb citywide sidewalk delivery in-house", icon: "🏗" },
+        { id: "mid", label: "Mid-capacity — could deliver with new staff or contractor partnerships", icon: "⚙" },
+        { id: "limited", label: "Limited — would need to contract construction and inspection out", icon: "📋" },
+        { id: "district_oriented", label: "Decentralized — district-based or neighborhood delivery fits city structure", icon: "🏘" },
+        { id: "delivery_unknown", label: "Don't know — capacity hasn't been formally assessed", icon: "❓" }
       ]
     }
   ];
