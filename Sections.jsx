@@ -3,19 +3,19 @@
 // Real map images wired in; city toggles on S3, S4, S5; nav tile fix
 
 // Reusable image map panel
-function MapImage({ src, alt, caption, source }) {
+function MapImage({ src, alt, caption, source, fit = "contain" }) {
   const navy = "#1B3A4B";
   return React.createElement("div", {
     style: { width: "100%", height: "100%", position: "relative", background: "#E8E2D8", display: "flex", flexDirection: "column" }
   },
     React.createElement("img", {
       src, alt,
-      style: { width: "100%", flex: 1, objectFit: "cover", objectPosition: "center", display: "block" }
+      style: { width: "100%", height: "100%", flex: 1, objectFit: fit, objectPosition: "center", display: "block", background: "#D9D2C5" }
     }),
     (caption || source) && React.createElement("div", {
       style: {
         background: "rgba(27,58,75,0.88)", color: "#EDE6DA",
-        padding: "8px 14px", fontSize: 11, lineHeight: 1.5,
+        padding: "10px 14px", fontSize: 12.5, lineHeight: 1.55,
         display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12
       }
     },
@@ -41,9 +41,9 @@ function CityTabs({ cities, active, onChange, color }) {
         key: c,
         onClick: () => onChange(i),
         style: {
-          padding: "5px 14px", borderRadius: 4, border: "none",
+          padding: "7px 16px", borderRadius: 4, border: "none",
           background: active === i ? rust : "transparent",
-          color: "#EDE6DA", fontSize: 12, fontWeight: active === i ? 700 : 400,
+          color: "#EDE6DA", fontSize: 13.5, fontWeight: active === i ? 700 : 500,
           cursor: "pointer", fontFamily: "inherit", transition: "all 0.15s"
         }
       }, c)
@@ -788,10 +788,11 @@ function S8Timeline({ tweaks, isMobile }) {
   },
     React.createElement("div", { style: { maxWidth: 900, margin: "0 auto" } },
       React.createElement("div", { style: { fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: rust, fontWeight: 700, marginBottom: 12 } }, "Act II — Denver's Trajectory"),
-      React.createElement("h2", { style: { fontSize: 34, fontWeight: 800, color: navy, margin: "0 0 12px" } }, "The 20-Year Reform Arc"),
-      React.createElement("p", { style: { fontSize: 16, color: "#444", lineHeight: 1.75, marginBottom: 16 } },
+      React.createElement("h2", { style: { fontSize: isMobile ? 32 : 38, fontWeight: 800, color: navy, margin: "0 0 12px" } }, "The 20-Year Reform Arc"),
+      React.createElement("p", { style: { fontSize: 17, color: "#444", lineHeight: 1.75, marginBottom: 10 } },
         "From the moment Denver named the billion-dollar problem to the moment it acted, eight years passed. From the first failed enforcement bill to the ballot initiative that finally worked, four decades."
       ),
+      React.createElement("div", { style: { fontSize: 13, color: "#666", marginBottom: 12, fontWeight: 600 } }, "Click any timeline row to expand details."),
       React.createElement("div", { style: { display: "flex", gap: 16, marginBottom: 44 } },
         [["Positive step", "#2D6A4F"], ["Failed attempt", "#B6B0A6"], ["Neutral / proposal", "#D89A4E"], ["Milestone", rust]].map(([l, c]) =>
           React.createElement("div", { key: l, style: { display: "flex", alignItems: "center", gap: 6 } },
@@ -850,9 +851,12 @@ function S8Timeline({ tweaks, isMobile }) {
               React.createElement("div", {
                 style: {
                   fontSize: 14, fontWeight: ev.type === "milestone" ? 800 : 600,
-                  color: ev.type === "milestone" ? rust : navy, marginBottom: isActive ? 8 : 0
+                  color: ev.type === "milestone" ? rust : navy, marginBottom: isActive ? 8 : 0, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12
                 }
-              }, ev.label),
+              },
+                React.createElement("span", null, ev.label),
+                React.createElement("span", { style: { fontSize: 11, color: "#888", letterSpacing: "0.04em", textTransform: "uppercase", fontWeight: 700 } }, isActive ? "Hide" : "Click to expand")
+              ),
               isActive && React.createElement("p", { style: { fontSize: 13, color: "#555", lineHeight: 1.65, margin: 0 } }, ev.body)
             )
           );
