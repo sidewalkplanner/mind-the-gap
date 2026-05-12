@@ -79,17 +79,33 @@ function S1Cover({ tweaks, isMobile }) {
     ),
     React.createElement("div", { style: { position: "absolute", top: 0, left: 0, right: 0, height: 6, background: rust } }),
     React.createElement("svg", {
-      width: 64, height: 64, viewBox: "0 0 64 64",
-      style: { marginBottom: 32, opacity: 0.9 }
+      width: isMobile ? 58 : 92, height: isMobile ? 58 : 92, viewBox: "0 0 64 64",
+      style: { marginBottom: isMobile ? 18 : 24, opacity: 0.95 }
     },
       React.createElement("rect", { x: 4, y: 28, width: 24, height: 8, rx: 1, fill: "#B6BFB1", opacity: 0.8 }),
       React.createElement("rect", { x: 32, y: 30, width: 28, height: 8, rx: 1, fill: "#B2542C" }),
       React.createElement("rect", { x: 4, y: 40, width: 56, height: 2, rx: 1, fill: "rgba(255,255,255,0.2)" }),
       React.createElement("path", { d: "M28 27 L31 36 L26 33 L29 42", stroke: "#D89A4E", strokeWidth: 2.5, fill: "none", strokeLinecap: "round" })
     ),
-    React.createElement("div", { style: { fontSize: 32, letterSpacing: "0.22em", color: rust, fontWeight: 700, textTransform: "uppercase", marginBottom: 20 } }, "Mind the Gap"),
+    React.createElement("div", {
+      style: {
+        fontSize: isMobile ? "clamp(22px, 6vw, 30px)" : "clamp(34px, 3vw, 48px)",
+        letterSpacing: "0.22em",
+        color: rust,
+        fontWeight: 800,
+        textTransform: "uppercase",
+        marginBottom: isMobile ? 14 : 22
+      }
+    }, "Mind the Gap"),
     React.createElement("h1", {
-      style: { fontSize: "clamp(42px, 6vw, 80px)", fontWeight: 900, color: "#EDE6DA", lineHeight: 1.08, margin: "0 0 28px", maxWidth: 760 }
+      style: {
+        fontSize: isMobile ? "clamp(36px, 10vw, 54px)" : "clamp(40px, 4.7vw, 68px)",
+        fontWeight: 900,
+        color: "#EDE6DA",
+        lineHeight: 1.1,
+        margin: "0 0 28px",
+        maxWidth: 860
+      }
     }, "Lessons from Denver to Rebuild Your Sidewalk Network"),
     React.createElement("p", {
       style: { fontSize: 18, color: "rgba(237,230,218,0.72)", maxWidth: 560, lineHeight: 1.6, marginBottom: 48 }
