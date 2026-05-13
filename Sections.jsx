@@ -1080,7 +1080,7 @@ function S10SIP({ tweaks, isMobile }) {
       ],
       stat: "9-year", statLabel: "master plan to achieve complete, ADA-compliant network citywide",
       visual: React.createElement(MapImage, {
-        src: "uploads/berkleyrepair.WEBP",
+        src: "uploads/berkleyrepair.jpg",
         alt: "Crews preparing concrete forms for a sidewalk repair project in Denver's Berkeley neighborhood",
         caption: "Crews prepare to pour concrete for a Berkeley neighborhood sidewalk repair project (Oct. 14, 2025)",
         source: "Photo by RJ Sangosti / The Denver Post",
