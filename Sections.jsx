@@ -742,7 +742,7 @@ function S8Timeline({ tweaks, isMobile }) {
     { year: "Nov 2017", label: "Elevate Denver Bond", body: "Voters approve $47.7M for sidewalks - a meaningful, but small fraction of the identified $1.1B need.", type: "positive" },
     { year: "2017–20", label: "Neighborhood Sidewalk Repair Program", body: "City launches a proactive inspection-and-bill program. After 1,100 inspections over three years, the pace projects 400 years for citywide completion.", type: "negative" },
     { year: "Nov 2020", label: "Auditor's Report", body: "City Auditor labels the program 'flawed, inefficient, inconsistent, and placing undue burden on residents.", type: "negative" },
-    { year: "2022", label: "Denver Deserves Sidewalks", body: "Advocates collect ~20,000 signatures to put a new model on the ballot, bypassing City Council entirely.", type: "positive" },
+    { year: "2022", label: "Denver Deserves Sidewalks", body: "Advocates collect 19,197 signatures to put a new model on the ballot, bypassing City Council entirely.", type: "positive" },
     { year: "Nov 2022", label: "Initiative 307 Passes", body: "Voters approve a citywide annual fee that funds construction and repair through the city. Repair and construction responsibility shifts to the city.", type: "milestone" },
     { year: "Jan 2025", label: "Fees Begin and SIP Launches", body: "The city begins fee collection. The Sidewalk Improvement Program launches a 9-year master plan to build and repair a complete, ADA-compliant network.", type: "positive" },
   ];
@@ -872,7 +872,7 @@ function S9Ballot({ tweaks, isMobile }) {
       React.createElement("div", { style: { display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 16 } },
         [
           {
-            label: "Before Initiative 307", color: "#B6B0A6",
+            label: "Before Initiative 307", color: "#B2542C",
             items: ["Property owner liable for all repairs", "Unpredictable, surprise repair bills", "City inspects → owner pays → gaps persist", "No dedicated funding stream", "Council-appropriated budget only"]
           },
           {
@@ -940,10 +940,10 @@ function S9Ballot({ tweaks, isMobile }) {
       slideLabel: "The bypass",
       headline: "In 2022, advocates took it to the ballot",
       paragraphs: [
-        "The Denver Deserves Sidewalks campaign collected nearly 20,000 signatures across roughly six months of fieldwork. This was finally enough to put the question directly to voters.",
+        "The Denver Deserves Sidewalks campaign collected nearly 20,000 signatures across roughly six months of fieldwork. This was more than double the amount required to put the question directly to voters.",
         "The proposal fit in one sentence: a small annual fee on every property, scaled to lot frontage, in exchange for the city taking responsibility for sidewalk construction and repair."
       ],
-      stat: "~20,000", statLabel: "signatures collected to put the question to voters directly",
+      stat: "19,197", statLabel: "signatures collected to put the question to voters directly",
       visual: React.createElement(MapImage, {
         src: "uploads/ddscampaign.jpg",
         alt: "Denver Deserves Sidewalks campaign celebration after qualifying for the ballot",
@@ -956,7 +956,7 @@ function S9Ballot({ tweaks, isMobile }) {
       slideLabel: "What voters approved",
       headline: "Initiative 307: November 2022",
       paragraphs: [
-        "The vote did three things at once: it shifted legal responsibility from property owner to city, created a dedicated recurring funding stream, and required prioritization based on need.",
+        "In November 2022, Initiative 307 passed with a winning vote of 56%. Once the vote was one, three things happened: legal responsibility from property owner to city, a dedicated recurring funding stream had to be created, and prioritization had to be based on need.",
       ],
       visual: React.createElement(ThreeChanges)
     },
