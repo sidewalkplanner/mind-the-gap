@@ -1024,9 +1024,9 @@ function S10SIP({ tweaks, isMobile }) {
 
     const FundingGap = () => {
     const sources = [
-      { label: "SIP annual fee revenue", sublabel: "Dedicated stream, first in Denver's history", color: green, note: "~$XX M/yr NEED TO CONFIRM REVENUE" },
+      { label: "SIP annual fee revenue", sublabel: "Dedicated stream, first in Denver's history", color: green, note: "~$40 M/yr NEED TO CONFIRM REVENUE" },
       { label: "Development-triggered construction", sublabel: "Owners build when property redevelops (D.R.M.C. 49-84)", color: "#4A90A4", note: "Ongoing, unquantified" },
-      { label: "Federal & state grants", sublabel: "RAISE, CDBG, CDOT — competitive, variable", color: "#D89A4E", note: "Variable, project-by-project" },
+      { label: "Federal & state grants", sublabel: "BUILD, CDBG, CDOT - competitive, variable", color: "#D89A4E", note: "Variable, project-by-project" },
       { label: "Future bond measures", sublabel: "Precedent: Elevate Denver ($47.7M, 2017)", color: "#B6BFB1", note: "Not yet committed" },
     ];
     return React.createElement("div", {
@@ -1034,7 +1034,7 @@ function S10SIP({ tweaks, isMobile }) {
     },
       React.createElement("div", { style: { fontSize: 13, fontWeight: 700, color: navy, marginBottom: 4 } }, "How SIP Fits Into the Funding Picture"),
       React.createElement("div", { style: { fontSize: 11, color: "#888", marginBottom: 28, lineHeight: 1.6 } },
-        "The fee is the foundation — not the whole structure. Total network need was last estimated at $1.1B (Denver Moves, 2017)."
+        "The fee sets the foundation for the program and other potential revenue sources. Total network need was last estimated at $1.1B (Denver Moves, 2017)."
       ),
       React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 10, marginBottom: 28 } },
         ...sources.map((s, i) =>
