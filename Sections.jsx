@@ -340,10 +340,9 @@ function S4Era({ tweaks, isMobile }) {
 
   const CrossSection = () =>
     React.createElement(MapImage, {
-      src: "uploads/Sidewalks -Development Eras.jpg",
+      src: "uploads/Sidewalks -Development Eras.png",
       alt: "Pre-car and car-era sidewalk cross-section comparison",
       caption: "Why retrofit is harder: pre-car vs car-era development pattern",
-      source: "Capstone graphic",
       fit: "contain"
     });
 
@@ -363,7 +362,7 @@ function S4Era({ tweaks, isMobile }) {
     },
     {
       slideLabel: "The numbers",
-      headline: "Three cities, same pattern",
+      headline: "Three cities, similar patterns",
       paragraphs: [
         "Across all three peer cities, car-era neighborhoods are the largest single source of missing sidewalk.",
         "In Seattle, 74% of all gaps fall in car-era neighborhoods. In Denver, 35%. In Minneapolis, 41%.",
@@ -946,7 +945,7 @@ function S9Ballot({ tweaks, isMobile }) {
       ],
       stat: "~20,000", statLabel: "signatures collected to put the question to voters directly",
       visual: React.createElement(MapImage, {
-        src: "uploads/Denver Deserves Sidewalks Campaign - celebration after getting on ballot.jpg",
+        src: "uploads/ddscampaign.jpg",
         alt: "Denver Deserves Sidewalks campaign celebration after qualifying for the ballot",
         caption: "Denver Deserves Sidewalks campaign celebration after getting on the ballot",
         source: "Instagram — Denver Streets Partnership",
@@ -1081,7 +1080,7 @@ function S10SIP({ tweaks, isMobile }) {
       ],
       stat: "9-year", statLabel: "master plan to achieve complete, ADA-compliant network citywide",
       visual: React.createElement(MapImage, {
-        src: "uploads/Denver sidewalk repair crews - Berkeley - Oct 14 2025 - RJ Sangosti Denver Post.jpg",
+        src: "uploads/berkleyrepair.WEBP",
         alt: "Crews preparing concrete forms for a sidewalk repair project in Denver's Berkeley neighborhood",
         caption: "Crews prepare to pour concrete for a Berkeley neighborhood sidewalk repair project (Oct. 14, 2025)",
         source: "Photo by RJ Sangosti / The Denver Post",
