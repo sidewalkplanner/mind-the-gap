@@ -1219,8 +1219,6 @@ function S11Pathways({ tweaks, isMobile }) {
     }
   ];
 
-  const authIcon = (auth) => auth.startsWith("Council") ? "🏛" : "🗳";
-
   return React.createElement("section", {
     id: "s11",
     style: { background: bone, padding: isMobile ? "60px 0 60px" : "80px 0 80px" }
@@ -1284,25 +1282,8 @@ function S11Pathways({ tweaks, isMobile }) {
             React.createElement("p", { style: { fontSize: 14.5, color: "#333", lineHeight: 1.7, margin: 0 } }, models[activeModel].mechanism)
           ),
           React.createElement("div", { style: { marginBottom: 20 } },
-            React.createElement("div", { style: { fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: "#888", fontWeight: 700, marginBottom: 6 } }, "Authorization pathway"),
-            React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 8 } },
-              React.createElement("span", { style: { fontSize: 16 } }, authIcon(models[activeModel].auth)),
-              React.createElement("span", { style: { fontSize: 14, color: navy, fontWeight: 600 } }, models[activeModel].auth)
-            )
-          ),
-          React.createElement("div", { style: { marginBottom: 20 } },
-            React.createElement("div", { style: { fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: "#888", fontWeight: 700, marginBottom: 6 } }, "Key tradeoff"),
+            React.createElement("div", { style: { fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: "#888", fontWeight: 700, marginBottom: 6 } }, "Tradeoffs"),
             React.createElement("p", { style: { fontSize: 14, color: "#555", lineHeight: 1.65, margin: 0 } }, models[activeModel].tradeoff)
-          ),
-          React.createElement("div", {
-            style: {
-              padding: "14px 16px", borderRadius: 6,
-              background: `${models[activeModel].color}12`,
-              border: `1.5px solid ${models[activeModel].color}44`
-            }
-          },
-            React.createElement("div", { style: { fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: models[activeModel].color, fontWeight: 700, marginBottom: 6 } }, "Verdict"),
-            React.createElement("p", { style: { fontSize: 14, color: "#333", lineHeight: 1.65, margin: 0, fontWeight: 500 } }, models[activeModel].verdict)
           )
         ),
         // Right: US map with example cities
