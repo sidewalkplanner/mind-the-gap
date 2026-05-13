@@ -1109,34 +1109,6 @@ function S10SIP({ tweaks, isMobile }) {
   });
 }
 
-function USCityMap({ models, activeModel }) {
-  const activeColor = "#B2542C";
-  const inactiveColor = "#A8A39A";
-  const outlineFill = "rgba(190,185,175,0.22)";
-  const outlineStroke = "rgba(80,75,65,0.40)";
-  const dotStroke = "#F0EDE8";
-  const cities = {
-    "Spanish Fork, UT": [266.9, 260.1], "Maitland, FL": [727.0, 475.8], "Lincoln, NE": [477.7, 265.1], "Boston, MA": [825.5, 191.5],
-    "Payette, ID": [209.9, 173.1], "Westminster, CO": [350.8, 270.4], "Englewood, CO": [368.8, 288.4], "Baker City, OR": [201.1, 157.7],
-    "Denver, CO (post-Initiative 307)": [359.8, 279.4], "Ann Arbor, MI": [655.3, 226.7], "East Grand Rapids, MI": [628.5, 217.4],
-    "Berkeley, CA (Measure FF)": [108.8, 267.9], "Ithaca, NY (five Sidewalk Improvement Districts)": [752.6, 207.2], "Minneapolis, MN": [523.6, 186.5],
-    "Cheney, WA": [215.8, 109.2], "Seattle, WA": [157.9, 92.1]
-  };
-  const usPath = "M50,50 L350,50 L370,150 L320,200 L250,220 L100,210 L40,160 Z";
-  const activeCities = new Set(models[activeModel].cities);
-  return React.createElement("div", { style: { position: "relative", width: "100%" } },
-    React.createElement("svg", { viewBox: "0 0 975 610", style: { width: "100%", height: "auto", display: "block" }, role: "img", "aria-label": `US locator map highlighting example cities for ${models[activeModel].name} model` },
-      React.createElement("path", { d: usPath, fill: outlineFill, stroke: outlineStroke, strokeWidth: 1.2, strokeLinejoin: "round" }),
-      Object.entries(cities).map(([name, [x, y]]) => activeCities.has(name) ? null : React.createElement("circle", { key: `i-${name}`, cx: x, cy: y, r: 5, fill: inactiveColor, stroke: dotStroke, strokeWidth: 1.5 })),
-      Object.entries(cities).map(([name, [x, y]]) => !activeCities.has(name) ? null : React.createElement("g", { key: `a-${name}` },
-        React.createElement("circle", { cx: x, cy: y, r: 17, fill: activeColor, opacity: 0.18 }),
-        React.createElement("circle", { cx: x, cy: y, r: 8, fill: activeColor, stroke: dotStroke, strokeWidth: 2 })
-      ))
-    ),
-    React.createElement("div", { style: { fontSize: 11, color: "#999", fontStyle: "italic", textAlign: "center", marginTop: 8 } }, "Example cities for the selected model")
-  );
-}
-
 function S11Pathways({ tweaks, isMobile }) {
   const navy = tweaks?.primaryColor || "#1B3A4B";
   const rust = tweaks?.accentColor || "#B2542C";
