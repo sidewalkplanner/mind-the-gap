@@ -3,19 +3,19 @@
 // Real map images wired in; city toggles on S3, S4, S5; nav tile fix
 
 // Reusable image map panel
-function MapImage({ src, alt, caption, source }) {
+function MapImage({ src, alt, caption, source, fit = "contain" }) {
   const navy = "#1B3A4B";
   return React.createElement("div", {
     style: { width: "100%", height: "100%", position: "relative", background: "#E8E2D8", display: "flex", flexDirection: "column" }
   },
     React.createElement("img", {
       src, alt,
-      style: { width: "100%", flex: 1, objectFit: "cover", objectPosition: "center", display: "block" }
+      style: { width: "100%", height: "100%", flex: 1, objectFit: fit, objectPosition: "center", display: "block", background: "#D9D2C5" }
     }),
     (caption || source) && React.createElement("div", {
       style: {
         background: "rgba(27,58,75,0.88)", color: "#EDE6DA",
-        padding: "8px 14px", fontSize: 11, lineHeight: 1.5,
+        padding: "10px 14px", fontSize: 12.5, lineHeight: 1.55,
         display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12
       }
     },
@@ -41,9 +41,9 @@ function CityTabs({ cities, active, onChange, color }) {
         key: c,
         onClick: () => onChange(i),
         style: {
-          padding: "5px 14px", borderRadius: 4, border: "none",
+          padding: "7px 16px", borderRadius: 4, border: "none",
           background: active === i ? rust : "transparent",
-          color: "#EDE6DA", fontSize: 12, fontWeight: active === i ? 700 : 400,
+          color: "#EDE6DA", fontSize: 13.5, fontWeight: active === i ? 700 : 500,
           cursor: "pointer", fontFamily: "inherit", transition: "all 0.15s"
         }
       }, c)
@@ -79,7 +79,7 @@ function S1Cover({ tweaks, isMobile }) {
     ),
     React.createElement("div", { style: { position: "absolute", top: 0, left: 0, right: 0, height: 6, background: rust } }),
     React.createElement("svg", {
-      width: isMobile ? 58 : 92, height: isMobile ? 58 : 92, viewBox: "0 0 64 64",
+      width: isMobile ? 72 : 112, height: isMobile ? 72 : 112, viewBox: "0 0 64 64",
       style: { marginBottom: isMobile ? 18 : 24, opacity: 0.95 }
     },
       React.createElement("rect", { x: 4, y: 28, width: 24, height: 8, rx: 1, fill: "#B6BFB1", opacity: 0.8 }),
@@ -208,7 +208,7 @@ function S3Network({ tweaks, isMobile }) {
         "These maps seperate sidewalk networks into three conditions: sufficient sidewalks, sidewalks that exist but don't meet accessibility standards, and streets where sidewalks are missing altogether.",
         "In Denver, 60% of the network is sufficient, 30% is too narrow, and 10% is missing outright. Toggle between cities to compare."
       ],
-      visual: React.createElement("div", { style: { width: "100%", height: "100%", position: "relative" } },
+      visual: React.createElement("div", { style: { width: "100%", height: "100%", position: "relative", paddingTop: 52, boxSizing: "border-box" } },
         React.createElement(CityTabs, {
           cities: networkMaps.map(m => m.city),
           active: city1,
@@ -339,40 +339,13 @@ function S4Era({ tweaks, isMobile }) {
   };
 
   const CrossSection = () =>
-    React.createElement("div", {
-      style: { width: "100%", height: "100%", background: "#F7F4EF", display: "flex", flexDirection: "column", padding: 40, justifyContent: "center", gap: 28 }
-    },
-      ["Pre-car Era (pre-1940)", "Car Era (1940–1990)"].map((era, idx) =>
-        React.createElement("div", { key: era },
-          React.createElement("div", { style: { fontSize: 12, fontWeight: 700, color: navy, marginBottom: 10, textTransform: "uppercase", letterSpacing: "0.08em" } }, era),
-          React.createElement("svg", { viewBox: "0 0 320 80", style: { width: "100%", height: 76 } },
-            React.createElement("rect", { x: 0, y: 30, width: 320, height: 36, fill: "#8C8C8C" }),
-            React.createElement("line", { x1: 160, y1: 42, x2: 160, y2: 54, stroke: "#FFD700", strokeWidth: 2, strokeDasharray: "6,4" }),
-            idx === 0 ? [
-              React.createElement("rect", { key: "lot1", x: 0, y: 0, width: 55, height: 30, fill: "#C8D5B9", stroke: "#888", strokeWidth: 0.5 }),
-              React.createElement("rect", { key: "sw1", x: 52, y: 22, width: 12, height: 8, fill: sage }),
-              React.createElement("rect", { key: "curb1", x: 64, y: 25, width: 4, height: 5, fill: "#aaa" }),
-              React.createElement("rect", { key: "lot2", x: 252, y: 0, width: 68, height: 30, fill: "#C8D5B9", stroke: "#888", strokeWidth: 0.5 }),
-              React.createElement("rect", { key: "sw2", x: 256, y: 22, width: 12, height: 8, fill: sage }),
-              React.createElement("rect", { key: "curb2", x: 252, y: 25, width: 4, height: 5, fill: "#aaa" }),
-              React.createElement("text", { key: "t1", x: 22, y: 15, fontSize: 8, fill: "#555", textAnchor: "middle" }, "Narrow lot"),
-              React.createElement("text", { key: "t2", x: 58, y: 15, fontSize: 7, fill: navy, textAnchor: "middle" }, "Sidewalk ✓"),
-            ] : [
-              React.createElement("rect", { key: "lot1", x: 0, y: 0, width: 100, height: 30, fill: "#C8D5B9", stroke: "#888", strokeWidth: 0.5 }),
-              React.createElement("path", { key: "swale", d: "M100 30 Q110 36 120 30", fill: "none", stroke: "#6BA3BE", strokeWidth: 2 }),
-              React.createElement("rect", { key: "lot2", x: 210, y: 0, width: 110, height: 30, fill: "#C8D5B9", stroke: "#888", strokeWidth: 0.5 }),
-              React.createElement("path", { key: "swale2", d: "M200 30 Q210 36 220 30", fill: "none", stroke: "#6BA3BE", strokeWidth: 2 }),
-              React.createElement("text", { key: "t1", x: 50, y: 15, fontSize: 8, fill: "#555", textAnchor: "middle" }, "Wide lot"),
-              React.createElement("text", { key: "t2", x: 160, y: 19, fontSize: 7, fill: rust, textAnchor: "middle" }, "No sidewalk · No curb"),
-              React.createElement("text", { key: "t3", x: 160, y: 28, fontSize: 6, fill: "#6BA3BE", textAnchor: "middle" }, "drainage swale"),
-            ]
-          ),
-          React.createElement("div", { style: { fontSize: 11, color: idx === 0 ? "#2D6A4F" : rust, marginTop: 4, fontWeight: 600 } },
-            idx === 0 ? "✓ Sidewalk integrated at initial construction" : "✗ Retrofit requires drainage + right-of-way reclaim"
-          )
-        )
-      )
-    );
+    React.createElement(MapImage, {
+      src: "uploads/Sidewalks -Development Eras.jpg",
+      alt: "Pre-car and car-era sidewalk cross-section comparison",
+      caption: "Why retrofit is harder: pre-car vs car-era development pattern",
+      source: "Capstone graphic",
+      fit: "contain"
+    });
 
   const slides = [
     {
@@ -383,7 +356,7 @@ function S4Era({ tweaks, isMobile }) {
         "Sidewalk gaps in Denver cluster most heavily in post-1940 neighborhoods. In the city’s older, prewar areas, the sidewalk network is far more continuous. The overlap is hard to miss: where development happened in the auto era, pedestrian infrastructure was more likely to be omitted or built to lower standards, and those gaps have persisted.",
 		"Toggle between cities to compare how closely sidewalk gaps track development era."
       ],
-      visual: React.createElement("div", { style: { width: "100%", height: "100%", position: "relative" } },
+      visual: React.createElement("div", { style: { width: "100%", height: "100%", position: "relative", paddingTop: 52, boxSizing: "border-box" } },
         React.createElement(CityTabs, { cities: eraMaps.map(m => m.city), active: eraCity, onChange: setEraCity, color: rust }),
         React.createElement(MapImage, eraMaps[eraCity])
       )
@@ -471,7 +444,7 @@ function S5Equity({ tweaks, isMobile }) {
         "In Denver, C and D areas account for 26% of total gaps; A and B areas account for only 13%. Toggle to see how Minneapolis and Seattle compare. Seattle tells us what happened in other cities."
       ],
       stat: "26%", statLabel: "of Denver's gaps in HOLC C+D areas (vs. 13% in A+B)",
-      visual: React.createElement("div", { style: { width: "100%", height: "100%", position: "relative" } },
+      visual: React.createElement("div", { style: { width: "100%", height: "100%", position: "relative", paddingTop: 52, boxSizing: "border-box" } },
         React.createElement(CityTabs, { cities: holcMaps.map(m => m.city), active: holcCity, onChange: setHolcCity, color: rust }),
         React.createElement(MapImage, holcMaps[holcCity])
       )
@@ -484,7 +457,7 @@ function S5Equity({ tweaks, isMobile }) {
         "In Seattle, 62% of all sidewalk gaps fall in HOLC-ungraded areas. In Denver, 61%. In Minneapolis, 39%.",
         "This is the second equity layer: the legacy of car-era development standards in places that weren't developed during the initial redlining period."
       ],
-      visual: React.createElement("div", { style: { width: "100%", height: "100%", position: "relative" } },
+      visual: React.createElement("div", { style: { width: "100%", height: "100%", position: "relative", paddingTop: 52, boxSizing: "border-box" } },
         React.createElement(CityTabs, { cities: holcMaps.map(m => m.city), active: holcCity, onChange: setHolcCity, color: rust }),
         React.createElement(MapImage, holcMaps[holcCity])
       )
@@ -498,7 +471,7 @@ function S5Equity({ tweaks, isMobile }) {
         "As cities expand bus rapid transit and light rail, the assumption that nearby pedestrian infrastructure already exists is often wrong."
       ],
       stat: "65%", statLabel: "of Denver's gaps within ¼ mile of a historic streetcar line",
-      visual: React.createElement("div", { style: { width: "100%", height: "100%", position: "relative" } },
+      visual: React.createElement("div", { style: { width: "100%", height: "100%", position: "relative", paddingTop: 52, boxSizing: "border-box" } },
         React.createElement(CityTabs, { cities: streetcarMaps.map(m => m.city), active: streetcarCity, onChange: setStreetcarCity, color: rust }),
         React.createElement(MapImage, streetcarMaps[streetcarCity])
       )
@@ -788,10 +761,17 @@ function S8Timeline({ tweaks, isMobile }) {
   },
     React.createElement("div", { style: { maxWidth: 900, margin: "0 auto" } },
       React.createElement("div", { style: { fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: rust, fontWeight: 700, marginBottom: 12 } }, "Act II — Denver's Trajectory"),
-      React.createElement("h2", { style: { fontSize: 34, fontWeight: 800, color: navy, margin: "0 0 12px" } }, "The 20-Year Reform Arc"),
-      React.createElement("p", { style: { fontSize: 16, color: "#444", lineHeight: 1.75, marginBottom: 16 } },
+      React.createElement("h2", { style: { fontSize: isMobile ? 32 : 38, fontWeight: 800, color: navy, margin: "0 0 12px" } }, "The 20-Year Reform Arc"),
+      React.createElement("p", { style: { fontSize: 17, color: "#444", lineHeight: 1.75, marginBottom: 10 } },
         "From the moment Denver named the billion-dollar problem to the moment it acted, eight years passed. From the first failed enforcement bill to the ballot initiative that finally worked, four decades."
       ),
+      React.createElement("div", {
+        style: {
+          fontSize: 14, color: navy, marginBottom: 14, fontWeight: 700,
+          background: "rgba(216,154,78,0.18)", border: "1px solid rgba(216,154,78,0.45)",
+          borderRadius: 8, padding: "10px 12px", display: "inline-flex", alignItems: "center", gap: 8
+        }
+      }, "👇 Click any timeline row to expand details"),
       React.createElement("div", { style: { display: "flex", gap: 16, marginBottom: 44 } },
         [["Positive step", "#2D6A4F"], ["Failed attempt", "#B6B0A6"], ["Neutral / proposal", "#D89A4E"], ["Milestone", rust]].map(([l, c]) =>
           React.createElement("div", { key: l, style: { display: "flex", alignItems: "center", gap: 6 } },
@@ -841,18 +821,21 @@ function S8Timeline({ tweaks, isMobile }) {
             // Content
             React.createElement("div", {
               style: {
-                flex: 1, background: isActive ? (ev.type === "milestone" ? "rgba(178,84,44,0.06)" : "rgba(27,58,75,0.04)") : "transparent",
+                flex: 1, background: isActive ? (ev.type === "milestone" ? "rgba(178,84,44,0.08)" : "rgba(27,58,75,0.06)") : "rgba(27,58,75,0.015)",
                 borderRadius: 6, padding: isActive ? "12px 16px" : "10px 16px",
-                marginLeft: 12, border: isActive ? `1px solid ${ts.dot}44` : "1px solid transparent",
+                marginLeft: 12, border: isActive ? `1px solid ${ts.dot}66` : "1px dashed rgba(27,58,75,0.2)",
                 transition: "all 0.2s"
               }
             },
               React.createElement("div", {
                 style: {
                   fontSize: 14, fontWeight: ev.type === "milestone" ? 800 : 600,
-                  color: ev.type === "milestone" ? rust : navy, marginBottom: isActive ? 8 : 0
+                  color: ev.type === "milestone" ? rust : navy, marginBottom: isActive ? 8 : 0, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12
                 }
-              }, ev.label),
+              },
+                React.createElement("span", null, ev.label),
+                React.createElement("span", { style: { fontSize: 11, color: "#888", letterSpacing: "0.04em", textTransform: "uppercase", fontWeight: 700 } }, isActive ? "Hide" : "Click to expand")
+              ),
               isActive && React.createElement("p", { style: { fontSize: 13, color: "#555", lineHeight: 1.65, margin: 0 } }, ev.body)
             )
           );
@@ -962,7 +945,13 @@ function S9Ballot({ tweaks, isMobile }) {
         "The proposal fit in one sentence: a small annual fee on every property, scaled to lot frontage, in exchange for the city taking responsibility for sidewalk construction and repair."
       ],
       stat: "~20,000", statLabel: "signatures collected to put the question to voters directly",
-      visual: React.createElement(MapPlaceholder, { label: "Campaign Photo, search Instagram, Denverite, etc. for something.", sublabel: "Denver Deserves Sidewalks — 2022" })
+      visual: React.createElement(MapImage, {
+        src: "uploads/Denver Deserves Sidewalks Campaign - celebration after getting on ballot.jpg",
+        alt: "Denver Deserves Sidewalks campaign celebration after qualifying for the ballot",
+        caption: "Denver Deserves Sidewalks campaign celebration after getting on the ballot",
+        source: "Instagram — Denver Streets Partnership",
+        fit: "cover"
+      })
     },
     {
       slideLabel: "What voters approved",
@@ -1091,7 +1080,13 @@ function S10SIP({ tweaks, isMobile }) {
         "The legal and funding pieces are now built into the model. The harder part is delivery: deciding where work happens first, and whether those choices hold up as the program moves from policy to pavement."
       ],
       stat: "9-year", statLabel: "master plan to achieve complete, ADA-compliant network citywide",
-      visual: React.createElement(MapPlaceholder, { label: "SIP Construction Program or other similar maps", sublabel: "Other ideas?" })
+      visual: React.createElement(MapImage, {
+        src: "uploads/Denver sidewalk repair crews - Berkeley - Oct 14 2025 - RJ Sangosti Denver Post.jpg",
+        alt: "Crews preparing concrete forms for a sidewalk repair project in Denver's Berkeley neighborhood",
+        caption: "Crews prepare to pour concrete for a Berkeley neighborhood sidewalk repair project (Oct. 14, 2025)",
+        source: "Photo by RJ Sangosti / The Denver Post",
+        fit: "cover"
+      })
     },
     {
       slideLabel: "What's still open",
@@ -2746,4 +2741,3 @@ function S13Credits({ tweaks, isMobile }) {
 }
 
 Object.assign(window, { S10SIP, S11Pathways, S12Decision, S13Credits });
-
