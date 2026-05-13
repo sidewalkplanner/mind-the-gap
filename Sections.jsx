@@ -1280,8 +1280,6 @@ function S11Pathways({ tweaks, isMobile }) {
           ),
           React.createElement(USCityMap, { models, activeModel })
         )
-      ),
-        )
       )
     )
   );
