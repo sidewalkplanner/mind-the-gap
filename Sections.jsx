@@ -339,40 +339,13 @@ function S4Era({ tweaks, isMobile }) {
   };
 
   const CrossSection = () =>
-    React.createElement("div", {
-      style: { width: "100%", height: "100%", background: "#F7F4EF", display: "flex", flexDirection: "column", padding: 40, justifyContent: "center", gap: 28 }
-    },
-      ["Pre-car Era (pre-1940)", "Car Era (1940–1990)"].map((era, idx) =>
-        React.createElement("div", { key: era },
-          React.createElement("div", { style: { fontSize: 12, fontWeight: 700, color: navy, marginBottom: 10, textTransform: "uppercase", letterSpacing: "0.08em" } }, era),
-          React.createElement("svg", { viewBox: "0 0 320 80", style: { width: "100%", height: 76 } },
-            React.createElement("rect", { x: 0, y: 30, width: 320, height: 36, fill: "#8C8C8C" }),
-            React.createElement("line", { x1: 160, y1: 42, x2: 160, y2: 54, stroke: "#FFD700", strokeWidth: 2, strokeDasharray: "6,4" }),
-            idx === 0 ? [
-              React.createElement("rect", { key: "lot1", x: 0, y: 0, width: 55, height: 30, fill: "#C8D5B9", stroke: "#888", strokeWidth: 0.5 }),
-              React.createElement("rect", { key: "sw1", x: 52, y: 22, width: 12, height: 8, fill: sage }),
-              React.createElement("rect", { key: "curb1", x: 64, y: 25, width: 4, height: 5, fill: "#aaa" }),
-              React.createElement("rect", { key: "lot2", x: 252, y: 0, width: 68, height: 30, fill: "#C8D5B9", stroke: "#888", strokeWidth: 0.5 }),
-              React.createElement("rect", { key: "sw2", x: 256, y: 22, width: 12, height: 8, fill: sage }),
-              React.createElement("rect", { key: "curb2", x: 252, y: 25, width: 4, height: 5, fill: "#aaa" }),
-              React.createElement("text", { key: "t1", x: 22, y: 15, fontSize: 8, fill: "#555", textAnchor: "middle" }, "Narrow lot"),
-              React.createElement("text", { key: "t2", x: 58, y: 15, fontSize: 7, fill: navy, textAnchor: "middle" }, "Sidewalk ✓"),
-            ] : [
-              React.createElement("rect", { key: "lot1", x: 0, y: 0, width: 100, height: 30, fill: "#C8D5B9", stroke: "#888", strokeWidth: 0.5 }),
-              React.createElement("path", { key: "swale", d: "M100 30 Q110 36 120 30", fill: "none", stroke: "#6BA3BE", strokeWidth: 2 }),
-              React.createElement("rect", { key: "lot2", x: 210, y: 0, width: 110, height: 30, fill: "#C8D5B9", stroke: "#888", strokeWidth: 0.5 }),
-              React.createElement("path", { key: "swale2", d: "M200 30 Q210 36 220 30", fill: "none", stroke: "#6BA3BE", strokeWidth: 2 }),
-              React.createElement("text", { key: "t1", x: 50, y: 15, fontSize: 8, fill: "#555", textAnchor: "middle" }, "Wide lot"),
-              React.createElement("text", { key: "t2", x: 160, y: 19, fontSize: 7, fill: rust, textAnchor: "middle" }, "No sidewalk · No curb"),
-              React.createElement("text", { key: "t3", x: 160, y: 28, fontSize: 6, fill: "#6BA3BE", textAnchor: "middle" }, "drainage swale"),
-            ]
-          ),
-          React.createElement("div", { style: { fontSize: 11, color: idx === 0 ? "#2D6A4F" : rust, marginTop: 4, fontWeight: 600 } },
-            idx === 0 ? "✓ Sidewalk integrated at initial construction" : "✗ Retrofit requires drainage + right-of-way reclaim"
-          )
-        )
-      )
-    );
+    React.createElement(MapImage, {
+      src: "uploads/Sidewalks -Development Eras.jpg",
+      alt: "Pre-car and car-era sidewalk cross-section comparison",
+      caption: "Why retrofit is harder: pre-car vs car-era development pattern",
+      source: "Capstone graphic",
+      fit: "contain"
+    });
 
   const slides = [
     {
@@ -972,7 +945,13 @@ function S9Ballot({ tweaks, isMobile }) {
         "The proposal fit in one sentence: a small annual fee on every property, scaled to lot frontage, in exchange for the city taking responsibility for sidewalk construction and repair."
       ],
       stat: "~20,000", statLabel: "signatures collected to put the question to voters directly",
-      visual: React.createElement(MapPlaceholder, { label: "Campaign Photo, search Instagram, Denverite, etc. for something.", sublabel: "Denver Deserves Sidewalks — 2022" })
+      visual: React.createElement(MapImage, {
+        src: "uploads/Denver Deserves Sidewalks Campaign - celebration after getting on ballot.jpg",
+        alt: "Denver Deserves Sidewalks campaign celebration after qualifying for the ballot",
+        caption: "Denver Deserves Sidewalks campaign celebration after getting on the ballot",
+        source: "Instagram — Denver Streets Partnership",
+        fit: "cover"
+      })
     },
     {
       slideLabel: "What voters approved",
@@ -1101,7 +1080,13 @@ function S10SIP({ tweaks, isMobile }) {
         "The legal and funding pieces are now built into the model. The harder part is delivery: deciding where work happens first, and whether those choices hold up as the program moves from policy to pavement."
       ],
       stat: "9-year", statLabel: "master plan to achieve complete, ADA-compliant network citywide",
-      visual: React.createElement(MapPlaceholder, { label: "SIP Construction Program or other similar maps", sublabel: "Other ideas?" })
+      visual: React.createElement(MapImage, {
+        src: "uploads/Denver sidewalk repair crews - Berkeley - Oct 14 2025 - RJ Sangosti Denver Post.jpg",
+        alt: "Crews preparing concrete forms for a sidewalk repair project in Denver's Berkeley neighborhood",
+        caption: "Crews prepare to pour concrete for a Berkeley neighborhood sidewalk repair project (Oct. 14, 2025)",
+        source: "Photo by RJ Sangosti / The Denver Post",
+        fit: "cover"
+      })
     },
     {
       slideLabel: "What's still open",
@@ -1206,8 +1191,6 @@ function S11Pathways({ tweaks, isMobile }) {
     }
   ];
 
-  const authIcon = (auth) => auth.startsWith("Council") ? "🏛" : "🗳";
-
   return React.createElement("section", {
     id: "s11",
     style: { background: bone, padding: isMobile ? "60px 0 60px" : "80px 0 80px" }
@@ -1271,25 +1254,8 @@ function S11Pathways({ tweaks, isMobile }) {
             React.createElement("p", { style: { fontSize: 14.5, color: "#333", lineHeight: 1.7, margin: 0 } }, models[activeModel].mechanism)
           ),
           React.createElement("div", { style: { marginBottom: 20 } },
-            React.createElement("div", { style: { fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: "#888", fontWeight: 700, marginBottom: 6 } }, "Authorization pathway"),
-            React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 8 } },
-              React.createElement("span", { style: { fontSize: 16 } }, authIcon(models[activeModel].auth)),
-              React.createElement("span", { style: { fontSize: 14, color: navy, fontWeight: 600 } }, models[activeModel].auth)
-            )
-          ),
-          React.createElement("div", { style: { marginBottom: 20 } },
-            React.createElement("div", { style: { fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: "#888", fontWeight: 700, marginBottom: 6 } }, "Key tradeoff"),
+            React.createElement("div", { style: { fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: "#888", fontWeight: 700, marginBottom: 6 } }, "Tradeoffs"),
             React.createElement("p", { style: { fontSize: 14, color: "#555", lineHeight: 1.65, margin: 0 } }, models[activeModel].tradeoff)
-          ),
-          React.createElement("div", {
-            style: {
-              padding: "14px 16px", borderRadius: 6,
-              background: `${models[activeModel].color}12`,
-              border: `1.5px solid ${models[activeModel].color}44`
-            }
-          },
-            React.createElement("div", { style: { fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: models[activeModel].color, fontWeight: 700, marginBottom: 6 } }, "Verdict"),
-            React.createElement("p", { style: { fontSize: 14, color: "#333", lineHeight: 1.65, margin: 0, fontWeight: 500 } }, models[activeModel].verdict)
           )
         ),
         // Right: US map with example cities
@@ -1313,18 +1279,7 @@ function S11Pathways({ tweaks, isMobile }) {
               )
             )
           ),
-          React.createElement("div", null,
-            React.createElement("svg", { viewBox: "0 0 400 250", style: { width: "100%", opacity: 0.25 } },
-              React.createElement("path", {
-                d: "M50,50 L350,50 L370,150 L320,200 L250,220 L100,210 L40,160 Z",
-                fill: "none", stroke: navy, strokeWidth: 2
-              }),
-              React.createElement("text", { x: 200, y: 130, textAnchor: "middle", fontSize: 14, fill: navy, opacity: 0.5 }, "United States")
-            ),
-            React.createElement("div", { style: { fontSize: 11, color: "#999", fontStyle: "italic", textAlign: "center" } },
-              "Map: example cities, color-coded by model"
-            )
-          )
+          React.createElement(USCityMap, { models, activeModel })
         )
       ),
       // Authorization spectrum
