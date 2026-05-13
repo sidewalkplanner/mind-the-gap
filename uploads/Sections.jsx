@@ -1281,6 +1281,15 @@ function S11Pathways({ tweaks, isMobile }) {
           React.createElement(USCityMap, { models, activeModel })
         )
       ),
+      // Authorization spectrum
+      React.createElement("div", { style: { marginTop: 32, display: "flex", gap: 0, background: "#fff", borderRadius: 8, overflow: "hidden", boxShadow: "0 1px 6px rgba(0,0,0,0.08)" } },
+        React.createElement("div", { style: { padding: "14px 20px", flex: 1, borderRight: "1px solid rgba(0,0,0,0.06)" } },
+          React.createElement("div", { style: { fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: "#888", fontWeight: 700, marginBottom: 6 } }, "🏛 Council Action Models"),
+          React.createElement("div", { style: { fontSize: 12, color: "#555" } }, "Public Ownership · Utility Fee · Improvement District · Inspection-and-Bill")
+        ),
+        React.createElement("div", { style: { padding: "14px 20px", flex: 1 } },
+          React.createElement("div", { style: { fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: "#888", fontWeight: 700, marginBottom: 6 } }, "🗳 Voter Mandate Models"),
+          React.createElement("div", { style: { fontSize: 12, color: "#555" } }, "Dedicated Annual Fee · Property Tax Millage · Parcel Tax · General Levy")
         )
       )
     )
