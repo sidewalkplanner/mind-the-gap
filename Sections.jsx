@@ -110,16 +110,6 @@ function S1Cover({ tweaks, isMobile }) {
     React.createElement("p", {
       style: { fontSize: 18, color: "rgba(237,230,218,0.72)", maxWidth: 560, lineHeight: 1.6, marginBottom: 48 }
     }, "Taylor Lucas & Robert Sells · MURP Capstone · University of Colorado Denver · In partnership with Fehr & Peers"),
-    React.createElement("div", { style: { display: "flex", gap: 16, flexWrap: "wrap", justifyContent: "center" } },
-      [["60%", "Sufficient"], ["30%", "Deficient"], ["10%", "Missing"]].map(([pct, label], i) =>
-        React.createElement("div", { key: i,
-          style: { background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 8, padding: "16px 24px", textAlign: "center" }
-        },
-          React.createElement("div", { style: { fontSize: 28, fontWeight: 800, color: i === 0 ? "#B6BFB1" : i === 1 ? "#D89A4E" : rust } }, pct),
-          React.createElement("div", { style: { fontSize: 12, color: "rgba(237,230,218,0.6)", marginTop: 4, letterSpacing: "0.06em" } }, label)
-        )
-      )
-    ),
     React.createElement("div", {
       style: { position: "absolute", bottom: 32, left: "50%", transform: "translateX(-50%)", color: "rgba(237,230,218,0.4)", fontSize: 12, letterSpacing: "0.1em", textTransform: "uppercase" }
     }, "Scroll to begin ↓")
@@ -206,7 +196,7 @@ function S3Network({ tweaks, isMobile }) {
       headline: "The sidewalk network in 2025",
       paragraphs: [
         "These maps seperate sidewalk networks into three conditions: sufficient sidewalks, sidewalks that exist but don't meet accessibility standards, and streets where sidewalks are missing altogether.",
-        "In Denver, 60% of the network is sufficient, 30% is too narrow, and 10% is missing outright. Toggle between cities to compare."
+        "In Denver, 57% of the network is sufficient, 34% is too narrow, and 9% is missing outright. Toggle between cities to compare."
       ],
       visual: React.createElement("div", { style: { width: "100%", height: "100%", position: "relative", paddingTop: 52, boxSizing: "border-box" } },
         React.createElement(CityTabs, {
@@ -1023,10 +1013,6 @@ function S10SIP({ tweaks, isMobile }) {
           React.createElement("div", { style: { fontSize: 11, color: "#888", marginTop: 3 } }, row.note)
         )
       ),
-      React.createElement("div", { style: { marginTop: 16, padding: "12px 14px", background: "rgba(45,106,79,0.08)", borderRadius: 6, border: `1px solid ${green}` } },
-        React.createElement("span", { style: { fontSize: 12, color: green, fontWeight: 700 } }, "Income-qualified rebates: "),
-        React.createElement("span", { style: { fontSize: 12, color: "#555" } }, "Eligible households can apply for fee reduction or waiver through the city.")
-      )
     );
 
     const FundingGap = () => {
