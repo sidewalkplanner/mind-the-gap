@@ -2707,11 +2707,13 @@ function S13Credits({ tweaks, isMobile }) {
           React.createElement("p", { style: { fontSize: 15, lineHeight: 1.75, opacity: 0.75, marginBottom: 32 } },
             "The report contains the full methodology, comparative spatial analysis of Denver, Seattle, and Minneapolis, historical research on Denver's reform trajectory, and citations behind every figure."
           ),
-          React.createElement("button", {
+          React.createElement("a", {
+            href: "https://drive.google.com/uc?export=download&id=1FnC-zLYs4j6Qguu5lgMPiVEYWouK_q25",
+            download: true,
             style: {
-              padding: "14px 28px", background: rust, color: "#fff",
-              border: "none", borderRadius: 6, fontSize: 15, fontWeight: 700,
-              cursor: "pointer", fontFamily: "inherit"
+              display: "inline-block", padding: "14px 28px", background: rust, color: "#fff",
+              borderRadius: 6, fontSize: 15, fontWeight: 700,
+              cursor: "pointer", fontFamily: "inherit", textDecoration: "none"
             }
           }, "Download the full report — PDF →")
         ),
