@@ -1121,6 +1121,9 @@ function S11Pathways({ tweaks, isMobile }) {
   const rust = tweaks?.accentColor || "#B2542C";
   const bone = tweaks?.bgColor || "#EDE6DA";
   const [activeModel, setActiveModel] = React.useState(0);
+  const [question, setQuestion] = React.useState("");
+  const [chatState, setChatState] = React.useState({ answer: "", loading: false, error: "" });
+  const previousModelRef = React.useRef(activeModel);
 
   const models = [
     {
@@ -1197,6 +1200,67 @@ function S11Pathways({ tweaks, isMobile }) {
     }
   ];
 
+  React.useEffect(() => {
+    if (previousModelRef.current !== activeModel) {
+      setQuestion("");
+      setChatState({ answer: "", loading: false, error: "" });
+      previousModelRef.current = activeModel;
+    }
+  }, [activeModel]);
+
+  const askModelAssistant = async () => {
+    const trimmedQuestion = question.trim();
+    if (!trimmedQuestion || chatState.loading) return;
+
+    const selectedModel = models[activeModel];
+    setChatState({ answer: "", loading: true, error: "" });
+
+    try {
+      const configuredEndpoint = window.__MODEL_CHAT_API_ENDPOINT__;
+      const endpoints = configuredEndpoint
+        ? [configuredEndpoint]
+        : ["/ai/model-chat", "/api/model-chat"];
+
+      let response = null;
+      for (const endpoint of endpoints) {
+        response = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            question: trimmedQuestion,
+            model: {
+              name: selectedModel.name,
+              mechanism: selectedModel.mechanism,
+              tradeoff: selectedModel.tradeoff,
+              cities: selectedModel.cities
+            }
+          })
+        });
+        if (response.ok) break;
+      }
+
+      if (!response || !response.ok) throw new Error("Assistant request failed");
+      const data = await response.json();
+      if (!data?.answer) throw new Error("No answer returned");
+
+      setChatState({ answer: data.answer, loading: false, error: "" });
+      setQuestion("");
+    } catch (error) {
+      setChatState({
+        answer: "",
+        loading: false,
+        error: "Sorry — I couldn't reach the model assistant right now. Please try again."
+      });
+    }
+  };
+
+  const handleQuestionKeyDown = (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+      e.preventDefault();
+      askModelAssistant();
+    }
+  };
+
   return React.createElement("section", {
     id: "s11",
     style: { background: bone, padding: isMobile ? "60px 0 60px" : "80px 0 80px" }
@@ -1262,6 +1326,47 @@ function S11Pathways({ tweaks, isMobile }) {
           React.createElement("div", { style: { marginBottom: 20 } },
             React.createElement("div", { style: { fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: "#888", fontWeight: 700, marginBottom: 6 } }, "Tradeoffs"),
             React.createElement("p", { style: { fontSize: 14, color: "#555", lineHeight: 1.65, margin: 0 } }, models[activeModel].tradeoff)
+          ),
+          React.createElement("div", {
+            style: {
+              marginTop: 28, padding: "16px 16px 14px",
+              border: "1px solid rgba(27,58,75,0.12)", borderRadius: 10,
+              background: "#F8F6F2"
+            }
+          },
+            React.createElement("div", { style: { fontSize: 15, fontWeight: 700, color: navy, marginBottom: 10 } }, "Have questions about this model? Ask here!"),
+            React.createElement("textarea", {
+              value: question,
+              onChange: e => setQuestion(e.target.value),
+              onKeyDown: handleQuestionKeyDown,
+              placeholder: `Ask about ${models[activeModel].name}...`,
+              rows: 3,
+              style: {
+                width: "100%", resize: "vertical", minHeight: 72, fontFamily: "inherit", fontSize: 13.5,
+                border: "1px solid rgba(27,58,75,0.2)", borderRadius: 8, padding: "10px 12px",
+                outline: "none", boxSizing: "border-box", background: "#fff", color: "#1f1f1f"
+              }
+            }),
+            React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 10, gap: 12 } },
+              React.createElement("div", { style: { fontSize: 11.5, color: "#6D6A62" } }, "Answers are grounded in this pathway's mechanism and tradeoffs. Press Ctrl/Cmd + Enter to submit."),
+              React.createElement("button", {
+                onClick: askModelAssistant,
+                disabled: chatState.loading || !question.trim(),
+                style: {
+                  border: "none", borderRadius: 7, padding: "8px 14px",
+                  background: chatState.loading || !question.trim() ? "#9EA7AD" : models[activeModel].color,
+                  color: "#fff", fontWeight: 700, cursor: chatState.loading || !question.trim() ? "not-allowed" : "pointer",
+                  fontFamily: "inherit", fontSize: 12.5
+                }
+              }, chatState.loading ? "Asking..." : "Ask AI")
+            ),
+            chatState.error && React.createElement("div", { style: { marginTop: 10, fontSize: 12.5, color: "#B2542C" } }, chatState.error),
+            chatState.answer && React.createElement("div", {
+              style: {
+                marginTop: 12, borderRadius: 8, background: "#fff", border: "1px solid rgba(27,58,75,0.12)",
+                padding: "12px 13px", fontSize: 13.5, color: "#2A2A2A", lineHeight: 1.55
+              }
+            }, chatState.answer)
           )
         ),
         // Right: US map with example cities
