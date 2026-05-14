@@ -1376,7 +1376,7 @@ function S11Pathways({ tweaks, isMobile }) {
             }
           },
             React.createElement("div", { style: { fontSize: 15, fontWeight: 700, color: navy, marginBottom: 6 } }, `Ask about the ${models[activeModel].name} pathway`),
-            React.createElement("div", { style: { fontSize: 12.5, color: "#6D6A62", marginBottom: 10 } }, "Get help understanding how this governance model works, what it takes to implement, and whether it fits your city's context."),
+            React.createElement("div", { style: { fontSize: 12.5, color: "#6D6A62", marginBottom: 10 } }, "Tell me about your city. I'll explain how this governance model works, what it takes to implement, and whether it fits your city's context."),
             React.createElement("textarea", {
               value: question,
               onChange: e => setQuestion(e.target.value),
@@ -1790,14 +1790,14 @@ function S12Decision({ tweaks, isMobile }) {
     else if (modelKey === "parcel_tax") pathways = ["council_referred_ballot", "citizen_initiative"];
     else if (modelKey === "millage" || modelKey === "general_levy") pathways = ["council_referred_ballot", "citizen_initiative", "phased_approach"];
     else if (modelKey === "dedicated_fee") {
-      if (taxRegime === "tabor") pathways = ["council_referred_ballot", "citizen_initiative", "phased_approach"];
+      if (taxRegime === "tax_vote") pathways = ["council_referred_ballot", "citizen_initiative", "phased_approach"];
       else pathways = ["council_ordinance", "council_referred_ballot", "citizen_initiative", "phased_approach"];
     } else if (modelKey === "utility_fee") {
       pathways = ["council_ordinance", "council_referred_ballot", "phased_approach"];
     }
 
     // Prop 13: millage essentially blocked (would need supermajority + state-law workarounds)
-    if (taxRegime === "prop13" && modelKey === "millage") return [];
+    if (taxRegime === "property_supermajority" && modelKey === "millage") return [];
 
     // If a charter amendment is needed, that becomes the primary or paired pathway
     if (needsCharterChange) {
@@ -1821,7 +1821,7 @@ function S12Decision({ tweaks, isMobile }) {
       options: [
         { id: "charter_codified", label: "In our city charter", icon: "📜" },
         { id: "ordinance", label: "In an ordinance — council could change it", icon: "📋" },
-        { id: "practice", label: "Just how it's always been done — nothing formally on the books", icon: "🗂" },
+        { id: "practice", label: "Just how it's always been done — not much on the books", icon: "🗂" },
         { id: "mixed", label: "A mix of charter, ordinance, and practice", icon: "🔀" },
         { id: "unclear_q1", label: "Not sure", icon: "❓" }
       ]
@@ -1829,14 +1829,14 @@ function S12Decision({ tweaks, isMobile }) {
     {
       id: "q2",
       label: "State law",
-      text: "What does your state allow?",
-      subtitle: "The fee-versus-tax distinction usually determines whether you need voter approval.",
+      text: "What revenue-raising constraints apply in your state?",
+      subtitle: "The fee-versus-tax distinction often determines whether voter approval is required.",
       options: [
-        { id: "broad_home_rule", label: "Home rule, no major tax-vote hurdles", icon: "🏛" },
-        { id: "tabor", label: "Tax increases need voter approval (Colorado TABOR or similar)", icon: "📊" },
-        { id: "prop13", label: "Property-tax supermajority required (California Prop 13/218)", icon: "⚖" },
-        { id: "millage_cap", label: "Millage caps with rollback formulas (Michigan Headlee or similar)", icon: "📉" },
-        { id: "dillons", label: "Dillon's Rule — most new revenue needs state authorization", icon: "📜" },
+        { id: "none", label: "No major state-level revenue constraints", icon: "🏛" },
+        { id: "tax_vote", label: "Voter approval required for general tax increases (Colorado TABOR or similar)", icon: "📊" },
+        { id: "property_supermajority", label: "Voter approval and supermajority required for property taxes (California Prop 13/218 or similar)", icon: "⚖" },
+        { id: "millage_cap", label: "Property tax rate or levy capped with automatic rollback (Michigan Headlee or similar)", icon: "📉" },
+        { id: "state_auth_required", label: "Limited taxing authority — most new revenue requires state legislative authorization", icon: "📜" },
         { id: "unsure_q2", label: "Not sure", icon: "❓" }
       ]
     },
@@ -1917,12 +1917,12 @@ function S12Decision({ tweaks, isMobile }) {
       unclear_q1:       { public_ownership: 1, utility_fee: 1, dedicated_fee: 1, millage: 1, parcel_tax: 1, improvement_district: 1, inspection_bill: 2, general_levy: 1 }
     },
     q2: { // state revenue framework
-      broad_home_rule: { public_ownership: 2, utility_fee: 3, dedicated_fee: 3, millage: 2, parcel_tax: -1, improvement_district: 2, inspection_bill: 2, general_levy: 2 },
-      tabor:           { public_ownership: 1, utility_fee: 2, dedicated_fee: 3, millage: 1, parcel_tax: -1, improvement_district: 1, inspection_bill: 2, general_levy: 2 },
-      prop13:          { public_ownership: 1, utility_fee: 1, dedicated_fee: -1, millage: -5, parcel_tax: 7, improvement_district: 1, inspection_bill: 1, general_levy: 2 },
-      millage_cap:     { public_ownership: 2, utility_fee: 2, dedicated_fee: 2, millage: -1, parcel_tax: 1, improvement_district: 2, inspection_bill: 2, general_levy: 1 },
-      dillons:         { public_ownership: 1, utility_fee: 1, dedicated_fee: -1, millage: 1, parcel_tax: -2, improvement_district: 0, inspection_bill: 2, general_levy: 0 },
-      unsure_q2:       { public_ownership: 1, utility_fee: 1, dedicated_fee: 1, millage: 1, parcel_tax: 0, improvement_district: 1, inspection_bill: 2, general_levy: 1 }
+      none:                    { public_ownership: 2, utility_fee: 3, dedicated_fee: 3, millage: 2, parcel_tax: -1, improvement_district: 2, inspection_bill: 2, general_levy: 2 },
+      tax_vote:                { public_ownership: 1, utility_fee: 2, dedicated_fee: 3, millage: 1, parcel_tax: -1, improvement_district: 1, inspection_bill: 2, general_levy: 2 },
+      property_supermajority:  { public_ownership: 1, utility_fee: 1, dedicated_fee: -1, millage: -5, parcel_tax: 7, improvement_district: 1, inspection_bill: 1, general_levy: 2 },
+      millage_cap:             { public_ownership: 2, utility_fee: 2, dedicated_fee: 2, millage: -1, parcel_tax: 1, improvement_district: 2, inspection_bill: 2, general_levy: 1 },
+      state_auth_required:     { public_ownership: 1, utility_fee: 1, dedicated_fee: -1, millage: 1, parcel_tax: -2, improvement_district: 0, inspection_bill: 2, general_levy: 0 },
+      unsure_q2:               { public_ownership: 1, utility_fee: 1, dedicated_fee: 1, millage: 1, parcel_tax: 0, improvement_district: 1, inspection_bill: 2, general_levy: 1 }
     },
     q3: { // network state
       build_out:    { public_ownership: 2, utility_fee: 1, dedicated_fee: 3, millage: 2, parcel_tax: 2, improvement_district: 2, inspection_bill: -2, general_levy: 3 },
@@ -2034,7 +2034,7 @@ function S12Decision({ tweaks, isMobile }) {
   const uncertaintyFlags = () => {
     const flags = [];
     if (answers.q1 === "unclear_q1") flags.push({ q: "Current liability framework", action: "Verify with municipal counsel whether sidewalk responsibility is in your charter, ordinance, or operational practice. This determines whether reform requires charter amendment vs. ordinance vs. policy change." });
-    if (answers.q2 === "unsure_q2") flags.push({ q: "State revenue framework", action: "Engage municipal counsel to identify state-level tax-vote requirements and the legal classification of fees vs. taxes in your jurisdiction." });
+    if (answers.q2 === "unsure_q2") flags.push({ q: "State revenue constraints", action: "Engage municipal counsel to identify which state-level constraints apply — voter-approval requirements, property tax caps, or limits on taxing authority — and how they affect whether your proposed charge qualifies as a fee or a tax." });
     if (answers.q3 === "no_inventory") flags.push({ q: "Network inventory", action: "Commission a citywide sidewalk inventory before scoping the program. Without one, downstream decisions are calibrated to guesses." });
     if (answers.q4 === "spatial_unknown") flags.push({ q: "Spatial pattern", action: "Map sidewalk conditions against demographic and historical data (HOLC, development era, income). The geography of need shapes both mechanism and sequencing." });
     if (answers.q5 === "council_unknown") flags.push({ q: "Council appetite", action: "Test council appetite through a targeted briefing with key members before committing to a direction." });
@@ -2100,10 +2100,10 @@ function S12Decision({ tweaks, isMobile }) {
     if (answers.q1 === "charter_codified" && ["public_ownership", "utility_fee", "dedicated_fee", "millage", "parcel_tax", "general_levy"].includes(topModelKey)) {
       steps.push("Draft the charter amendment language and the funding mechanism in parallel. They will move together politically and legally; designing one without the other creates implementation gaps.");
     }
-    if (answers.q2 === "tabor" && (topModelKey === "utility_fee" || topModelKey === "dedicated_fee")) {
+    if (answers.q2 === "tax_vote" && (topModelKey === "utility_fee" || topModelKey === "dedicated_fee")) {
       steps.push("Engage a municipal attorney early to structure the mechanism as a service fee rather than a tax. The fee-vs-tax classification determines whether council can adopt by ordinance or whether voter approval is required — and the legal standard varies significantly by state.");
     }
-    if (answers.q2 === "prop13" && topModelKey === "parcel_tax") {
+    if (answers.q2 === "property_supermajority" && topModelKey === "parcel_tax") {
       steps.push("Confirm the simple-majority vs. supermajority threshold for your specific parcel tax structure. Prop 218 distinctions between general and special taxes matter, and recent court decisions have narrowed some routes.");
     }
     if (topModelKey === "improvement_district") {
@@ -2128,7 +2128,11 @@ function S12Decision({ tweaks, isMobile }) {
     const next = { ...answers, [qid]: val };
     setAnswers(next);
     if (Object.keys(next).length === questions.length) {
-      setTimeout(() => setRevealed(true), 250);
+      setTimeout(() => {
+        setRevealed(true);
+        const el = document.getElementById("s12");
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 250);
     }
   };
   const goBackTo = (qid) => {
