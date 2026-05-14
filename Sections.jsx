@@ -58,11 +58,11 @@ function S1Cover({ tweaks, isMobile }) {
   return React.createElement("section", {
     id: "s1",
     style: {
-      minHeight: "100dvh", maxHeight: "100dvh", background: navy,
+      height: "calc(100dvh - 55px)", background: navy,
       display: "flex", flexDirection: "column",
       alignItems: "center", justifyContent: "center",
       position: "relative", overflow: "hidden", textAlign: "center",
-      padding: "80px 40px 80px"
+      padding: "40px 40px 80px"
     }
   },
     React.createElement("svg", {
@@ -954,12 +954,12 @@ function S9Ballot({ tweaks, isMobile }) {
       }
     },
       React.createElement("div", { style: { fontSize: 12, letterSpacing: "0.1em", textTransform: "uppercase", color: rust, fontWeight: 700, marginBottom: 20 } },
-        "Initiative 307 did three things at once"
+        "As implemented by City Council, Initiative 307 does three things"
       ),
       [
         { num: "01", title: "Shifted legal responsibility", body: "From property owner to city, across all parcel types." },
         { num: "02", title: "Created dedicated funding", body: "A recurring fee stream — not a one-time bond. Sidewalk funding stopped competing annually." },
-        { num: "03", title: "Required prioritization", body: "Based on need. The implementation language was on the ballot, not added later." },
+        { num: "03", title: "Required prioritization", body: "Based on need and the 2019 Denver Moves Pedestrians Plan." },
       ].map((item, i) =>
         React.createElement("div", {
           key: i,
@@ -971,7 +971,8 @@ function S9Ballot({ tweaks, isMobile }) {
           React.createElement("div", {
             style: {
               fontSize: 22, fontWeight: 900, color: rust,
-              opacity: 0.8, flexShrink: 0, lineHeight: 1
+              opacity: 0.8, flexShrink: 0, lineHeight: 1,
+              width: 36, textAlign: "left"
             }
           }, item.num),
           React.createElement("div", null,
@@ -988,7 +989,7 @@ function S9Ballot({ tweaks, isMobile }) {
       headline: "In 2022, advocates took it to the ballot",
       paragraphs: [
         "The Denver Deserves Sidewalks campaign collected nearly 20,000 signatures across roughly six months of fieldwork. This was more than double the amount required to put the question directly to voters.",
-        "The proposal fit in one sentence: a small annual fee on every property, scaled to lot frontage, in exchange for the city taking responsibility for sidewalk construction and repair."
+        "The proposal was simple: a small annual fee on every property, scaled to lot frontage, in exchange for the city taking responsibility for sidewalk construction and repair."
       ],
       stat: "19,197", statLabel: "signatures collected to put the question to voters directly",
       visual: React.createElement(MapImage, {
