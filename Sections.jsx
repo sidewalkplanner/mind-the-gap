@@ -662,7 +662,7 @@ function S7Swipe({ tweaks, isMobile }) {
             ".blk{fill:#E8DFCB;fill-opacity:0.6;stroke:#C4B89A;stroke-width:1}" +
             ".rd{fill:none;stroke:#C8BBAA;stroke-width:20;stroke-linecap:round}" +
             ".tree{fill:#7A8B5C;opacity:0.8}" +
-            ".era-lbl{font-family:Georgia,serif;font-size:14px;fill:#5A5447;text-anchor:middle}" +
+            ".era-lbl{font-family:Georgia,serif;font-size:18px;fill:#5A5447;text-anchor:middle}" +
             ".era-ln{stroke:#5A5447;stroke-width:1;stroke-opacity:0.35}"
           )
         ),
@@ -675,9 +675,6 @@ function S7Swipe({ tweaks, isMobile }) {
           React.createElement("g", null, ...zoneASidewalks.map((s, i) =>
             React.createElement("line", { key: `as${i}`, x1: s.x1, y1: s.y1, x2: s.x2, y2: s.y2, className: "sw" })
           )),
-          React.createElement("g", null, ...trees.map((t, i) =>
-            React.createElement("circle", { key: `t${i}`, cx: t.cx, cy: t.cy, r: 5, className: "tree" })
-          ))
         ),
 
         // ── ZONE B ──
@@ -690,53 +687,61 @@ function S7Swipe({ tweaks, isMobile }) {
           ))
         ),
 
-        // ── ZONE C ──
-        // Layout: collector road runs horizontally across mid-zone.
-        // Cul-de-sac A (upper-left): stem up from collector, bulb at top — NO sidewalks.
-        // Cul-de-sac B (lower-right): stem down from collector, bulb at bottom — partial sidewalk one side.
-        // Loop street (upper-right): teardrop loop off collector — no sidewalks.
-        // Superblocks fill the gaps between streets.
+        // ── ZONE C — Postwar Auto Suburbs ──
+        // Concept: one horizontal collector bisects the zone. Three disconnected
+        // residential streets branch off it — two cul-de-sacs (up) and one dead-end
+        // stub (down). Everything else is large featureless superblock. Roads are
+        // filled rects; turnarounds are concentric circles. Sidewalks ~40%, sparse.
+        //
+        // Zone x: 1078–1590  y: 50–560
+        // Collector: y 295–321
+        // Cul-A (upper-left,  NO sidewalks):  stem x 1128–1154, bulb cy=100
+        // Cul-B (upper-right, NO sidewalks):  stem x 1440–1466, bulb cy=100
+        // Stub  (lower-center, partial SW):   stem x 1284–1310, dead-end y=490
         React.createElement("g", { className: "zone-postwar" },
 
-          // ── Blocks first (drawn under streets) ──
-          // Upper-left superblock (left of cul A stem, above collector)
-          React.createElement("rect", { x: 1080, y: 40,  width: 210, height: 255, className: "blk" }),
-          // Upper-center superblock (right of cul A stem, left of loop, above collector)
-          React.createElement("rect", { x: 1310, y: 40,  width: 148, height: 255, className: "blk" }),
-          // Upper-right superblock (inside/outside loop area, right of loop)
-          React.createElement("rect", { x: 1510, y: 40,  width: 80,  height: 255, className: "blk" }),
-          // Lower-left superblock (below collector, left of cul B stem)
-          React.createElement("rect", { x: 1080, y: 320, width: 250, height: 230, className: "blk" }),
-          // Lower-right superblock (below collector, right of cul B stem)
-          React.createElement("rect", { x: 1390, y: 320, width: 200, height: 230, className: "blk" }),
+          // ── SUPERBLOCKS (under roads) ──
+          // Upper-left block: left of cul-A stem, above collector
+          React.createElement("rect", { x: 1078, y: 50,  width: 48,  height: 243, className: "blk" }),
+          // Upper-center block: between cul-A and cul-B stems, above collector
+          React.createElement("rect", { x: 1156, y: 50,  width: 282, height: 243, className: "blk" }),
+          // Upper-right block: right of cul-B stem, above collector
+          React.createElement("rect", { x: 1468, y: 50,  width: 120, height: 243, className: "blk" }),
+          // Lower-left block: below collector, left of stub stem
+          React.createElement("rect", { x: 1078, y: 323, width: 204, height: 237, className: "blk" }),
+          // Lower-right block: below collector, right of stub stem
+          React.createElement("rect", { x: 1312, y: 323, width: 276, height: 237, className: "blk" }),
 
-          // ── Streets (drawn over blocks) ──
-          // Collector spine — horizontal mid-zone road
-          React.createElement("line", { x1: 1068, y1: 305, x2: 1590, y2: 305, className: "rd" }),
-          // Cul-de-sac A: stem up from collector
-          React.createElement("line", { x1: 1195, y1: 295, x2: 1195, y2: 140, className: "rd" }),
-          // Cul-de-sac A: bulb
-          React.createElement("circle", { cx: 1195, cy: 112, r: 28, fill: "none", stroke: "#C8BBAA", strokeWidth: 18 }),
-          // Cul-de-sac B: stem down from collector
-          React.createElement("line", { x1: 1355, y1: 315, x2: 1355, y2: 470, className: "rd" }),
-          // Cul-de-sac B: bulb
-          React.createElement("circle", { cx: 1355, cy: 498, r: 28, fill: "none", stroke: "#C8BBAA", strokeWidth: 18 }),
-          // Loop street: teardrop path off collector upper-right
-          React.createElement("path", { d: "M 1490 295 C 1490 220, 1540 120, 1560 120 C 1580 120, 1590 145, 1590 165 C 1590 215, 1555 280, 1490 295 Z", fill: "none", stroke: "#C8BBAA", strokeWidth: 18, strokeLinejoin: "round" }),
+          // ── ROADS (over blocks) ──
+          // Collector
+          React.createElement("rect", { x: 1068, y: 295, width: 522, height: 26, fill: "#D0C5B0" }),
 
-          // ── Sidewalks — ~45% coverage ──
+          // Cul-de-sac A — upper-left, NO sidewalks
+          React.createElement("rect", { x: 1128, y: 130, width: 26, height: 167, fill: "#D0C5B0" }),
+          React.createElement("circle", { cx: 1141, cy: 112, r: 38, fill: "#D0C5B0" }),
+          React.createElement("circle", { cx: 1141, cy: 112, r: 20, fill: "#EDE6DA" }),
+
+          // Cul-de-sac B — upper-right, NO sidewalks
+          React.createElement("rect", { x: 1440, y: 130, width: 26, height: 167, fill: "#D0C5B0" }),
+          React.createElement("circle", { cx: 1453, cy: 112, r: 38, fill: "#D0C5B0" }),
+          React.createElement("circle", { cx: 1453, cy: 112, r: 20, fill: "#EDE6DA" }),
+
+          // Dead-end stub — lower-center, partial sidewalk one side
+          React.createElement("rect", { x: 1284, y: 321, width: 26, height: 168, fill: "#D0C5B0" }),
+          // Blunt end cap (small rect to square off the terminus)
+          React.createElement("rect", { x: 1272, y: 487, width: 50,  height: 14,  fill: "#D0C5B0" }),
+
+          // ── SIDEWALKS — ~40% coverage, fragmented ──
           React.createElement("g", { className: "sidewalks" },
-            // Collector north side — left portion only (stops before cul A)
-            React.createElement("line", { x1: 1080, y1: 293, x2: 1182, y2: 293, className: "sw" }),
-            // Collector south side — right portion only (partial, after cul B)
-            React.createElement("line", { x1: 1368, y1: 317, x2: 1488, y2: 317, className: "sw" }),
-            // Left edge of lower-left superblock (outer perimeter facing left)
-            React.createElement("line", { x1: 1080, y1: 320, x2: 1080, y2: 550, className: "sw" }),
-            // Top of upper-left superblock
-            React.createElement("line", { x1: 1080, y1: 40,  x2: 1290, y2: 40,  className: "sw" }),
-            // Cul-de-sac B — one side only (left of stem)
-            React.createElement("line", { x1: 1343, y1: 318, x2: 1343, y2: 468, className: "sw" }),
-            // NO sidewalks on cul A, loop street, upper-center/right blocks, lower-right block
+            // Collector north side — left segment only (up to cul-A)
+            React.createElement("line", { x1: 1078, y1: 294, x2: 1126, y2: 294, className: "sw" }),
+            // Collector south side — right segment only (right of stub)
+            React.createElement("line", { x1: 1312, y1: 322, x2: 1588, y2: 322, className: "sw" }),
+            // Left outer edge — upper block only (not lower)
+            React.createElement("line", { x1: 1078, y1: 50,  x2: 1078, y2: 294, className: "sw" }),
+            // Stub — right side only (one side = partial)
+            React.createElement("line", { x1: 1312, y1: 323, x2: 1312, y2: 487, className: "sw" }),
+            // NO sidewalks: cul-A stem/bulb, cul-B stem/bulb, lower-left block, upper-right block
           )
         ),
 
