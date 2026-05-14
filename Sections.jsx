@@ -589,66 +589,75 @@ function S7Swipe({ tweaks, isMobile }) {
   const rust = tweaks?.accentColor || "#B2542C";
   const bone = tweaks?.bgColor || "#EDE6DA";
 
-  // Zone A blocks: 6 cols x 4 rows, x: 0–550
-  // Block width ~72, height ~120, street gap ~18
-  const zoneABlocks = [];
-  const zoneASidewalks = [];
-  const treeCircles = [];
-  const swA = 3.5; // sidewalk stroke width
-  const swColor = "#1E4D40";
-  const treeColor = "#7A8B5C";
-
-  for (let col = 0; col < 6; col++) {
-    for (let row = 0; row < 4; row++) {
-      const x = 20 + col * 88;
-      const y = 60 + row * 138;
-      const w = 70;
-      const h = 118;
-      zoneABlocks.push({ x, y, w, h });
-      // All 4 edges get sidewalks
-      // top
-      zoneASidewalks.push({ x1: x, y1: y, x2: x + w, y2: y });
-      // bottom
-      zoneASidewalks.push({ x1: x, y1: y + h, x2: x + w, y2: y + h });
-      // left
-      zoneASidewalks.push({ x1: x, y1: y, x2: x, y2: y + h });
-      // right
-      zoneASidewalks.push({ x1: x + w, y1: y, x2: x + w, y2: y + h });
-      // A few trees along top sidewalk of each block
-      if (col < 5 && row < 3) {
-        treeCircles.push({ cx: x + w * 0.25, cy: y - 6 });
-        treeCircles.push({ cx: x + w * 0.75, cy: y - 6 });
+  // ── ZONE A: 6 cols × 4 rows, tightly packed, x: 20–548 ──
+  // Each block 68w × 115h, street gap 16px
+  const BW_A = 68, BH_A = 115, GAP_A = 16;
+  const ORIG_A_X = 20, ORIG_A_Y = 55;
+  const zoneABlocks = [], zoneASidewalks = [], trees = [];
+  for (let c = 0; c < 6; c++) {
+    for (let r = 0; r < 4; r++) {
+      const x = ORIG_A_X + c * (BW_A + GAP_A);
+      const y = ORIG_A_Y + r * (BH_A + GAP_A);
+      zoneABlocks.push({ x, y, w: BW_A, h: BH_A });
+      // All 4 edges — sidewalk
+      zoneASidewalks.push(
+        { x1: x,        y1: y,        x2: x + BW_A, y2: y        }, // top
+        { x1: x,        y1: y + BH_A, x2: x + BW_A, y2: y + BH_A }, // bottom
+        { x1: x,        y1: y,        x2: x,         y2: y + BH_A }, // left
+        { x1: x + BW_A, y1: y,        x2: x + BW_A,  y2: y + BH_A }, // right
+      );
+      // Trees on top edge of rows 0–2, cols 0–4
+      if (r < 3 && c < 5) {
+        trees.push({ cx: x + BW_A * 0.3, cy: y - 5 });
+        trees.push({ cx: x + BW_A * 0.7, cy: y - 5 });
       }
     }
   }
 
-  // Zone B blocks: 4 cols x 3 rows, x: 550–1050
-  const zoneBBlocks = [];
-  const zoneBSidewalks = [];
-  // Which block edges to omit (col, row, edge) – 3 gaps introduced
-  const zoneBGaps = new Set(["1-0-bottom", "2-1-top", "3-2-left"]);
-  for (let col = 0; col < 4; col++) {
-    for (let row = 0; row < 3; row++) {
-      const irregW = [105, 115, 100, 110][col];
-      const irregH = [160, 175, 155][row];
-      const x = 565 + col * (irregW + 22);
-      const y = 70 + row * (irregH + 28);
-      zoneBBlocks.push({ x, y, w: irregW, h: irregH });
-      const edges = [
-        { key: `${col}-${row}-top`,    x1: x, y1: y,       x2: x + irregW, y2: y },
-        { key: `${col}-${row}-bottom`, x1: x, y1: y+irregH, x2: x+irregW,  y2: y+irregH },
-        { key: `${col}-${row}-left`,   x1: x, y1: y,       x2: x,          y2: y+irregH },
-        { key: `${col}-${row}-right`,  x1: x+irregW, y1: y, x2: x+irregW, y2: y+irregH },
-      ];
-      edges.forEach(e => {
-        if (!zoneBGaps.has(e.key)) zoneBSidewalks.push(e);
-      });
+  // ── ZONE B: 4 cols × 3 rows, larger blocks, x: 568–1048 ──
+  // Col widths vary slightly; row heights vary slightly
+  const BW_B = [96, 104, 98, 100];
+  const BH_B = [145, 155, 140];
+  const GAP_B = 22;
+  const ORIG_B_X = 568, ORIG_B_Y = 55;
+  // Compute col x-starts
+  const colStartB = [];
+  let bx = ORIG_B_X;
+  for (let c = 0; c < 4; c++) { colStartB.push(bx); bx += BW_B[c] + GAP_B; }
+  const rowStartB = [];
+  let by = ORIG_B_Y;
+  for (let r = 0; r < 3; r++) { rowStartB.push(by); by += BH_B[r] + GAP_B; }
+
+  const zoneBBlocks = [], zoneBSidewalks = [];
+  // Gaps: omit specific edges to show transition (use "c-r-edge" keys)
+  const bGaps = new Set(["1-0-bottom", "2-1-left", "3-2-top", "0-2-right"]);
+  for (let c = 0; c < 4; c++) {
+    for (let r = 0; r < 3; r++) {
+      const x = colStartB[c], y = rowStartB[r];
+      const w = BW_B[c], h = BH_B[r];
+      zoneBBlocks.push({ x, y, w, h });
+      [
+        { key: `${c}-${r}-top`,    x1: x,   y1: y,   x2: x+w, y2: y   },
+        { key: `${c}-${r}-bottom`, x1: x,   y1: y+h, x2: x+w, y2: y+h },
+        { key: `${c}-${r}-left`,   x1: x,   y1: y,   x2: x,   y2: y+h },
+        { key: `${c}-${r}-right`,  x1: x+w, y1: y,   x2: x+w, y2: y+h },
+      ].forEach(e => { if (!bGaps.has(e.key)) zoneBSidewalks.push(e); });
     }
   }
 
-  // Zone C: curvilinear — cul-de-sacs, loops, winding collector
-  // We'll use SVG path data for streets and explicit sidewalk path segments
-  // Sidewalks present on ~45% of edges; at least one full cul-de-sac with none
+  // ── ZONE C layout constants ──
+  // Zone C occupies x: 1068–1590, y: 30–590
+  // Design: one horizontal collector spine + two cul-de-sacs + one loop street
+  // All coordinates are explicit and hand-tuned to be clean and readable.
+  //
+  // Street geometry (drawn as thick strokes, no fill):
+  //   Collector: horizontal band y≈310, x 1068–1590
+  //   Cul-de-sac A (upper, NO sidewalks): spine from collector up, bulb at top
+  //   Cul-de-sac B (lower, partial sidewalk): spine from collector down, bulb
+  //   Loop street (right side): oval loop off collector, partial sidewalk
+  //
+  // Blocks sit between streets as filled rects/paths.
+  // Sidewalks are thin strokes just inside street-facing edges, present ~45%.
 
   return React.createElement("section", { id: "s7", style: { background: bone, padding: isMobile ? "60px 0 0" : "80px 0 0" } },
     React.createElement("div", { style: { maxWidth: 1200, margin: "0 auto", padding: isMobile ? "0 20px 32px" : "0 48px 40px" } },
@@ -660,129 +669,110 @@ function S7Swipe({ tweaks, isMobile }) {
     ),
     React.createElement("div", { style: { maxWidth: 1200, margin: "0 auto", padding: isMobile ? "0 20px 0" : "0 48px 0" } },
       React.createElement("svg", {
-        viewBox: "0 0 1600 700",
+        viewBox: "0 0 1600 620",
         width: "100%",
         height: "auto",
         preserveAspectRatio: "xMidYMid meet",
-        style: { display: "block", overflow: "visible" }
+        style: { display: "block" }
       },
-        // CSS custom properties
         React.createElement("defs", null,
-          React.createElement("style", null, `
-            .sw { stroke: #1E4D40; stroke-width: 3.5; stroke-linecap: round; }
-            .block { fill: #E8DFCB; fill-opacity: 0.55; stroke: #C8BBAA; stroke-width: 1; }
-            .street-band { fill: #D6CBB3; fill-opacity: 0.45; }
-            .tree { fill: #7A8B5C; opacity: 0.75; }
-            .era-label { font-family: Georgia, serif; font-size: 15px; fill: #5A5447; text-anchor: middle; }
-            .era-rule { stroke: #5A5447; stroke-width: 1; stroke-opacity: 0.4; }
-          `)
+          React.createElement("style", null,
+            ".sw{stroke:#1E4D40;stroke-width:3.5;stroke-linecap:round;fill:none}" +
+            ".blk{fill:#E8DFCB;fill-opacity:0.6;stroke:#C4B89A;stroke-width:1}" +
+            ".rd{fill:none;stroke:#C8BBAA;stroke-width:20;stroke-linecap:round}" +
+            ".tree{fill:#7A8B5C;opacity:0.8}" +
+            ".era-lbl{font-family:Georgia,serif;font-size:14px;fill:#5A5447;text-anchor:middle}" +
+            ".era-ln{stroke:#5A5447;stroke-width:1;stroke-opacity:0.35}"
+          )
         ),
 
-        // ── ZONE A: 1880s Streetcar Core ──
+        // ── ZONE A ──
         React.createElement("g", { className: "zone-streetcar-core" },
-          React.createElement("g", { className: "blocks" },
-            ...zoneABlocks.map((b, i) =>
-              React.createElement("rect", { key: `za-b${i}`, x: b.x, y: b.y, width: b.w, height: b.h, className: "block" })
-            )
-          ),
-          React.createElement("g", { className: "sidewalks" },
-            ...zoneASidewalks.map((s, i) =>
-              React.createElement("line", { key: `za-sw${i}`, x1: s.x1, y1: s.y1, x2: s.x2, y2: s.y2, className: "sw" })
-            )
-          ),
-          React.createElement("g", { className: "trees" },
-            ...treeCircles.map((t, i) =>
-              React.createElement("circle", { key: `tree${i}`, cx: t.cx, cy: t.cy, r: 5, className: "tree" })
-            )
-          )
+          React.createElement("g", null, ...zoneABlocks.map((b, i) =>
+            React.createElement("rect", { key: `a${i}`, x: b.x, y: b.y, width: b.w, height: b.h, className: "blk" })
+          )),
+          React.createElement("g", null, ...zoneASidewalks.map((s, i) =>
+            React.createElement("line", { key: `as${i}`, x1: s.x1, y1: s.y1, x2: s.x2, y2: s.y2, className: "sw" })
+          )),
+          React.createElement("g", null, ...trees.map((t, i) =>
+            React.createElement("circle", { key: `t${i}`, cx: t.cx, cy: t.cy, r: 5, className: "tree" })
+          ))
         ),
 
-        // ── ZONE B: Streetcar Suburbs ──
+        // ── ZONE B ──
         React.createElement("g", { className: "zone-streetcar-suburbs" },
-          React.createElement("g", { className: "blocks" },
-            ...zoneBBlocks.map((b, i) =>
-              React.createElement("rect", { key: `zb-b${i}`, x: b.x, y: b.y, width: b.w, height: b.h, className: "block" })
-            )
-          ),
-          React.createElement("g", { className: "sidewalks" },
-            ...zoneBSidewalks.map((s, i) =>
-              React.createElement("line", { key: `zb-sw${i}`, x1: s.x1, y1: s.y1, x2: s.x2, y2: s.y2, className: "sw" })
-            )
-          )
+          React.createElement("g", null, ...zoneBBlocks.map((b, i) =>
+            React.createElement("rect", { key: `b${i}`, x: b.x, y: b.y, width: b.w, height: b.h, className: "blk" })
+          )),
+          React.createElement("g", null, ...zoneBSidewalks.map((s, i) =>
+            React.createElement("line", { key: `bs${i}`, x1: s.x1, y1: s.y1, x2: s.x2, y2: s.y2, className: "sw" })
+          ))
         ),
 
-        // ── ZONE C: Postwar Sprawl ──
-        // Winding collector road
+        // ── ZONE C ──
         React.createElement("g", { className: "zone-postwar" },
-          React.createElement("g", { className: "blocks" },
-            // Large irregular block — upper
-            React.createElement("path", { d: "M1070 70 L1300 55 L1310 250 L1080 260 Z", className: "block" }),
-            // Large irregular block — lower left
-            React.createElement("path", { d: "M1070 290 L1280 280 L1270 480 L1075 500 Z", className: "block" }),
-            // Cul-de-sac 1 block (no sidewalks) — upper right
-            React.createElement("path", { d: "M1330 60 L1570 50 L1575 200 L1340 220 Z", className: "block" }),
-            // Loop block — center right
-            React.createElement("path", { d: "M1310 270 L1460 255 Q1540 310 1520 430 Q1500 510 1390 520 L1300 510 Z", className: "block" }),
-            // Small block — lower right corner
-            React.createElement("path", { d: "M1470 530 L1590 510 L1595 640 L1465 650 Z", className: "block" }),
-            // Bottom block — left
-            React.createElement("path", { d: "M1070 520 L1280 510 L1270 640 L1075 650 Z", className: "block" }),
-          ),
 
-          // Collector road band (winding S-curve visual aid)
-          React.createElement("path", {
-            d: "M1060 340 C1120 330 1180 360 1240 345 S1340 310 1400 330 S1520 370 1600 340",
-            fill: "none", stroke: "#D6CBB3", strokeWidth: 28, strokeOpacity: 0.5
-          }),
-          // Cul-de-sac 1 stem + bulb — upper right (no sidewalks)
-          React.createElement("path", { d: "M1450 60 L1450 150", fill: "none", stroke: "#D6CBB3", strokeWidth: 22, strokeOpacity: 0.5 }),
-          React.createElement("circle", { cx: 1450, cy: 185, r: 38, fill: "#D6CBB3", fillOpacity: 0.5 }),
-          // Cul-de-sac 2 stem + bulb — lower center (has some sidewalk)
-          React.createElement("path", { d: "M1175 510 L1175 610", fill: "none", stroke: "#D6CBB3", strokeWidth: 22, strokeOpacity: 0.5 }),
-          React.createElement("circle", { cx: 1175, cy: 645, r: 36, fill: "#D6CBB3", fillOpacity: 0.5 }),
-          // Loop street — center right
-          React.createElement("ellipse", { cx: 1415, cy: 385, rx: 80, ry: 60, fill: "none", stroke: "#D6CBB3", strokeWidth: 20, strokeOpacity: 0.5 }),
+          // Streets (thick light strokes — the road surface itself)
+          // Horizontal collector spine
+          React.createElement("line", { x1: 1068, y1: 305, x2: 1590, y2: 305, className: "rd" }),
+          // Cul-de-sac A spine (upper left, NO sidewalks) — vertical from collector up
+          React.createElement("line", { x1: 1150, y1: 295, x2: 1150, y2: 120, className: "rd" }),
+          // Cul-de-sac A bulb
+          React.createElement("circle", { cx: 1150, cy: 95, r: 32, className: "rd", strokeWidth: 18 }),
+          // Cul-de-sac B spine (lower right, partial sidewalk) — vertical from collector down
+          React.createElement("line", { x1: 1390, y1: 315, x2: 1390, y2: 480, className: "rd" }),
+          // Cul-de-sac B bulb
+          React.createElement("circle", { cx: 1390, cy: 505, r: 32, className: "rd", strokeWidth: 18 }),
+          // Loop street — oval off collector on the right side
+          React.createElement("ellipse", { cx: 1510, cy: 185, rx: 68, ry: 100, className: "rd", strokeWidth: 18 }),
+          // Loop connector to collector
+          React.createElement("line", { x1: 1510, y1: 283, x2: 1510, y2: 295, className: "rd" }),
 
-          // Sidewalks — only some edges, Zone C (~45% coverage)
+          // Blocks — large parcels between streets
+          // Upper-left superblock (between collector top and top edge, left of cul-de-sac A)
+          React.createElement("rect", { x: 1080, y: 45,  width: 48,  height: 248, className: "blk" }),
+          React.createElement("rect", { x: 1140, y: 45,  width: 0,   height: 0   }), // spacer for cul A
+          React.createElement("rect", { x: 1172, y: 45,  width: 185, height: 248, className: "blk" }),
+          // Upper right — beside loop street
+          React.createElement("rect", { x: 1430, y: 45,  width: 62,  height: 238, className: "blk" }),
+          React.createElement("rect", { x: 1570, y: 45,  width: 22,  height: 238, className: "blk" }),
+          // Lower left — between collector and bottom, left of cul B
+          React.createElement("rect", { x: 1080, y: 317, width: 290, height: 240, className: "blk" }),
+          // Lower right — right of cul B
+          React.createElement("rect", { x: 1412, y: 317, width: 170, height: 220, className: "blk" }),
+
+          // Sidewalks — ~45% coverage, selective
           React.createElement("g", { className: "sidewalks" },
-            // Upper large block — top and left edges only
-            React.createElement("line", { x1: 1070, y1: 70,  x2: 1300, y2: 55,  className: "sw" }),
-            React.createElement("line", { x1: 1070, y1: 70,  x2: 1075, y2: 500, className: "sw" }),
-            // Lower left block — left and bottom only
-            React.createElement("line", { x1: 1075, y1: 500, x2: 1270, y2: 480, className: "sw" }),
-            // Loop street — partial sidewalk on outer left arc only
-            React.createElement("path", { d: "M1310 270 Q1350 260 1380 270", fill: "none", className: "sw" }),
-            React.createElement("path", { d: "M1300 510 Q1340 530 1390 520", fill: "none", className: "sw" }),
-            // Cul-de-sac 2 (lower center) — one side of stem only
-            React.createElement("line", { x1: 1170, y1: 515, x2: 1170, y2: 610, className: "sw" }),
-            // Collector road — south side segment only, partial
-            React.createElement("line", { x1: 1060, y1: 360, x2: 1200, y2: 362, className: "sw" }),
-            React.createElement("line", { x1: 1360, y1: 352, x2: 1490, y2: 358, className: "sw" }),
-            // Bottom left block — top edge only
-            React.createElement("line", { x1: 1070, y1: 520, x2: 1270, y2: 510, className: "sw" }),
-            // Small lower right block — none (omitted entirely)
+            // Collector north side — left segment only (partial)
+            React.createElement("line", { x1: 1080, y1: 294, x2: 1260, y2: 294, className: "sw" }),
+            // Collector south side — right segment only (partial)
+            React.createElement("line", { x1: 1330, y1: 316, x2: 1490, y2: 316, className: "sw" }),
+            // Left edge of upper-left superblock
+            React.createElement("line", { x1: 1080, y1: 45,  x2: 1080, y2: 293, className: "sw" }),
+            // Top of upper-middle superblock
+            React.createElement("line", { x1: 1172, y1: 45,  x2: 1357, y2: 45,  className: "sw" }),
+            // Left side of lower-left block (facing collector entry)
+            React.createElement("line", { x1: 1080, y1: 317, x2: 1080, y2: 557, className: "sw" }),
+            // Cul-de-sac B — one side of spine only (partial coverage)
+            React.createElement("line", { x1: 1380, y1: 317, x2: 1380, y2: 472, className: "sw" }),
+            // NO sidewalks on cul-de-sac A at all — absence is the message
+            // NO sidewalks on loop street
+            // NO sidewalks on lower-right block or right side of upper blocks
           )
-          // Cul-de-sac 1 (upper right) has NO sidewalks — absence is the message
         ),
 
         // ── ERA LABELS ──
-        // Tick rules
-        React.createElement("line", { x1: 50,   y1: 620, x2: 500,  y2: 620, className: "era-rule" }),
-        React.createElement("line", { x1: 565,  y1: 620, x2: 1045, y2: 620, className: "era-rule" }),
-        React.createElement("line", { x1: 1060, y1: 620, x2: 1595, y2: 620, className: "era-rule" }),
-        // Tick marks
-        React.createElement("line", { x1: 275,  y1: 615, x2: 275,  y2: 625, className: "era-rule", strokeOpacity: 0.8 }),
-        React.createElement("line", { x1: 805,  y1: 615, x2: 805,  y2: 625, className: "era-rule", strokeOpacity: 0.8 }),
-        React.createElement("line", { x1: 1328, y1: 615, x2: 1328, y2: 625, className: "era-rule", strokeOpacity: 0.8 }),
-        // Labels
-        React.createElement("text", { x: 275,  y: 650, className: "era-label" }, "1880s — Streetcar Core"),
-        React.createElement("text", { x: 805,  y: 650, className: "era-label" }, "1900–1940 — Streetcar Suburbs"),
-        React.createElement("text", { x: 1328, y: 650, className: "era-label" }, "Postwar — Auto Suburbs"),
+        React.createElement("line", { x1: 20,   y1: 578, x2: 546,  y2: 578, className: "era-ln" }),
+        React.createElement("line", { x1: 568,  y1: 578, x2: 1046, y2: 578, className: "era-ln" }),
+        React.createElement("line", { x1: 1068, y1: 578, x2: 1590, y2: 578, className: "era-ln" }),
+        React.createElement("text", { x: 283,  y: 600, className: "era-lbl" }, "1880s — Streetcar Core"),
+        React.createElement("text", { x: 807,  y: 600, className: "era-lbl" }, "1900–1940 — Streetcar Suburbs"),
+        React.createElement("text", { x: 1329, y: 600, className: "era-lbl" }, "Postwar — Auto Suburbs"),
       )
     ),
     React.createElement("div", { style: { maxWidth: 1200, margin: "0 auto", padding: isMobile ? "16px 20px 48px" : "20px 48px 60px" } },
       React.createElement("p", { style: { fontSize: 14, color: "#5A5447", fontStyle: "italic", marginBottom: 20 } },
-        "Schematic: Denver's sidewalk network across three eras of platting. As development moved outward, continuous coverage gave way to fragmentary, auto-oriented patterns."
+        "Schematic: Denver’s sidewalk network across three eras of platting. As development moved outward, continuous coverage gave way to fragmentary, auto-oriented patterns."
       ),
       React.createElement("p", { style: { fontSize: 15, color: "#444", lineHeight: 1.75, maxWidth: 680 } },
         "The 1880s footprint sits inside a postwar city that grew far past it without bringing the system along. Most mid-sized American cities followed the same path with a walkable urban core that was then surrounded by decades of car-oriented growth. With no coherent mechanism to extend the sidewalk system outward, the system crumbled."
