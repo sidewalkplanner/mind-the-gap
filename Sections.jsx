@@ -1722,7 +1722,7 @@ function S12Decision({ tweaks, isMobile }) {
       ]
     },
     {
-      id: "q7",
+      id: "q6",
       label: "Scale",
       text: "How much money does the program need?",
       subtitle: "Different funding tools raise different amounts. Bonds and grants can multiply whatever base mechanism you start with.",
@@ -1787,13 +1787,13 @@ function S12Decision({ tweaks, isMobile }) {
       council_low:     { public_ownership: -2, utility_fee: 0, dedicated_fee: 2, millage: 2, parcel_tax: 2, improvement_district: -1, inspection_bill: 1, general_levy: 2 },
       council_unknown: { public_ownership: 1, utility_fee: 1, dedicated_fee: 1, millage: 1, parcel_tax: 1, improvement_district: 1, inspection_bill: 2, general_levy: 1 }
     },
-    q7: { // revenue scale
+    q6: { // revenue scale
       modest:         { public_ownership: 2, utility_fee: 4, dedicated_fee: 0, millage: 0, parcel_tax: 0, improvement_district: 2, inspection_bill: 3, general_levy: 0 },
       substantial:    { public_ownership: 2, utility_fee: 1, dedicated_fee: 3, millage: 3, parcel_tax: 3, improvement_district: 2, inspection_bill: 0, general_levy: 3 },
       very_high:      { public_ownership: 1, utility_fee: -1, dedicated_fee: 4, millage: 3, parcel_tax: 3, improvement_district: 1, inspection_bill: -2, general_levy: 4 },
       scale_unknown:  { public_ownership: 1, utility_fee: 1, dedicated_fee: 1, millage: 1, parcel_tax: 1, improvement_district: 1, inspection_bill: 2, general_levy: 1 }
     },
-    q8: { // delivery capacity
+    q7: { // delivery capacity
       robust:            { public_ownership: 2, utility_fee: 2, dedicated_fee: 2, millage: 2, parcel_tax: 2, improvement_district: 1, inspection_bill: 2, general_levy: 2 },
       mid:               { public_ownership: 1, utility_fee: 2, dedicated_fee: 2, millage: 1, parcel_tax: 1, improvement_district: 1, inspection_bill: 2, general_levy: 1 },
       limited:           { public_ownership: 0, utility_fee: 2, dedicated_fee: 1, millage: 0, parcel_tax: 0, improvement_district: 1, inspection_bill: 2, general_levy: 0 },
@@ -1866,7 +1866,7 @@ function S12Decision({ tweaks, isMobile }) {
       if (overlay.bestWith.includes(topModelKey)) score += 2;
       if (overlay.bestFor.includes(answers.q3)) score += 1;
       if (overlay.bestFor.includes(answers.q4)) score += 1;
-      if (overlay.bestFor.includes(answers.q7)) score += 1;
+      if (overlay.bestFor.includes(answers.q6)) score += 1;
       if (score > 0) suggested.push({ key, ...overlay, score });
     });
     return suggested.sort((a, b) => b.score - a.score).slice(0, 3);
@@ -1882,8 +1882,8 @@ function S12Decision({ tweaks, isMobile }) {
     if (answers.q3 === "no_inventory") flags.push({ q: "Network inventory", action: "Commission a citywide sidewalk inventory before scoping the program. Without one, downstream decisions are calibrated to guesses." });
     if (answers.q4 === "spatial_unknown") flags.push({ q: "Spatial pattern", action: "Map sidewalk conditions against demographic and historical data (HOLC, development era, income). The geography of need shapes both mechanism and sequencing." });
     if (answers.q5 === "council_unknown") flags.push({ q: "Council appetite", action: "Test council appetite through a targeted briefing with key members before committing to a direction." });
-    if (answers.q7 === "scale_unknown") flags.push({ q: "Revenue scale", action: "Develop a needs-assessment that translates network condition into annual revenue requirements before designing a mechanism." });
-    if (answers.q8 === "delivery_unknown") flags.push({ q: "Delivery capacity", action: "Audit current sidewalk delivery (in-house staff, contractor pipeline, inspection cycle) before scaling up." });
+    if (answers.q6 === "scale_unknown") flags.push({ q: "Revenue scale", action: "Develop a needs-assessment that translates network condition into annual revenue requirements before designing a mechanism." });
+    if (answers.q7 === "delivery_unknown") flags.push({ q: "Delivery capacity", action: "Audit current sidewalk delivery (in-house staff, contractor pipeline, inspection cycle) before scaling up." });
     return flags;
   };
 
@@ -1956,7 +1956,7 @@ function S12Decision({ tweaks, isMobile }) {
     if (topModelKey === "inspection_bill") {
       steps.push("Audit inspection capacity and assessment-billing infrastructure. The model only works if the city can run a rotating cycle that meaningfully covers the network within a defined timeframe.");
     }
-    if (answers.q8 === "limited") {
+    if (answers.q7 === "limited") {
       steps.push("Plan delivery as carefully as funding. A funded program with no contractor pipeline produces visible failure within the first program cycle.");
     }
     if (answers.q4 === "redlined_central" && !steps.some(s => s.includes("rebate"))) {
