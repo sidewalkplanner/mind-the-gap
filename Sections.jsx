@@ -2754,20 +2754,20 @@ function S12Decision({ tweaks, isMobile }) {
       // ── RESULTS CHATBOT ──────────────────────────────────────────────────
       revealed && React.createElement("div", {
         style: {
-          marginTop: 36, padding: isMobile ? "24px 20px" : "32px 36px",
+          marginTop: 48, padding: isMobile ? "28px 20px" : "36px 40px",
           background: "#fff", borderRadius: 12,
-          boxShadow: "0 4px 24px rgba(27,58,75,0.1)",
-          border: `1px solid rgba(27,58,75,0.12)`
+          boxShadow: "0 6px 32px rgba(27,58,75,0.13)",
+          border: `2.5px solid ${rust}`
         }
       },
-        React.createElement("div", { style: { marginBottom: 18 } },
+        React.createElement("div", { style: { marginBottom: 20 } },
           React.createElement("div", {
-            style: { fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase", color: rust, fontWeight: 700, marginBottom: 6 }
+            style: { fontSize: 18, letterSpacing: "0.08em", textTransform: "uppercase", color: rust, fontWeight: 800, marginBottom: 8 }
           }, "Results Advisor"),
-          React.createElement("div", { style: { fontSize: 18, fontWeight: 800, color: navy, marginBottom: 8 } },
+          React.createElement("div", { style: { fontSize: 22, fontWeight: 800, color: navy, marginBottom: 10 } },
             "Talk through your results"
           ),
-          React.createElement("p", { style: { fontSize: 13.5, color: "#555", lineHeight: 1.65, margin: 0 } },
+          React.createElement("p", { style: { fontSize: 14, color: "#555", lineHeight: 1.65, margin: 0 } },
             "Ask me anything about your diagnostic — what the top model means for your city, how to get started, or how it compares to alternatives."
           )
         ),
