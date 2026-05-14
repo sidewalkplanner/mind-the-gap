@@ -574,7 +574,14 @@ function S6History({ tweaks, isMobile }) {
         "Width standards in the 1881 code had 12 feet of uninterrupted sidewalk in front of commercial properties and five feet in front of residential and vacant lots within various areas of town.",
         "By modern standards, these requirements not only meet our requirements, but in some cases even exceed them.",
       ],
-      visual: React.createElement(MapPlaceholder, { label: "Historical Denver Sidewalk Network", sublabel: "c. 1880s streetcar-era city extent" })
+      visual: React.createElement("figure", { style: { margin: 0, width: "100%", height: "100%" } },
+        React.createElement("img", {
+          src: "uploads/sidewalkdistricts1890_wikimedia.jpg",
+          alt: "Map of Denver sidewalk districts, 1890",
+          style: { width: "100%", height: "100%", objectFit: "contain", display: "block" }
+        }),
+        React.createElement("figcaption", { style: { fontSize: 11, color: "#888", textAlign: "center", marginTop: 6 } }, "Denver sidewalk districts, 1890 — Wikimedia Commons")
+      )
     }
   ];
 
