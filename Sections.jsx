@@ -588,36 +588,67 @@ function S7Swipe({ tweaks, isMobile }) {
   const navy = tweaks?.primaryColor || "#1B3A4B";
   const rust = tweaks?.accentColor || "#B2542C";
   const bone = tweaks?.bgColor || "#EDE6DA";
-  const sage = "#B6BFB1", amber = "#D89A4E";
 
-  const [swipePos, setSwipePos] = React.useState(50);
-  const containerRef = React.useRef(null);
-  const dragging = React.useRef(false);
+  // Zone A blocks: 6 cols x 4 rows, x: 0–550
+  // Block width ~72, height ~120, street gap ~18
+  const zoneABlocks = [];
+  const zoneASidewalks = [];
+  const treeCircles = [];
+  const swA = 3.5; // sidewalk stroke width
+  const swColor = "#1E4D40";
+  const treeColor = "#7A8B5C";
 
-  const handleMouseDown = () => { dragging.current = true; };
-  const handleMouseUp = () => { dragging.current = false; };
-  const handleMouseMove = (e) => {
-    if (!dragging.current || !containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    setSwipePos(Math.max(5, Math.min(95, (x / rect.width) * 100)));
-  };
-  const handleTouch = (e) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = e.touches[0].clientX - rect.left;
-    setSwipePos(Math.max(5, Math.min(95, (x / rect.width) * 100)));
-  };
-
-  const genStreets = (density, seed) => {
-    const streets = [];
-    const rng = (n) => ((Math.sin(n * seed) + 1) / 2);
-    for (let i = 0; i < density; i++) {
-      streets.push({ x1: rng(i * 3) * 100, y1: i * (100 / density), x2: rng(i * 3 + 1) * 100 + rng(i) * 30, y2: i * (100 / density), horiz: true });
-      streets.push({ x1: i * (100 / density), y1: 0, x2: i * (100 / density), y2: 100, horiz: false });
+  for (let col = 0; col < 6; col++) {
+    for (let row = 0; row < 4; row++) {
+      const x = 20 + col * 88;
+      const y = 60 + row * 138;
+      const w = 70;
+      const h = 118;
+      zoneABlocks.push({ x, y, w, h });
+      // All 4 edges get sidewalks
+      // top
+      zoneASidewalks.push({ x1: x, y1: y, x2: x + w, y2: y });
+      // bottom
+      zoneASidewalks.push({ x1: x, y1: y + h, x2: x + w, y2: y + h });
+      // left
+      zoneASidewalks.push({ x1: x, y1: y, x2: x, y2: y + h });
+      // right
+      zoneASidewalks.push({ x1: x + w, y1: y, x2: x + w, y2: y + h });
+      // A few trees along top sidewalk of each block
+      if (col < 5 && row < 3) {
+        treeCircles.push({ cx: x + w * 0.25, cy: y - 6 });
+        treeCircles.push({ cx: x + w * 0.75, cy: y - 6 });
+      }
     }
-    return streets;
-  };
+  }
+
+  // Zone B blocks: 4 cols x 3 rows, x: 550–1050
+  const zoneBBlocks = [];
+  const zoneBSidewalks = [];
+  // Which block edges to omit (col, row, edge) – 3 gaps introduced
+  const zoneBGaps = new Set(["1-0-bottom", "2-1-top", "3-2-left"]);
+  for (let col = 0; col < 4; col++) {
+    for (let row = 0; row < 3; row++) {
+      const irregW = [105, 115, 100, 110][col];
+      const irregH = [160, 175, 155][row];
+      const x = 565 + col * (irregW + 22);
+      const y = 70 + row * (irregH + 28);
+      zoneBBlocks.push({ x, y, w: irregW, h: irregH });
+      const edges = [
+        { key: `${col}-${row}-top`,    x1: x, y1: y,       x2: x + irregW, y2: y },
+        { key: `${col}-${row}-bottom`, x1: x, y1: y+irregH, x2: x+irregW,  y2: y+irregH },
+        { key: `${col}-${row}-left`,   x1: x, y1: y,       x2: x,          y2: y+irregH },
+        { key: `${col}-${row}-right`,  x1: x+irregW, y1: y, x2: x+irregW, y2: y+irregH },
+      ];
+      edges.forEach(e => {
+        if (!zoneBGaps.has(e.key)) zoneBSidewalks.push(e);
+      });
+    }
+  }
+
+  // Zone C: curvilinear — cul-de-sacs, loops, winding collector
+  // We'll use SVG path data for streets and explicit sidewalk path segments
+  // Sidewalks present on ~45% of edges; at least one full cul-de-sac with none
 
   return React.createElement("section", { id: "s7", style: { background: bone, padding: isMobile ? "60px 0 0" : "80px 0 0" } },
     React.createElement("div", { style: { maxWidth: 1200, margin: "0 auto", padding: isMobile ? "0 20px 32px" : "0 48px 40px" } },
@@ -625,94 +656,134 @@ function S7Swipe({ tweaks, isMobile }) {
       React.createElement("h2", { style: { fontSize: 34, fontWeight: 800, color: navy, margin: "0 0 16px" } }, "How Denver Lost It"),
       React.createElement("p", { style: { fontSize: 16, color: "#444", lineHeight: 1.75, maxWidth: 680, marginBottom: 8 } },
         "What undid the system wasn't neglect. It was sprawling, unchecked growth. As Denver expanded outward in the postwar boom, Sidewalk Districts were phased out. New subdivisions were platted with narrow attached sidewalks or, in many cases, no sidewalks at all."
-      ),
-      React.createElement("p", { style: { fontSize: 14, color: "#888", fontStyle: "italic", marginBottom: 32 } },
-        "Drag the slider — 1880 left, 2025 right (NOTE:DIFFERENT MAP. Maybe a slider showing network within Denver's original boundaries compared with growth?)"
       )
     ),
-    React.createElement("div", {
-      ref: containerRef,
-      style: {
-        position: "relative", height: "60vh", minHeight: 420,
-        overflow: "hidden", cursor: "ew-resize", userSelect: "none",
-        background: "#1B3A4B"
+    React.createElement("div", { style: { maxWidth: 1200, margin: "0 auto", padding: isMobile ? "0 20px 0" : "0 48px 0" } },
+      React.createElement("svg", {
+        viewBox: "0 0 1600 700",
+        width: "100%",
+        height: "auto",
+        preserveAspectRatio: "xMidYMid meet",
+        style: { display: "block", overflow: "visible" }
       },
-      onMouseDown: handleMouseDown, onMouseUp: handleMouseUp,
-      onMouseMove: handleMouseMove, onMouseLeave: handleMouseUp,
-      onTouchMove: handleTouch
-    },
-      // LEFT — 1880s
-      React.createElement("div", {
-        style: {
-          position: "absolute", inset: 0,
-          clipPath: `inset(0 ${100 - swipePos}% 0 0)`,
-          background: "#2D4A3E", display: "flex", alignItems: "center", justifyContent: "center"
-        }
-      },
-        React.createElement("svg", { style: { position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.25 }, viewBox: "0 0 600 400", preserveAspectRatio: "xMidYMid slice" },
-          Array.from({ length: 12 }).map((_, i) =>
-            React.createElement("line", { key: `h${i}`, x1: 0, y1: i * 35, x2: 600, y2: i * 35, stroke: sage, strokeWidth: 2 })
+        // CSS custom properties
+        React.createElement("defs", null,
+          React.createElement("style", null, `
+            .sw { stroke: #1E4D40; stroke-width: 3.5; stroke-linecap: round; }
+            .block { fill: #E8DFCB; fill-opacity: 0.55; stroke: #C8BBAA; stroke-width: 1; }
+            .street-band { fill: #D6CBB3; fill-opacity: 0.45; }
+            .tree { fill: #7A8B5C; opacity: 0.75; }
+            .era-label { font-family: Georgia, serif; font-size: 15px; fill: #5A5447; text-anchor: middle; }
+            .era-rule { stroke: #5A5447; stroke-width: 1; stroke-opacity: 0.4; }
+          `)
+        ),
+
+        // ── ZONE A: 1880s Streetcar Core ──
+        React.createElement("g", { className: "zone-streetcar-core" },
+          React.createElement("g", { className: "blocks" },
+            ...zoneABlocks.map((b, i) =>
+              React.createElement("rect", { key: `za-b${i}`, x: b.x, y: b.y, width: b.w, height: b.h, className: "block" })
+            )
           ),
-          Array.from({ length: 16 }).map((_, i) =>
-            React.createElement("line", { key: `v${i}`, x1: i * 40, y1: 0, x2: i * 40, y2: 400, stroke: sage, strokeWidth: 2 })
+          React.createElement("g", { className: "sidewalks" },
+            ...zoneASidewalks.map((s, i) =>
+              React.createElement("line", { key: `za-sw${i}`, x1: s.x1, y1: s.y1, x2: s.x2, y2: s.y2, className: "sw" })
+            )
+          ),
+          React.createElement("g", { className: "trees" },
+            ...treeCircles.map((t, i) =>
+              React.createElement("circle", { key: `tree${i}`, cx: t.cx, cy: t.cy, r: 5, className: "tree" })
+            )
           )
         ),
-        React.createElement("div", {
-          style: {
-            position: "absolute", top: 20, left: 20,
-            background: "rgba(45,106,79,0.9)", color: "#EDE6DA",
-            padding: "8px 14px", borderRadius: 4, fontSize: 13, fontWeight: 700
-          }
-        }, "1880s Denver — Continuous Sidewalk Coverage")
-      ),
-      // RIGHT — 2025
-      React.createElement("div", {
-        style: {
-          position: "absolute", inset: 0,
-          clipPath: `inset(0 0 0 ${swipePos}%)`,
-          background: "#1B3A4B", display: "flex", alignItems: "center", justifyContent: "center"
-        }
-      },
-        React.createElement("svg", { style: { position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.22 }, viewBox: "0 0 600 400", preserveAspectRatio: "xMidYMid slice" },
-          Array.from({ length: 18 }).map((_, i) =>
-            React.createElement("line", { key: `h${i}`, x1: 0, y1: i * 24, x2: 600, y2: i * 24, stroke: sage, strokeWidth: i % 3 === 0 ? 2 : 0.5, strokeDasharray: i % 3 !== 0 ? "4,8" : "0" })
+
+        // ── ZONE B: Streetcar Suburbs ──
+        React.createElement("g", { className: "zone-streetcar-suburbs" },
+          React.createElement("g", { className: "blocks" },
+            ...zoneBBlocks.map((b, i) =>
+              React.createElement("rect", { key: `zb-b${i}`, x: b.x, y: b.y, width: b.w, height: b.h, className: "block" })
+            )
           ),
-          Array.from({ length: 22 }).map((_, i) =>
-            React.createElement("line", { key: `v${i}`, x1: i * 28, y1: 0, x2: i * 28, y2: 400, stroke: sage, strokeWidth: i % 4 === 0 ? 2 : 0.5, strokeDasharray: i % 4 !== 0 ? "4,8" : "0" })
-          ),
-          Array.from({ length: 40 }).map((_, i) =>
-            React.createElement("line", { key: `g${i}`, x1: Math.sin(i * 2.1) * 600 + 300, y1: i * 10, x2: Math.sin(i * 2.1 + 0.5) * 600 + 300, y2: i * 10 + 10, stroke: rust, strokeWidth: 2, opacity: 0.7 })
+          React.createElement("g", { className: "sidewalks" },
+            ...zoneBSidewalks.map((s, i) =>
+              React.createElement("line", { key: `zb-sw${i}`, x1: s.x1, y1: s.y1, x2: s.x2, y2: s.y2, className: "sw" })
+            )
           )
         ),
-        React.createElement("div", {
-          style: {
-            position: "absolute", top: 20, right: 20,
-            background: "rgba(178,84,44,0.9)", color: "#EDE6DA",
-            padding: "8px 14px", borderRadius: 4, fontSize: 13, fontWeight: 700
-          }
-        }, "2025 Denver — Gaps in Car-Era Suburbs")
-      ),
-      // Divider handle
-      React.createElement("div", {
-        style: {
-          position: "absolute", top: 0, bottom: 0,
-          left: `${swipePos}%`, transform: "translateX(-50%)",
-          width: 4, background: "#fff", zIndex: 10
-        }
-      },
-        React.createElement("div", {
-          style: {
-            position: "absolute", top: "50%", left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 36, height: 36, borderRadius: "50%",
-            background: "#fff", boxShadow: "0 2px 12px rgba(0,0,0,0.3)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 16, cursor: "ew-resize"
-          }
-        }, "⟺")
+
+        // ── ZONE C: Postwar Sprawl ──
+        // Winding collector road
+        React.createElement("g", { className: "zone-postwar" },
+          React.createElement("g", { className: "blocks" },
+            // Large irregular block — upper
+            React.createElement("path", { d: "M1070 70 L1300 55 L1310 250 L1080 260 Z", className: "block" }),
+            // Large irregular block — lower left
+            React.createElement("path", { d: "M1070 290 L1280 280 L1270 480 L1075 500 Z", className: "block" }),
+            // Cul-de-sac 1 block (no sidewalks) — upper right
+            React.createElement("path", { d: "M1330 60 L1570 50 L1575 200 L1340 220 Z", className: "block" }),
+            // Loop block — center right
+            React.createElement("path", { d: "M1310 270 L1460 255 Q1540 310 1520 430 Q1500 510 1390 520 L1300 510 Z", className: "block" }),
+            // Small block — lower right corner
+            React.createElement("path", { d: "M1470 530 L1590 510 L1595 640 L1465 650 Z", className: "block" }),
+            // Bottom block — left
+            React.createElement("path", { d: "M1070 520 L1280 510 L1270 640 L1075 650 Z", className: "block" }),
+          ),
+
+          // Collector road band (winding S-curve visual aid)
+          React.createElement("path", {
+            d: "M1060 340 C1120 330 1180 360 1240 345 S1340 310 1400 330 S1520 370 1600 340",
+            fill: "none", stroke: "#D6CBB3", strokeWidth: 28, strokeOpacity: 0.5
+          }),
+          // Cul-de-sac 1 stem + bulb — upper right (no sidewalks)
+          React.createElement("path", { d: "M1450 60 L1450 150", fill: "none", stroke: "#D6CBB3", strokeWidth: 22, strokeOpacity: 0.5 }),
+          React.createElement("circle", { cx: 1450, cy: 185, r: 38, fill: "#D6CBB3", fillOpacity: 0.5 }),
+          // Cul-de-sac 2 stem + bulb — lower center (has some sidewalk)
+          React.createElement("path", { d: "M1175 510 L1175 610", fill: "none", stroke: "#D6CBB3", strokeWidth: 22, strokeOpacity: 0.5 }),
+          React.createElement("circle", { cx: 1175, cy: 645, r: 36, fill: "#D6CBB3", fillOpacity: 0.5 }),
+          // Loop street — center right
+          React.createElement("ellipse", { cx: 1415, cy: 385, rx: 80, ry: 60, fill: "none", stroke: "#D6CBB3", strokeWidth: 20, strokeOpacity: 0.5 }),
+
+          // Sidewalks — only some edges, Zone C (~45% coverage)
+          React.createElement("g", { className: "sidewalks" },
+            // Upper large block — top and left edges only
+            React.createElement("line", { x1: 1070, y1: 70,  x2: 1300, y2: 55,  className: "sw" }),
+            React.createElement("line", { x1: 1070, y1: 70,  x2: 1075, y2: 500, className: "sw" }),
+            // Lower left block — left and bottom only
+            React.createElement("line", { x1: 1075, y1: 500, x2: 1270, y2: 480, className: "sw" }),
+            // Loop street — partial sidewalk on outer left arc only
+            React.createElement("path", { d: "M1310 270 Q1350 260 1380 270", fill: "none", className: "sw" }),
+            React.createElement("path", { d: "M1300 510 Q1340 530 1390 520", fill: "none", className: "sw" }),
+            // Cul-de-sac 2 (lower center) — one side of stem only
+            React.createElement("line", { x1: 1170, y1: 515, x2: 1170, y2: 610, className: "sw" }),
+            // Collector road — south side segment only, partial
+            React.createElement("line", { x1: 1060, y1: 360, x2: 1200, y2: 362, className: "sw" }),
+            React.createElement("line", { x1: 1360, y1: 352, x2: 1490, y2: 358, className: "sw" }),
+            // Bottom left block — top edge only
+            React.createElement("line", { x1: 1070, y1: 520, x2: 1270, y2: 510, className: "sw" }),
+            // Small lower right block — none (omitted entirely)
+          )
+          // Cul-de-sac 1 (upper right) has NO sidewalks — absence is the message
+        ),
+
+        // ── ERA LABELS ──
+        // Tick rules
+        React.createElement("line", { x1: 50,   y1: 620, x2: 500,  y2: 620, className: "era-rule" }),
+        React.createElement("line", { x1: 565,  y1: 620, x2: 1045, y2: 620, className: "era-rule" }),
+        React.createElement("line", { x1: 1060, y1: 620, x2: 1595, y2: 620, className: "era-rule" }),
+        // Tick marks
+        React.createElement("line", { x1: 275,  y1: 615, x2: 275,  y2: 625, className: "era-rule", strokeOpacity: 0.8 }),
+        React.createElement("line", { x1: 805,  y1: 615, x2: 805,  y2: 625, className: "era-rule", strokeOpacity: 0.8 }),
+        React.createElement("line", { x1: 1328, y1: 615, x2: 1328, y2: 625, className: "era-rule", strokeOpacity: 0.8 }),
+        // Labels
+        React.createElement("text", { x: 275,  y: 650, className: "era-label" }, "1880s — Streetcar Core"),
+        React.createElement("text", { x: 805,  y: 650, className: "era-label" }, "1900–1940 — Streetcar Suburbs"),
+        React.createElement("text", { x: 1328, y: 650, className: "era-label" }, "Postwar — Auto Suburbs"),
       )
     ),
-    React.createElement("div", { style: { maxWidth: 1200, margin: "0 auto", padding: isMobile ? "20px 20px 48px" : "32px 48px 60px" } },
+    React.createElement("div", { style: { maxWidth: 1200, margin: "0 auto", padding: isMobile ? "16px 20px 48px" : "20px 48px 60px" } },
+      React.createElement("p", { style: { fontSize: 14, color: "#5A5447", fontStyle: "italic", marginBottom: 20 } },
+        "Schematic: Denver's sidewalk network across three eras of platting. As development moved outward, continuous coverage gave way to fragmentary, auto-oriented patterns."
+      ),
       React.createElement("p", { style: { fontSize: 15, color: "#444", lineHeight: 1.75, maxWidth: 680 } },
         "The 1880s footprint sits inside a postwar city that grew far past it without bringing the system along. Most mid-sized American cities followed the same path with a walkable urban core that was then surrounded by decades of car-oriented growth. With no coherent mechanism to extend the sidewalk system outward, the system crumbled."
       )
