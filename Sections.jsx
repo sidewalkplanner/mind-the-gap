@@ -121,16 +121,8 @@ function S2About({ tweaks, isMobile }) {
   const rust = tweaks?.accentColor || "#B2542C";
   const bone = tweaks?.bgColor || "#EDE6DA";
 
-  // FIXED: "Why should the city pay?" now links to S9 (ballot/economic case)
-  const tiles = [
-    { label: "Why are sidewalks like this?", dest: "s4", audience: "For the curious reader", sub: "Path dependency & development eras" },
-    { label: "Why should the city pay?", dest: "s9", audience: "For the skeptical council member", sub: "The economic case for Initiative 307" },
-    { label: "What model fits my city?", dest: "s11", audience: "For the practitioner", sub: "Eight reform pathways compared" },
-    { label: "Where do I start?", dest: "s12", audience: "For the advocate", sub: "Interactive diagnostic decision tree" },
-  ];
-
-  const scrollTo = (id) => {
-    const el = document.getElementById(id);
+  const scrollToModels = () => {
+    const el = document.getElementById("s11");
     if (el) window.scrollTo({ top: el.offsetTop - 60, behavior: "smooth" });
   };
 
@@ -139,37 +131,26 @@ function S2About({ tweaks, isMobile }) {
     style: { background: bone, padding: isMobile ? "60px 20px" : "80px 48px" }
   },
     React.createElement("div", { style: { maxWidth: 1200, margin: "0 auto" } },
-      React.createElement("div", { style: { maxWidth: 680, marginBottom: 48 } },
+      React.createElement("div", { style: { maxWidth: 680 } },
         React.createElement("div", { style: { fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: rust, fontWeight: 700, marginBottom: 12 } }, "About This Guide"),
         React.createElement("h2", { style: { fontSize: 34, fontWeight: 800, color: navy, margin: "0 0 20px", lineHeight: 1.2 } }, "About This Guide"),
         React.createElement("p", { style: { fontSize: 16, color: "#444", lineHeight: 1.75, marginBottom: 14 } },
           "Incomplete networks. Code non-compliance. Deferred maintenance. These are all well known issues that sidewalk networks across the nation face. As walkable and safe pedestrian networks have returned to the forefront of planners minds, reforming the governance structure of these networks has become vital."
         ),
-        React.createElement("p", { style: { fontSize: 16, color: "#444", lineHeight: 1.75, marginBottom: 14 } },
+        React.createElement("p", { style: { fontSize: 16, color: "#444", lineHeight: 1.75, marginBottom: 20 } },
           "Denver's two-decade reform effort is the most fully documented case of a major city escaping that system. This Story Map walks through the analysis — what made Denver's network look the way it does, what the city tried, what failed, and what finally worked."
         ),
-       // React.createElement("p", { style: { fontSize: 16, color: "#444", lineHeight: 1.75 } },
-         // React.createElement("strong", null, "The focus is Denver. The field guide at the end is for everyone.")
-      ),
-      React.createElement("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 16 } },
-        tiles.map((t, i) =>
+        React.createElement("div", { style: { textAlign: "right" } },
           React.createElement("button", {
-            key: i,
-            onClick: () => scrollTo(t.dest),
+            onClick: scrollToModels,
             style: {
-              background: "#fff", border: "1.5px solid rgba(27,58,75,0.12)",
-              borderRadius: 10, padding: "24px 20px", textAlign: "left",
-              cursor: "pointer", fontFamily: "inherit",
-              transition: "all 0.18s", boxShadow: "0 2px 8px rgba(27,58,75,0.06)"
+              background: "none", border: "none", padding: 0, cursor: "pointer",
+              fontSize: 14, color: rust, fontWeight: 600, fontFamily: "inherit",
+              textDecoration: "none"
             },
-            onMouseEnter: e => { e.currentTarget.style.borderColor = rust; e.currentTarget.style.boxShadow = "0 4px 16px rgba(178,84,44,0.15)"; },
-            onMouseLeave: e => { e.currentTarget.style.borderColor = "rgba(27,58,75,0.12)"; e.currentTarget.style.boxShadow = "0 2px 8px rgba(27,58,75,0.06)"; }
-          },
-            React.createElement("div", { style: { fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: "#888", marginBottom: 8, fontWeight: 600 } }, t.audience),
-            React.createElement("div", { style: { fontSize: 15, fontWeight: 700, color: navy, lineHeight: 1.3, marginBottom: 8 } }, t.label),
-            React.createElement("div", { style: { fontSize: 12, color: "#777", lineHeight: 1.4, marginBottom: 12 } }, t.sub),
-            React.createElement("div", { style: { fontSize: 12, color: rust, fontWeight: 600 } }, "Jump to section →")
-          )
+            onMouseEnter: e => { e.currentTarget.style.textDecoration = "underline"; },
+            onMouseLeave: e => { e.currentTarget.style.textDecoration = "none"; }
+          }, "Skip to the eight models →")
         )
       )
     )
