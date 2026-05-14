@@ -1217,8 +1217,8 @@ function S11Pathways({ tweaks, isMobile }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          system: systemPrompt,
           messages: [
-            { role: "system", content: systemPrompt },
             { role: "user", content: trimmedQuestion }
           ]
         })
