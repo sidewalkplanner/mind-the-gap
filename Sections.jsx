@@ -109,7 +109,7 @@ function S1Cover({ tweaks, isMobile }) {
     }, "Lessons from Denver to Rebuild Your Sidewalk Network"),
     React.createElement("p", {
       style: { fontSize: 18, color: "rgba(237,230,218,0.72)", maxWidth: 560, lineHeight: 1.6, marginBottom: 48 }
-    }, "Taylor Lucas & Robert Sells · MURP Capstone · University of Colorado Denver · In partnership with Fehr & Peers"),
+    }, "Taylor Lucas & Robert Sells · MURP Capstone ·{"\n"}University of Colorado Denver · In partnership with Fehr & Peers"),
     React.createElement("div", {
       style: { position: "absolute", bottom: 32, left: "50%", transform: "translateX(-50%)", color: "rgba(237,230,218,0.4)", fontSize: 12, letterSpacing: "0.1em", textTransform: "uppercase" }
     }, "Scroll to begin ↓")
