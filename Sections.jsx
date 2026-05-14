@@ -1267,11 +1267,15 @@ function S11Pathways({ tweaks, isMobile }) {
       const endpoint = configuredEndpoint || "https://ai-proxy.robertsells32.workers.dev";
 
       const systemPrompt = [
-        `You are assisting with sidewalk governance reform questions for the pathway: ${selectedModel.name}.`,
-        `Mechanism: ${selectedModel.mechanism}`,
-        `Tradeoffs: ${selectedModel.tradeoff}`,
-        `Example cities: ${selectedModel.cities.join(", ")}`,
-        "Keep answers concise, practical, and tied to this model's implementation constraints."
+        `You are an expert advisor on sidewalk governance and municipal infrastructure policy.`,
+        `The user is currently viewing the "${selectedModel.name}" reform pathway on a tool that helps cities plan new sidewalk funding and maintenance frameworks.`,
+        `When the user refers to "this model," "this pathway," or asks general questions, they are asking about the ${selectedModel.name} model specifically.`,
+        `Here is the full context for this pathway:`,
+        `- Mechanism: ${selectedModel.mechanism}`,
+        `- Tradeoffs: ${selectedModel.tradeoff}`,
+        `- Example cities that use this model: ${selectedModel.cities.join(", ")}`,
+        `Answer questions about how this governance model works, how cities could adopt it, what it would take to implement, and how it compares to other sidewalk funding approaches.`,
+        `Keep answers concise, practical, and grounded in this model's real-world constraints.`
       ].join("\n");
 
       const response = await fetch(endpoint, {
@@ -1381,7 +1385,8 @@ function S11Pathways({ tweaks, isMobile }) {
               background: "#F8F6F2"
             }
           },
-            React.createElement("div", { style: { fontSize: 15, fontWeight: 700, color: navy, marginBottom: 10 } }, "Have questions about this model? Ask here!"),
+            React.createElement("div", { style: { fontSize: 15, fontWeight: 700, color: navy, marginBottom: 6 } }, `Ask about the ${models[activeModel].name} pathway`),
+            React.createElement("div", { style: { fontSize: 12.5, color: "#6D6A62", marginBottom: 10 } }, "Get help understanding how this governance model works, what it takes to implement, and whether it fits your city's context."),
             React.createElement("textarea", {
               value: question,
               onChange: e => setQuestion(e.target.value),
@@ -1395,7 +1400,7 @@ function S11Pathways({ tweaks, isMobile }) {
               }
             }),
             React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 10, gap: 12 } },
-              React.createElement("div", { style: { fontSize: 11.5, color: "#6D6A62" } }, "Answers are grounded in this pathway's mechanism and tradeoffs. Press Ctrl/Cmd + Enter to submit."),
+              React.createElement("div", { style: { fontSize: 11.5, color: "#6D6A62" } }, "Press Ctrl/Cmd + Enter to submit."),
               React.createElement("button", {
                 onClick: askModelAssistant,
                 disabled: chatState.loading || !question.trim(),
