@@ -692,61 +692,53 @@ function S7Swipe({ tweaks, isMobile }) {
         ),
 
         // ── ZONE C — Postwar Auto Suburbs ──
-        // Concept: one horizontal collector bisects the zone. Three disconnected
-        // residential streets branch off it — two cul-de-sacs (up) and one dead-end
-        // stub (down). Everything else is large featureless superblock. Roads are
-        // filled rects; turnarounds are concentric circles. Sidewalks ~40%, sparse.
-        //
-        // Zone x: 1078–1590  y: 50–560
-        // Collector: y 295–321
-        // Cul-A (upper-left,  NO sidewalks):  stem x 1128–1154, bulb cy=100
-        // Cul-B (upper-right, NO sidewalks):  stem x 1440–1466, bulb cy=100
-        // Stub  (lower-center, partial SW):   stem x 1284–1310, dead-end y=490
+        // Zone x: 1088–1580  y: 50–560
+        // Collector: y 288–314 (horizontal spine bisecting zone)
+        // Cul-A (upper-left):  stem x 1155–1181, bulb cy=110
+        // Cul-B (upper-right): stem x 1455–1481, bulb cy=110
+        // Stub  (lower-center): stem x 1305–1331, dead-end y=490
         React.createElement("g", { className: "zone-postwar" },
 
-          // ── SUPERBLOCKS (under roads) ──
-          // Upper-left block: left of cul-A stem, above collector
-          React.createElement("rect", { x: 1078, y: 50,  width: 48,  height: 245, className: "blk" }),
-          // Upper-center block: between cul-A and cul-B stems, above collector
-          React.createElement("rect", { x: 1156, y: 50,  width: 282, height: 245, className: "blk" }),
-          // Upper-right block: right of cul-B stem, above collector
-          React.createElement("rect", { x: 1468, y: 50,  width: 120, height: 245, className: "blk" }),
-          // Lower-left block: below collector, left of stub stem
-          React.createElement("rect", { x: 1078, y: 323, width: 204, height: 237, className: "blk" }),
-          // Lower-right block: below collector, right of stub stem
-          React.createElement("rect", { x: 1312, y: 323, width: 276, height: 237, className: "blk" }),
+          // ── SUPERBLOCKS ──
+          // Upper-left block
+          React.createElement("rect", { x: 1088, y: 50,  width: 65,  height: 236, className: "blk" }),
+          // Upper-center block (between cul-A and cul-B)
+          React.createElement("rect", { x: 1183, y: 50,  width: 270, height: 236, className: "blk" }),
+          // Upper-right block
+          React.createElement("rect", { x: 1483, y: 50,  width: 97,  height: 236, className: "blk" }),
+          // Lower-left block
+          React.createElement("rect", { x: 1088, y: 316, width: 215, height: 244, className: "blk" }),
+          // Lower-right block
+          React.createElement("rect", { x: 1333, y: 316, width: 247, height: 244, className: "blk" }),
 
-          // ── ROADS (over blocks) ──
+          // ── ROADS ──
           // Collector
-          React.createElement("rect", { x: 1068, y: 295, width: 522, height: 26, fill: "#D0C5B0" }),
+          React.createElement("rect", { x: 1078, y: 288, width: 512, height: 28, fill: "#D0C5B0" }),
 
-          // Cul-de-sac A — upper-left, NO sidewalks
-          // Stem runs from collector (y=295) up to bulb bottom (y=150); bulb cy=112
-          React.createElement("rect", { x: 1128, y: 150, width: 26, height: 145, fill: "#D0C5B0" }),
-          React.createElement("circle", { cx: 1141, cy: 120, r: 38, fill: "#D0C5B0" }),
-          React.createElement("circle", { cx: 1141, cy: 120, r: 20, fill: "#EDE6DA" }),
+          // Cul-de-sac A — upper-left
+          React.createElement("rect", { x: 1155, y: 148, width: 26, height: 140, fill: "#D0C5B0" }),
+          React.createElement("circle", { cx: 1168, cy: 116, r: 40, fill: "#D0C5B0" }),
+          React.createElement("circle", { cx: 1168, cy: 116, r: 22, fill: "#EDE6DA" }),
 
-          // Cul-de-sac B — upper-right, NO sidewalks
-          React.createElement("rect", { x: 1440, y: 150, width: 26, height: 145, fill: "#D0C5B0" }),
-          React.createElement("circle", { cx: 1453, cy: 120, r: 38, fill: "#D0C5B0" }),
-          React.createElement("circle", { cx: 1453, cy: 120, r: 20, fill: "#EDE6DA" }),
+          // Cul-de-sac B — upper-right
+          React.createElement("rect", { x: 1455, y: 148, width: 26, height: 140, fill: "#D0C5B0" }),
+          React.createElement("circle", { cx: 1468, cy: 116, r: 40, fill: "#D0C5B0" }),
+          React.createElement("circle", { cx: 1468, cy: 116, r: 22, fill: "#EDE6DA" }),
 
-          // Dead-end stub — lower-center, partial sidewalk one side
-          React.createElement("rect", { x: 1284, y: 321, width: 26, height: 168, fill: "#D0C5B0" }),
-          // Blunt end cap (small rect to square off the terminus)
-          React.createElement("rect", { x: 1272, y: 487, width: 50,  height: 14,  fill: "#D0C5B0" }),
+          // Dead-end stub — lower-center
+          React.createElement("rect", { x: 1305, y: 314, width: 26, height: 172, fill: "#D0C5B0" }),
+          React.createElement("rect", { x: 1293, y: 484, width: 50, height: 14,  fill: "#D0C5B0" }),
 
           // ── SIDEWALKS — ~40% coverage, fragmented ──
           React.createElement("g", { className: "sidewalks" },
-            // Collector north side — left segment only (up to cul-A)
-            React.createElement("line", { x1: 1078, y1: 294, x2: 1126, y2: 294, className: "sw" }),
+            // Collector north side — left segment only (to cul-A)
+            React.createElement("line", { x1: 1088, y1: 287, x2: 1153, y2: 287, className: "sw" }),
             // Collector south side — right segment only (right of stub)
-            React.createElement("line", { x1: 1312, y1: 322, x2: 1588, y2: 322, className: "sw" }),
-            // Left outer edge — upper block only (not lower)
-            React.createElement("line", { x1: 1078, y1: 50,  x2: 1078, y2: 294, className: "sw" }),
-            // Stub — right side only (one side = partial)
-            React.createElement("line", { x1: 1312, y1: 323, x2: 1312, y2: 487, className: "sw" }),
-            // NO sidewalks: cul-A stem/bulb, cul-B stem/bulb, lower-left block, upper-right block
+            React.createElement("line", { x1: 1333, y1: 317, x2: 1588, y2: 317, className: "sw" }),
+            // Left outer edge — upper block only
+            React.createElement("line", { x1: 1088, y1: 50,  x2: 1088, y2: 287, className: "sw" }),
+            // Stub — right side only
+            React.createElement("line", { x1: 1333, y1: 316, x2: 1333, y2: 484, className: "sw" }),
           )
         ),
 
@@ -754,7 +746,7 @@ function S7Swipe({ tweaks, isMobile }) {
         React.createElement("line", { x1: 20,   y1: 578, x2: 546,  y2: 578, className: "era-ln" }),
         React.createElement("line", { x1: 568,  y1: 578, x2: 1046, y2: 578, className: "era-ln" }),
         React.createElement("line", { x1: 1068, y1: 578, x2: 1590, y2: 578, className: "era-ln" }),
-        React.createElement("text", { x: 283,  y: 600, className: "era-lbl" }, "1880s — Streetcar Core"),
+        React.createElement("text", { x: 283,  y: 600, className: "era-lbl" }, "1880s Onward — Urban Core"),
         React.createElement("text", { x: 807,  y: 600, className: "era-lbl" }, "1900–1940 — Streetcar Suburbs"),
         React.createElement("text", { x: 1329, y: 600, className: "era-lbl" }, "Postwar — Auto Suburbs"),
       )
