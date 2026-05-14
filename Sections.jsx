@@ -193,7 +193,7 @@ function S3Network({ tweaks, isMobile }) {
   const slides = [
     {
       slideLabel: "See the gap",
-      headline: "The sidewalk network in 2025",
+      headline: "The sidewalk network in 2026",
       paragraphs: [
         "These maps seperate sidewalk networks into three conditions: sufficient sidewalks, sidewalks that exist but don't meet accessibility standards, and streets where sidewalks are missing altogether.",
         "In Denver, 57% of the network is sufficient, 34% is too narrow, and 9% is missing outright. Toggle between cities to compare."
