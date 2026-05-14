@@ -1,2 +1,9 @@
 Mind_the_Gap_Executive_Summary.docx
 Lucas_Sells_ThePedestrianGap_ExecSummary_Spring2026.pdf
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
