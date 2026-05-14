@@ -2772,9 +2772,9 @@ function S12Decision({ tweaks, isMobile }) {
             borderLeft: `3px solid ${navy}`, fontSize: 13.5, color: "#2A2A2A", lineHeight: 1.65
           }
         },
-          "I've reviewed your diagnostic answers. Before we go deeper — ",
+          "I've reviewed your diagnostic answers. Before we go deeper, tell me: ",
           React.createElement("strong", null, "what city are you working in?"),
-          " That lets me check whether the recommended model actually fits your state's legal framework and give you more specific guidance."
+          " This lets me check whether the recommended model actually fits your state's legal framework and give you more specific guidance."
         ),
 
         // Conversation thread
