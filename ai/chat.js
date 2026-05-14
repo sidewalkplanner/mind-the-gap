@@ -1,4 +1,4 @@
-const WORKER_URL = "ai-proxy.robertsells32.workers.dev";
+const WORKER_URL = "https://ai-proxy.robertsells32.workers.dev";
 
 const conversation = document.getElementById("conversation");
 const input = document.getElementById("input");
