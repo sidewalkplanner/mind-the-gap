@@ -716,14 +716,15 @@ function S7Swipe({ tweaks, isMobile }) {
           React.createElement("rect", { x: 1078, y: 288, width: 512, height: 28, fill: "#D0C5B0" }),
 
           // Cul-de-sac A — upper-left
-          React.createElement("rect", { x: 1155, y: 148, width: 26, height: 140, fill: "#D0C5B0" }),
-          React.createElement("circle", { cx: 1168, cy: 116, r: 40, fill: "#D0C5B0" }),
-          React.createElement("circle", { cx: 1168, cy: 116, r: 22, fill: "#EDE6DA" }),
+          // Stem: collector (y=288) up to bulb bottom (y=200); bulb cy=160, r=40
+          React.createElement("rect", { x: 1155, y: 200, width: 26, height: 88, fill: "#D0C5B0" }),
+          React.createElement("circle", { cx: 1168, cy: 160, r: 40, fill: "#D0C5B0" }),
+          React.createElement("circle", { cx: 1168, cy: 160, r: 22, fill: "#EDE6DA" }),
 
           // Cul-de-sac B — upper-right
-          React.createElement("rect", { x: 1455, y: 148, width: 26, height: 140, fill: "#D0C5B0" }),
-          React.createElement("circle", { cx: 1468, cy: 116, r: 40, fill: "#D0C5B0" }),
-          React.createElement("circle", { cx: 1468, cy: 116, r: 22, fill: "#EDE6DA" }),
+          React.createElement("rect", { x: 1455, y: 200, width: 26, height: 88, fill: "#D0C5B0" }),
+          React.createElement("circle", { cx: 1468, cy: 160, r: 40, fill: "#D0C5B0" }),
+          React.createElement("circle", { cx: 1468, cy: 160, r: 22, fill: "#EDE6DA" }),
 
           // Dead-end stub — lower-center
           React.createElement("rect", { x: 1305, y: 314, width: 26, height: 172, fill: "#D0C5B0" }),
