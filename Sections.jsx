@@ -1307,7 +1307,7 @@ function S11Pathways({ tweaks, isMobile }) {
         "Initiative 307 is one of at least eight ways cities have restructured how sidewalks get funded, built, and maintained. Which model fits depends on three things: a city's legal authority, its political environment, and the condition of the network it already has."
       ),
       React.createElement("p", { style: { fontSize: 14, color: "#666", marginBottom: 40 } },
-        "None of these models is universally correct. Click any pathway to explore it."
+        "Click any pathway to explore the model."
       ),
       // Model selector tabs
       React.createElement("div", {
