@@ -1452,6 +1452,11 @@ function S12Decision({ tweaks, isMobile }) {
   const [answers, setAnswers] = React.useState({});
   const [revealed, setRevealed] = React.useState(false);
   const [showMatrix, setShowMatrix] = React.useState(true);
+  const [resultsChatMessages, setResultsChatMessages] = React.useState([]);
+  const [resultsChatInput, setResultsChatInput] = React.useState("");
+  const [resultsChatLoading, setResultsChatLoading] = React.useState(false);
+  const [resultsChatError, setResultsChatError] = React.useState("");
+  const [resultsChatCity, setResultsChatCity] = React.useState("");
 
   // ══════════════════════════════════════════════════════════════════════════
   // MODEL CATALOG — eight governance/funding structures
@@ -2182,6 +2187,71 @@ function S12Decision({ tweaks, isMobile }) {
   }
 
   // ══════════════════════════════════════════════════════════════════════════
+  // RESULTS CHATBOT SEND
+  // ══════════════════════════════════════════════════════════════════════════
+  const sendResultsChat = async (inputText) => {
+    const text = inputText.trim();
+    if (!text || resultsChatLoading) return;
+
+    let cityForPrompt = resultsChatCity;
+    if (!resultsChatMessages.length && !resultsChatCity) {
+      cityForPrompt = text;
+      setResultsChatCity(text);
+    }
+
+    const newMessages = [...resultsChatMessages, { role: "user", content: text }];
+    setResultsChatMessages(newMessages);
+    setResultsChatInput("");
+    setResultsChatLoading(true);
+    setResultsChatError("");
+
+    try {
+      const endpoint = window.__MODEL_CHAT_API_ENDPOINT__ || "https://ai-proxy.robertsells32.workers.dev";
+      const strongNames = tiers ? tiers.strong.map(m => m.name).join(", ") : "unknown";
+      const possibleNames = tiers ? tiers.possible.map(m => m.name).join(", ") : "";
+      const answerSummary = questions.map(q => {
+        const chosen = q.options.find(o => o.id === answers[q.id]);
+        return `${q.label}: ${chosen ? chosen.label : "not answered"}`;
+      }).join("\n");
+
+      const systemPrompt = [
+        "You are a municipal sidewalk policy advisor helping a user understand and act on their diagnostic results from the Mind the Gap sidewalk governance tool.",
+        "",
+        "DIAGNOSTIC RESULTS:",
+        `Strong-fit model(s): ${strongNames || "none"}`,
+        possibleNames ? `Possible-fit model(s): ${possibleNames}` : "",
+        "",
+        "USER'S QUIZ ANSWERS:",
+        answerSummary,
+        "",
+        cityForPrompt ? `The user's city: ${cityForPrompt}` : "The user has not yet provided their city.",
+        "",
+        "Your job: help the user understand what their results mean in practice, how to move forward, what their state's legal framework means for the recommended model, and how to compare options.",
+        "If you don't yet know what city they're in, ask for it — it helps you verify whether the recommended model is legally viable and cite relevant local precedents.",
+        "Be concise, practical, and specific. Avoid generic advice. Reference the actual models and answers from the diagnostic when relevant.",
+        "Format responses in Markdown for readability."
+      ].filter(Boolean).join("\n");
+
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ system: systemPrompt, messages: newMessages })
+      });
+
+      if (!response.ok) throw new Error("Request failed");
+      const data = await response.json();
+      const reply = data?.answer || data?.content?.[0]?.text;
+      if (!reply) throw new Error("No response");
+
+      setResultsChatMessages([...newMessages, { role: "assistant", content: reply }]);
+    } catch {
+      setResultsChatError("Couldn't reach the advisor — please try again.");
+    } finally {
+      setResultsChatLoading(false);
+    }
+  };
+
+  // ══════════════════════════════════════════════════════════════════════════
   // RENDER
   // ══════════════════════════════════════════════════════════════════════════
   return React.createElement("section", {
@@ -2680,6 +2750,109 @@ function S12Decision({ tweaks, isMobile }) {
           )
         )
       ),
+
+      // ── RESULTS CHATBOT ──────────────────────────────────────────────────
+      revealed && React.createElement("div", {
+        style: {
+          marginTop: 36, padding: isMobile ? "24px 20px" : "32px 36px",
+          background: "#fff", borderRadius: 12,
+          boxShadow: "0 4px 24px rgba(27,58,75,0.1)",
+          border: `1px solid rgba(27,58,75,0.12)`
+        }
+      },
+        React.createElement("div", { style: { marginBottom: 18 } },
+          React.createElement("div", {
+            style: { fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase", color: rust, fontWeight: 700, marginBottom: 6 }
+          }, "Results Advisor"),
+          React.createElement("div", { style: { fontSize: 18, fontWeight: 800, color: navy, marginBottom: 8 } },
+            "Talk through your results"
+          ),
+          React.createElement("p", { style: { fontSize: 13.5, color: "#555", lineHeight: 1.65, margin: 0 } },
+            "Ask me anything about your diagnostic — what the top model means for your city, how to get started, or how it compares to alternatives."
+          )
+        ),
+
+        // Opening message from the bot (shown once, before any conversation)
+        resultsChatMessages.length === 0 && React.createElement("div", {
+          style: {
+            marginBottom: 16, padding: "14px 16px",
+            background: `rgba(27,58,75,0.04)`, borderRadius: 8,
+            borderLeft: `3px solid ${navy}`, fontSize: 13.5, color: "#2A2A2A", lineHeight: 1.65
+          }
+        },
+          "I've reviewed your diagnostic answers. Before we go deeper — ",
+          React.createElement("strong", null, "what city are you working in?"),
+          " That lets me check whether the recommended model actually fits your state's legal framework and give you more specific guidance."
+        ),
+
+        // Conversation thread
+        resultsChatMessages.length > 0 && React.createElement("div", {
+          style: { marginBottom: 16, display: "flex", flexDirection: "column", gap: 12 }
+        },
+          resultsChatMessages.map((msg, i) =>
+            React.createElement("div", {
+              key: i,
+              style: {
+                padding: "12px 16px", borderRadius: 8,
+                background: msg.role === "user" ? `rgba(27,58,75,0.06)` : `rgba(178,84,44,0.05)`,
+                borderLeft: msg.role === "user" ? `3px solid ${navy}` : `3px solid ${rust}`,
+                fontSize: 13.5, color: "#2A2A2A", lineHeight: 1.65,
+                alignSelf: msg.role === "user" ? "flex-end" : "flex-start",
+                maxWidth: "90%"
+              }
+            },
+              msg.role === "user"
+                ? React.createElement("span", null, msg.content)
+                : React.createElement("div", {
+                    dangerouslySetInnerHTML: { __html: typeof marked !== "undefined" ? marked.parse(msg.content) : msg.content }
+                  })
+            )
+          )
+        ),
+
+        resultsChatError && React.createElement("div", {
+          style: { marginBottom: 12, fontSize: 12.5, color: rust }
+        }, resultsChatError),
+
+        // Input row
+        React.createElement("div", { style: { display: "flex", gap: 10, alignItems: "flex-end" } },
+          React.createElement("textarea", {
+            value: resultsChatInput,
+            onChange: e => setResultsChatInput(e.target.value),
+            onKeyDown: e => {
+              if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+                e.preventDefault();
+                sendResultsChat(resultsChatInput);
+              }
+            },
+            placeholder: resultsChatMessages.length === 0
+              ? "Tell me your city, then ask anything about your results..."
+              : "Ask a follow-up question... (Ctrl/Cmd + Enter to send)",
+            rows: 3,
+            style: {
+              flex: 1, resize: "vertical", minHeight: 64,
+              fontFamily: "inherit", fontSize: 13.5,
+              border: `1px solid rgba(27,58,75,0.2)`, borderRadius: 8,
+              padding: "10px 12px", outline: "none",
+              boxSizing: "border-box", background: "#fff", color: "#1f1f1f"
+            }
+          }),
+          React.createElement("button", {
+            disabled: resultsChatLoading || !resultsChatInput.trim(),
+            onClick: () => sendResultsChat(resultsChatInput),
+            style: {
+              padding: "10px 18px", borderRadius: 8, border: "none",
+              background: resultsChatLoading || !resultsChatInput.trim() ? "#9EA7AD" : rust,
+              color: "#fff", fontWeight: 700, fontSize: 13,
+              cursor: resultsChatLoading || !resultsChatInput.trim() ? "not-allowed" : "pointer",
+              fontFamily: "inherit", flexShrink: 0, alignSelf: "flex-end"
+            }
+          }, resultsChatLoading ? "Asking..." : "Send")
+        ),
+        React.createElement("div", { style: { fontSize: 11, color: muted, marginTop: 8 } },
+          "Press Ctrl/Cmd + Enter to send."
+        )
+      )
 
     )
   );
