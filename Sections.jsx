@@ -1217,33 +1217,33 @@ function S11Pathways({ tweaks, isMobile }) {
 
     try {
       const configuredEndpoint = window.__MODEL_CHAT_API_ENDPOINT__;
-      const endpoints = configuredEndpoint
-        ? [configuredEndpoint]
-        : ["/ai/model-chat", "/api/model-chat"];
+      const endpoint = configuredEndpoint || "https://ai-proxy.robertsells32.workers.dev";
 
-      let response = null;
-      for (const endpoint of endpoints) {
-        response = await fetch(endpoint, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            question: trimmedQuestion,
-            model: {
-              name: selectedModel.name,
-              mechanism: selectedModel.mechanism,
-              tradeoff: selectedModel.tradeoff,
-              cities: selectedModel.cities
-            }
-          })
-        });
-        if (response.ok) break;
-      }
+      const systemPrompt = [
+        `You are assisting with sidewalk governance reform questions for the pathway: ${selectedModel.name}.`,
+        `Mechanism: ${selectedModel.mechanism}`,
+        `Tradeoffs: ${selectedModel.tradeoff}`,
+        `Example cities: ${selectedModel.cities.join(", ")}`,
+        "Keep answers concise, practical, and tied to this model's implementation constraints."
+      ].join("\n");
 
-      if (!response || !response.ok) throw new Error("Assistant request failed");
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: trimmedQuestion }
+          ]
+        })
+      });
+
+      if (!response.ok) throw new Error("Assistant request failed");
       const data = await response.json();
-      if (!data?.answer) throw new Error("No answer returned");
+      const reply = data?.answer || data?.content?.[0]?.text;
+      if (!reply) throw new Error("No answer returned");
 
-      setChatState({ answer: data.answer, loading: false, error: "" });
+      setChatState({ answer: reply, loading: false, error: "" });
       setQuestion("");
     } catch (error) {
       setChatState({
