@@ -10,6 +10,7 @@
 	<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
 	<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
 	<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -27,6 +28,18 @@
     ::-webkit-scrollbar-track { background: rgba(27,58,75,0.05); }
     ::-webkit-scrollbar-thumb { background: rgba(27,58,75,0.2); border-radius: 3px; }
     section { scroll-margin-top: 55px; }
+    .ai-response h1, .ai-response h2, .ai-response h3 {
+      font-size: 13.5px; font-weight: 700; color: #1B3A4B;
+      margin: 12px 0 4px;
+    }
+    .ai-response h1 { font-size: 15px; }
+    .ai-response p { margin: 0 0 8px; }
+    .ai-response p:last-child { margin-bottom: 0; }
+    .ai-response ul, .ai-response ol { padding-left: 18px; margin: 4px 0 8px; }
+    .ai-response li { margin-bottom: 3px; }
+    .ai-response strong { font-weight: 700; color: #1B3A4B; }
+    .ai-response em { font-style: italic; }
+    .ai-response hr { border: none; border-top: 1px solid rgba(27,58,75,0.12); margin: 10px 0; }
   </style>
   <template id="__bundler_thumbnail">
     <svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">

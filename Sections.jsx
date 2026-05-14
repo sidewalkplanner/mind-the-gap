@@ -58,11 +58,11 @@ function S1Cover({ tweaks, isMobile }) {
   return React.createElement("section", {
     id: "s1",
     style: {
-      minHeight: "100dvh", background: navy,
+      minHeight: "100dvh", maxHeight: "100dvh", background: navy,
       display: "flex", flexDirection: "column",
       alignItems: "center", justifyContent: "center",
       position: "relative", overflow: "hidden", textAlign: "center",
-      padding: "80px 40px 60px"
+      padding: "80px 40px 80px"
     }
   },
     React.createElement("svg", {
@@ -108,11 +108,15 @@ function S1Cover({ tweaks, isMobile }) {
       }
     }, "Lessons from Denver to Rebuild Your Sidewalk Network"),
     React.createElement("p", {
-      style: { fontSize: 18, color: "rgba(237,230,218,0.72)", maxWidth: 560, lineHeight: 1.6, marginBottom: 48 }
-    }, "Taylor Lucas & Robert Sells · MURP Capstone · University of Colorado Denver · In partnership with Fehr & Peers"),
+      style: { fontSize: isMobile ? 16 : 20, color: "rgba(237,230,218,0.8)", maxWidth: 560, lineHeight: 1.7, marginBottom: 0 }
+    },
+      React.createElement("span", null, "Robert Sells & Taylor Lucas · MURP Capstone"),
+      React.createElement("br", null),
+      React.createElement("span", null, "University of Colorado Denver · In partnership with Fehr & Peers")
+    ),
     React.createElement("div", {
-      style: { position: "absolute", bottom: 32, left: "50%", transform: "translateX(-50%)", color: "rgba(237,230,218,0.4)", fontSize: 12, letterSpacing: "0.1em", textTransform: "uppercase" }
-    }, "Scroll to begin ↓")
+      style: { position: "absolute", bottom: 28, left: "50%", transform: "translateX(-50%)", color: "rgba(237,230,218,0.65)", fontSize: 14, letterSpacing: "0.12em", textTransform: "uppercase", fontWeight: 700, whiteSpace: "nowrap" }
+    }, "Scroll to Begin ↓")
   );
 }
 
@@ -702,11 +706,11 @@ function S7Swipe({ tweaks, isMobile }) {
 
           // ── SUPERBLOCKS (under roads) ──
           // Upper-left block: left of cul-A stem, above collector
-          React.createElement("rect", { x: 1078, y: 50,  width: 48,  height: 243, className: "blk" }),
+          React.createElement("rect", { x: 1078, y: 50,  width: 48,  height: 245, className: "blk" }),
           // Upper-center block: between cul-A and cul-B stems, above collector
-          React.createElement("rect", { x: 1156, y: 50,  width: 282, height: 243, className: "blk" }),
+          React.createElement("rect", { x: 1156, y: 50,  width: 282, height: 245, className: "blk" }),
           // Upper-right block: right of cul-B stem, above collector
-          React.createElement("rect", { x: 1468, y: 50,  width: 120, height: 243, className: "blk" }),
+          React.createElement("rect", { x: 1468, y: 50,  width: 120, height: 245, className: "blk" }),
           // Lower-left block: below collector, left of stub stem
           React.createElement("rect", { x: 1078, y: 323, width: 204, height: 237, className: "blk" }),
           // Lower-right block: below collector, right of stub stem
@@ -717,14 +721,15 @@ function S7Swipe({ tweaks, isMobile }) {
           React.createElement("rect", { x: 1068, y: 295, width: 522, height: 26, fill: "#D0C5B0" }),
 
           // Cul-de-sac A — upper-left, NO sidewalks
-          React.createElement("rect", { x: 1128, y: 130, width: 26, height: 167, fill: "#D0C5B0" }),
-          React.createElement("circle", { cx: 1141, cy: 112, r: 38, fill: "#D0C5B0" }),
-          React.createElement("circle", { cx: 1141, cy: 112, r: 20, fill: "#EDE6DA" }),
+          // Stem runs from collector (y=295) up to bulb bottom (y=150); bulb cy=112
+          React.createElement("rect", { x: 1128, y: 150, width: 26, height: 145, fill: "#D0C5B0" }),
+          React.createElement("circle", { cx: 1141, cy: 120, r: 38, fill: "#D0C5B0" }),
+          React.createElement("circle", { cx: 1141, cy: 120, r: 20, fill: "#EDE6DA" }),
 
           // Cul-de-sac B — upper-right, NO sidewalks
-          React.createElement("rect", { x: 1440, y: 130, width: 26, height: 167, fill: "#D0C5B0" }),
-          React.createElement("circle", { cx: 1453, cy: 112, r: 38, fill: "#D0C5B0" }),
-          React.createElement("circle", { cx: 1453, cy: 112, r: 20, fill: "#EDE6DA" }),
+          React.createElement("rect", { x: 1440, y: 150, width: 26, height: 145, fill: "#D0C5B0" }),
+          React.createElement("circle", { cx: 1453, cy: 120, r: 38, fill: "#D0C5B0" }),
+          React.createElement("circle", { cx: 1453, cy: 120, r: 20, fill: "#EDE6DA" }),
 
           // Dead-end stub — lower-center, partial sidewalk one side
           React.createElement("rect", { x: 1284, y: 321, width: 26, height: 168, fill: "#D0C5B0" }),
@@ -1062,7 +1067,7 @@ function S10SIP({ tweaks, isMobile }) {
 
     const FundingGap = () => {
     const sources = [
-      { label: "SIP annual fee revenue", sublabel: "Dedicated stream, first in Denver's history", color: green, note: "~$40 M/yr NEED TO CONFIRM REVENUE" },
+      { label: "SIP annual fee revenue", sublabel: "Dedicated stream, first in Denver's history", color: green, note: "~$40 M/yr" },
       { label: "Development-triggered construction", sublabel: "Owners build when property redevelops (D.R.M.C. 49-84)", color: "#4A90A4", note: "Ongoing, unquantified" },
       { label: "Federal & state grants", sublabel: "BUILD, CDBG, CDOT - competitive, variable", color: "#D89A4E", note: "Variable, project-by-project" },
       { label: "Future bond measures", sublabel: "Precedent: Elevate Denver ($47.7M, 2017)", color: "#B6BFB1", note: "Not yet committed" },
@@ -1398,11 +1403,13 @@ function S11Pathways({ tweaks, isMobile }) {
             ),
             chatState.error && React.createElement("div", { style: { marginTop: 10, fontSize: 12.5, color: "#B2542C" } }, chatState.error),
             chatState.answer && React.createElement("div", {
+              className: "ai-response",
               style: {
                 marginTop: 12, borderRadius: 8, background: "#fff", border: "1px solid rgba(27,58,75,0.12)",
-                padding: "12px 13px", fontSize: 13.5, color: "#2A2A2A", lineHeight: 1.55
-              }
-            }, chatState.answer)
+                padding: "12px 13px", fontSize: 13.5, color: "#2A2A2A", lineHeight: 1.65
+              },
+              dangerouslySetInnerHTML: { __html: marked.parse(chatState.answer) }
+            })
           )
         ),
         // Right: US map with example cities
@@ -2093,7 +2100,7 @@ function S12Decision({ tweaks, isMobile }) {
       steps.push("Draft the charter amendment language and the funding mechanism in parallel. They will move together politically and legally; designing one without the other creates implementation gaps.");
     }
     if (answers.q2 === "tabor" && (topModelKey === "utility_fee" || topModelKey === "dedicated_fee")) {
-      steps.push("Engage a TABOR-experienced attorney early to structure the mechanism as a service fee rather than a tax. The fee-vs-tax classification determines whether council can adopt by ordinance or whether voter approval is required.");
+      steps.push("Engage a municipal attorney early to structure the mechanism as a service fee rather than a tax. The fee-vs-tax classification determines whether council can adopt by ordinance or whether voter approval is required — and the legal standard varies significantly by state.");
     }
     if (answers.q2 === "prop13" && topModelKey === "parcel_tax") {
       steps.push("Confirm the simple-majority vs. supermajority threshold for your specific parcel tax structure. Prop 218 distinctions between general and special taxes matter, and recent court decisions have narrowed some routes.");
@@ -2203,7 +2210,7 @@ function S12Decision({ tweaks, isMobile }) {
         }
       },
         React.createElement("strong", null, "This tool is for educational and exploratory use. "),
-        "Every recommendation it produces requires verification by municipal counsel, a financial advisor familiar with local revenue mechanisms, and engagement with your specific charter, state statutes, and political context. Outputs are starting points for further investigation — not implementation guidance."
+        "Every recommendation it produces requires verification by municipal counsel, a financial advisor familiar with local revenue mechanisms, and engagement with your specific charter, state statutes, and political context."
       ),
 
       // ── Progress bar ─────────────────────────────────────────────────────
@@ -2669,17 +2676,6 @@ function S12Decision({ tweaks, isMobile }) {
         )
       ),
 
-      // ── Closing ──────────────────────────────────────────────────────────
-      React.createElement("div", {
-        style: {
-          marginTop: 48, padding: "24px 28px", background: bone,
-          borderLeft: `4px solid ${rust}`, borderRadius: "0 8px 8px 0"
-        }
-      },
-        React.createElement("p", { style: { margin: 0, fontSize: 15, color: "#333", lineHeight: 1.7, fontStyle: "italic" } },
-          "This diagnostic is a starting point. The legal review, fiscal analysis, and coalition work each option requires are yours to do."
-        )
-      )
     )
   );
 }
