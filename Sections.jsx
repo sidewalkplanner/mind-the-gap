@@ -1184,7 +1184,7 @@ function S11Pathways({ tweaks, isMobile }) {
     {
       num: 3, name: "Dedicated Annual Fee",
       mechanism: "Parcel-based fee outside utility billing, scaled by property type and frontage. Funds a dedicated sidewalk program directly.",
-      cities: ["Denver, CO (post-Initiative 307)"],
+      cities: ["Denver, CO"],
       auth: "Voter mandate",
       tradeoff: "Strong revenue protection, durable beyond political cycles. Long advocacy timeline to pass.",
       verdict: "The Denver model. Best fit when council action has stalled and ballot capacity exists.",
@@ -1417,7 +1417,7 @@ function S11Pathways({ tweaks, isMobile }) {
         React.createElement("div", {
           style: {
             background: "#F0EDE8", padding: "40px 32px",
-            display: "flex", flexDirection: "column", justifyContent: "space-between"
+            display: "flex", flexDirection: "column", justifyContent: "flex-start", gap: 24
           }
         },
           React.createElement("div", null,
